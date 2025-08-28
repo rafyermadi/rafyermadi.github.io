@@ -2,442 +2,530 @@
 <html lang="id" data-theme="dark">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Rafy • Blog</title>
-  <meta name="description" content="Blog progres penulisan novel dan catatan proses." />
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+  <!-- 1) Anti FOUC & Theme-First: terapkan tema sebelum CSS diload -->
+  <script>
+    (function () {
+      try {
+        const saved = localStorage.getItem("theme") || "dark";
+        document.documentElement.setAttribute("data-theme", saved);
+      } catch (e) {
+        document.documentElement.setAttribute("data-theme", "dark");
+      }
+    })();
+  </script>
+
+  <!-- 2) Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet">
+
+  <!-- 3) CSS -->
   <style>
-    :root{ --bg:#0b0b10; --fg:#e9ecf1; --muted:#b8c1d1; --card:rgba(255,255,255,.06); --border:rgba(255,255,255,.12); --accent:#7c9cff; --accent-2:#9f7cff; --glass:rgba(255,255,255,.07); --shadow:0 10px 30px rgba(0,0,0,.35); --radius:18px; }
-    html[data-theme='light']{ --bg:#f7f8fb; --fg:#0f1222; --muted:#5b6173; --card:rgba(255,255,255,.9); --border:rgba(10,12,20,.08); --glass:rgba(255,255,255,.7); --shadow:0 10px 30px rgba(0,0,0,.08); }
+    :root{
+      --radius:18px;
+      --shadow-1: 0 6px 30px rgba(0,0,0,.25);
+      --shadow-2: 0 18px 60px rgba(0,0,0,.35);
+      --tr-150: 150ms ease;
+    }
+    :root[data-theme="dark"]{
+      color-scheme: dark;
+      --bg: #0d1117;
+      --bg-soft: #0f1320;
+      --surface: #161b22;
+      --text: #e6edf3;
+      --text-soft:#c6d2de;
+      --muted:#8b98a5;
+      --primary:#9bbcf9;
+      --accent:#c59cff;
+      --chip:#202736;
+      --chip-text:#d7e2ef;
+      --border: #243044;
+      --hero-grad-1:#101626;
+      --hero-grad-2:#0d1324;
+      --hero-ring:#5b76ff33;
+    }
+    :root[data-theme="light"]{
+      color-scheme: light;
+      --bg: #f7f8fb;
+      --bg-soft: #f1f4fb;
+      --surface: #ffffff;
+      --text: #0b1523;
+      --text-soft:#344055;
+      --muted:#5d6a7a;
+      --primary:#2b59ff;
+      --accent:#6b3cff;
+      --chip:#eef2fb;
+      --chip-text:#0b1523;
+      --border: #dde4f2;
+      --hero-grad-1:#eef3ff;
+      --hero-grad-2:#fafcff;
+      --hero-ring:#2b59ff22;
+    }
+
     *{box-sizing:border-box}
-    body{margin:0; font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial; color:var(--fg);
-      background:radial-gradient(1200px 600px at 10% 10%, rgba(124,156,255,.25), transparent 60%),
-                 radial-gradient(1000px 500px at 90% 0%, rgba(159,124,255,.18), transparent 60%), var(--bg);}
-    a{color:inherit; text-decoration:none}
-    .container{max-width:1100px; margin:0 auto; padding:20px}
-
-    /* NAV */
-    .nav{position:sticky; top:0; backdrop-filter:saturate(1.2) blur(10px);
-      background:linear-gradient(180deg, rgba(0,0,0,.35), transparent); border-bottom:1px solid var(--border); z-index:20}
-    .nav-inner{display:flex; align-items:center; gap:14px; padding:12px 20px;}
-    .brand{font-family:'Playfair Display', serif; font-weight:800; letter-spacing:.4px; font-size:20px}
-    .nav-links{display:flex; gap:12px; margin-left:auto}
-    .chip{padding:8px 12px; border:1px solid var(--border); border-radius:999px; background:var(--card); transition:transform .15s ease;}
-    .chip:hover{transform:translateY(-2px)}
-    .toggle{padding:10px 12px; border:1px solid var(--border); border-radius:12px; background:var(--card); cursor:pointer; color:var(--fg)}
-
-    /* HERO */
-    .hero{padding:56px 20px 28px; position:relative}
-    .title{font-family:'Playfair Display',serif; font-weight:800; font-size:clamp(34px, 6vw, 54px); line-height:1.06; margin:0 0 10px}
-    .subtitle{color:var(--muted); font-size:clamp(14px, 2.2vw, 18px); max-width:800px}
-    .bar{height:4px; background:linear-gradient(90deg,var(--accent),var(--accent-2)); width:120px; border-radius:999px; margin:14px 0 0}
-    .avatar{width:96px; height:96px; border-radius:50%; border:2px solid var(--border); background:var(--glass); box-shadow:var(--shadow); overflow:hidden}
-    .avatar img{width:100%; height:100%; object-fit:cover}
-    .avatar-ring{padding:3px; border-radius:999px; background:linear-gradient(135deg,var(--accent),var(--accent-2)); display:inline-block}
-    .toolbar{display:flex; gap:12px; flex-wrap:wrap; margin:22px 0 8px;}
-
-    /* LIST / CARDS */
-    .search{flex:1 1 260px; display:flex; align-items:center; padding:12px 14px; border:1px solid var(--border); border-radius:12px; background:var(--card)}
-    .search input{all:unset; flex:1; font-size:15px; color:var(--fg)}
-    .dropdown-wrap{position:relative; display:inline-block}
-    .dropdown{position:absolute; z-index:60; left:0; top:calc(100% + 8px)}
-    .dropdown-menu{padding:8px; border:1px solid var(--border); border-radius:14px; background:var(--card); box-shadow:var(--shadow); max-height:280px; overflow:auto; min-width:220px}
-    .menu-title{font-size:12px; color:var(--muted); padding:6px 10px; text-transform:uppercase; letter-spacing:.3px}
-    .menu-item{display:flex; align-items:center; justify-content:space-between; gap:8px; padding:8px 10px; border-radius:10px; cursor:pointer}
-    .menu-item:hover{background:var(--glass)}
-    .btn{display:inline-flex; align-items:center; gap:8px; padding:10px 14px; border:1px solid var(--border); border-radius:12px; background:var(--card); box-shadow:var(--shadow); cursor:pointer; color:var(--fg)}
-    .grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(270px,1fr)); gap:18px;}
-    .card{position:relative; overflow:hidden; border-radius:var(--radius); border:1px solid var(--border); background:var(--glass); box-shadow:var(--shadow);}
-    .cover{aspect-ratio:16/10; background:linear-gradient(180deg,rgba(0,0,0,.0),rgba(0,0,0,.35)), center/cover no-repeat var(--card);}
-    .card-content{padding:14px 14px 16px}
-    .card h3{margin:6px 0 6px; font-size:18px}
-    .meta{display:flex; gap:10px; align-items:center; color:var(--muted); font-size:12px}
-    .tags{display:flex; gap:8px; flex-wrap:wrap; margin-top:10px}
-    .tag{font-size:11px; padding:6px 9px; border-radius:999px; border:1px solid var(--border); background:var(--card)}
-
-    /* POST */
-    .post{display:grid; grid-template-columns:minmax(0,1fr) 280px; gap:28px; margin-top:12px}
-    .post .body{padding:22px; border:1px solid var(--border); border-radius:var(--radius); background:var(--glass); box-shadow:var(--shadow)}
-    .post .body h1{font-family:'Playfair Display',serif; font-size:34px; margin:4px 0 8px}
-    .post .sidebar{position:sticky; top:90px; height:fit-content}
-    .toc{padding:16px; border:1px solid var(--border); border-radius:16px; background:var(--card)}
-    .toc h4{margin:0 0 10px; font-size:13px; letter-spacing:.4px; text-transform:uppercase; color:var(--muted)}
-    .toc a{display:block; padding:6px 6px; border-radius:8px; font-size:14px; color:var(--muted)}
-    .toc a:hover{background:var(--glass); color:var(--fg)}
-    .progress{position:fixed; left:0; top:0; height:4px; width:0%; background:linear-gradient(90deg,var(--accent),var(--accent-2)); z-index:30}
-    .about{padding:22px; border:1px solid var(--border); border-radius:var(--radius); background:var(--glass); box-shadow:var(--shadow);}
-
-    footer{margin:40px 0 20px; color:var(--muted); font-size:13px; text-align:center}
-
-    /* ===== ANIMATIONS ===== */
-    @media (prefers-reduced-motion:no-preference){
-      .reveal-up{opacity:0; transform:translateY(10px); animation:revealUp .6s cubic-bezier(.22,.61,.36,1) .1s forwards}
-      .reveal-fade{opacity:0; animation:fadeIn .6s ease .2s forwards}
-      .card.stagger{opacity:0; transform:translateY(8px); animation:cardIn .5s ease forwards}
-      @keyframes revealUp{to{opacity:1; transform:none}}
-      @keyframes fadeIn{to{opacity:1}}
-      @keyframes cardIn{to{opacity:1; transform:none}}
-      /* Page Loader */
-      .loader{position:fixed; inset:0; display:grid; place-items:center; background:radial-gradient(800px 400px at 15% 20%, rgba(124,156,255,.25), transparent 60%),
-                                                  radial-gradient(700px 350px at 85% 10%, rgba(159,124,255,.18), transparent 60%), var(--bg);
-              z-index:99; transition:opacity .5s ease; }
-      .loader.hide{opacity:0; pointer-events:none}
-      .orb{position:absolute; width:260px; height:260px; border-radius:50%;
-           background:conic-gradient(from 0deg, var(--accent), var(--accent-2), var(--accent), var(--accent-2));
-           filter:blur(22px); opacity:.30; animation:spin 6s linear infinite;}
-      @keyframes spin{to{transform:rotate(360deg)}}
-      .loader h1{font-family:'Playfair Display',serif; font-size:28px; letter-spacing:.4px}
-      .loader small{color:var(--muted)}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, "Helvetica Neue", Arial, "Apple Color Emoji","Segoe UI Emoji", "Segoe UI Symbol";
+      background: var(--bg);
+      color: var(--text);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
     }
-    @media (max-width: 920px){ .post{grid-template-columns:1fr} }
-    @media (max-width: 860px){ .hero-grid{grid-template-columns:1fr} }
-    @media (max-width: 760px){
-      .container{padding:14px}
-      .nav-inner{gap:8px; padding:10px 12px}
-      .brand{font-size:18px; white-space:nowrap}
-      .nav-links{gap:8px; overflow-x:auto; -webkit-overflow-scrolling:touch}
-      .nav-links::-webkit-scrollbar{display:none}
-      .chip{padding:6px 10px; font-size:13px}
-      .hero{padding:28px 14px 16px}
-      .avatar{width:72px; height:72px}
-      .title{font-size:clamp(26px,8vw,34px)}
-      .subtitle{font-size:14px}
-      .toolbar{gap:8px; margin:16px 0 6px}
-      .search{padding:10px 12px}
-      .btn{padding:8px 12px; font-size:13px}
-      .grid{grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:12px}
-      .card-content{padding:12px}
-      .post .body{padding:16px}
-      .toc{display:none}
+    a{color:inherit;text-decoration:none}
+    .wrap{max-width:1180px;margin:0 auto;padding:0 20px}
+
+    /* Topbar */
+    .topbar{
+      position:sticky;top:0;z-index:50;
+      backdrop-filter:saturate(1.2) blur(10px);
+      background: linear-gradient(180deg, rgba(0,0,0,.25), rgba(0,0,0,0)) ;
+      border-bottom:1px solid transparent;
     }
-    @media (max-width: 420px){
-      .container{padding:10px}
-      .grid{grid-template-columns:1fr}
-      .avatar{width:64px; height:64px}
-      .search input{font-size:14px}
+    .nav{
+      display:flex;align-items:center;gap:14px;justify-content:space-between;
+      padding:18px 0;
+    }
+    .brand{
+      font-family:"Playfair Display",serif;
+      font-size:26px;font-weight:800;letter-spacing:.2px;
+    }
+    .tabs{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+    .chip{
+      background: var(--chip);color:var(--chip-text);
+      padding:10px 16px;border-radius:999px;border:1px solid var(--border);
+      box-shadow: 0 1px 0 rgba(255,255,255,.06) inset;
+      transition: transform var(--tr-150), background var(--tr-150);
+      font-weight:600
+    }
+    .chip:hover{transform:translateY(-1px)}
+    .toggle{
+      width:38px;height:38px;border-radius:12px;border:1px solid var(--border);
+      display:grid;place-items:center;background:var(--surface);cursor:pointer;
+      box-shadow: var(--shadow-1);
+    }
+    .toggle i{width:18px;height:18px;border-radius:50%;
+      background: conic-gradient(from 0deg,#f7c948 0 50%, #6b3cff 0 100%);
+      box-shadow:0 0 0 3px var(--hero-ring) inset
     }
 
-    /* Markdown niceties */
-    .body blockquote{border-left:3px solid var(--accent); margin:12px 0; padding:10px 14px; background:linear-gradient(90deg, rgba(124,156,255,.14), transparent); border-radius:8px}
-    .body pre{background:#0f1126; color:#e7e7ff; padding:12px 14px; border-radius:10px; overflow:auto; border:1px solid var(--border)}
-    .body code{background:rgba(124,156,255,.14); padding:2px 6px; border-radius:6px}
-    .dropcap:first-letter{float:left; font-family:'Playfair Display',serif; font-size:3.2em; line-height:.9; margin:.07em .18em 0 0; color:var(--accent)}
+    /* Hero */
+    .hero{
+      position:relative;margin-top:-8px;padding:56px 0 28px;
+      background: radial-gradient(1200px 600px at 10% -10%, var(--hero-grad-1), transparent 60%),
+                  radial-gradient(900px 500px at 90% -20%, var(--hero-grad-2), transparent 60%);
+      border-bottom:1px solid var(--border);
+    }
+    .hero-inner{display:grid;grid-template-columns:110px 1fr;gap:24px;align-items:center}
+    .avatar{
+      width:110px;height:110px;border-radius:999px;
+      background: radial-gradient(80% 80% at 30% 20%, #e0d3ff, #9ea7ff 70%, #7b59ff);
+      border:6px solid var(--bg);
+      box-shadow: 0 0 0 8px var(--hero-ring), var(--shadow-2);
+    }
+    .hero h1{
+      margin:0;
+      font-family:"Playfair Display",serif;
+      font-weight:800;
+      letter-spacing:.3px;
+      line-height:1.1;
+      font-size: clamp(28px, 6vw, 64px);
+      text-shadow: 0 1px 0 rgba(0,0,0,.3);
+    }
+    .hero .desc{margin-top:8px;color:var(--text-soft);font-size:18px}
+    .meter{height:6px;width:220px;background:var(--chip);border-radius:999px;margin-top:14px;position:relative;overflow:hidden;border:1px solid var(--border)}
+    .meter::after{
+      content:"";position:absolute;left:0;top:0;height:100%;width:45%;
+      background: linear-gradient(90deg, var(--accent), var(--primary));
+      box-shadow: 0 0 18px var(--primary);
+    }
+    .stats{margin-top:10px;color:var(--muted);font-weight:600}
+
+    /* Search & filters */
+    .toolbar{display:flex;gap:12px;align-items:center;margin:18px 0 10px;flex-wrap:wrap}
+    .search{
+      flex:1;display:flex;align-items:center;gap:10px;
+      background: var(--surface); border:1px solid var(--border); border-radius:999px; padding:14px 18px;
+      box-shadow: var(--shadow-1);
+      color:var(--muted)
+    }
+    .search input{
+      outline:0;border:0;background:transparent;color:var(--text);
+      width:100%;font-size:16px
+    }
+
+    /* Tag dropdown */
+    .tag-wrap{position:relative}
+    .menu{
+      position:absolute;right:0;top:calc(100% + 10px);min-width:280px;
+      background:var(--surface);border:1px solid var(--border);border-radius:16px;
+      box-shadow: var(--shadow-2);padding:14px;display:none
+    }
+    .menu.open{display:block}
+    .menu h5{margin:4px 8px 10px;color:var(--muted);letter-spacing:.6px}
+    .menu .item{padding:10px 12px;border-radius:12px;cursor:pointer}
+    .menu .item:hover{background:var(--chip)}
+
+    /* Grid list & cards */
+    .grid{display:grid;grid-template-columns:1fr 360px;gap:18px}
+    @media (max-width: 980px){.grid{grid-template-columns:1fr}}
+    .card{
+      background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
+      box-shadow: var(--shadow-1);padding:22px; overflow:hidden
+    }
+    .card h3{margin:0 0 6px;font-family:"Playfair Display",serif;font-size: clamp(22px, 3.8vw, 38px)}
+    .meta{color:var(--muted);font-size:14px;margin:6px 0 12px;display:flex;gap:14px;align-items:center}
+    .tags{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+    .t{font-weight:700; font-size:13px; padding:6px 10px; border-radius:999px; background:var(--chip); color:var(--chip-text); border:1px solid var(--border)}
+
+    /* Sidebar */
+    .side .card h4{margin:0 0 10px;font-size:14px;letter-spacing:.8px;color:var(--muted)}
+    .toc a{display:block;padding:10px 12px;border-radius:10px}
+    .toc a:hover{background:var(--chip)}
+
+    /* Post page */
+    .post h1{font-family:"Playfair Display",serif;font-size: clamp(28px,5vw,52px);margin:0 0 10px}
+    .post .content{line-height:1.75;color:var(--text-soft);font-size:18px}
+    .post .content p{margin:10px 0 18px}
+    .post .content img{max-width:100%;border-radius:14px;border:1px solid var(--border)}
+    .lead{color:var(--muted);margin-bottom:12px}
+
+    /* Footer */
+    footer{padding:28px 0 40px;color:var(--muted);text-align:center}
+    footer a{color:var(--primary);font-weight:700}
+
+    /* Loader */
+    .loader{
+      position:fixed;inset:0;background:rgba(0,0,0,.25);
+      display:none;place-items:center;z-index:70;backdrop-filter: blur(4px) saturate(1.2);
+    }
+    .loader.show{display:grid}
+    .spinner{
+      width:58px;height:58px;border-radius:50%;
+      border:4px solid rgba(255,255,255,.18);
+      border-top-color: var(--primary);
+      animation: spin 900ms linear infinite;
+      box-shadow: 0 0 0 6px var(--hero-ring);
+    }
+    @keyframes spin{to{transform:rotate(1turn)}}
+
+    /* Page transition */
+    .fade{opacity:0; transform:translateY(6px); transition:opacity 180ms ease, transform 180ms ease}
+    .fade.in{opacity:1; transform:none}
   </style>
 </head>
 <body>
-  <!-- Page Loader -->
-  <div class="loader" id="pageLoader" aria-hidden="true">
-    <div class="orb"></div>
-    <div style="text-align:center; z-index:1">
-      <h1>Rafy • Blog</h1>
-      <small>memuat…</small>
+  <!-- Loader -->
+  <div id="loader" class="loader"><div class="spinner"></div></div>
+
+  <!-- Topbar -->
+  <header class="topbar">
+    <div class="wrap">
+      <div class="nav">
+        <div class="brand">Rafy • Blog</div>
+        <div class="tabs">
+          <a href="#/" class="chip">Beranda</a>
+          <a href="#/blog" class="chip">Blog</a>
+          <a href="#/novel" class="chip">Novel</a>
+          <a href="#/about" class="chip">Tentang Penulis</a>
+          <button id="themeBtn" class="toggle" aria-label="Toggle theme"><i></i></button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="wrap">
+      <div class="hero-inner">
+        <div class="avatar"></div>
+        <div>
+          <h1>Halo, aku Rafy Rayyan Ermadi</h1>
+          <div class="desc">Blog progres menulis & belajar—novel tugas akhir, catatan proses, dan eksperimen tulisan.</div>
+          <div class="meter"></div>
+          <div id="statLine" class="stats">2 posting • 1 bab • 1 catatan</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Toolbar -->
+  <div class="wrap">
+    <div class="toolbar">
+      <div class="search">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M21 21l-3.8-3.8M10.8 18.5A7.7 7.7 0 1 1 10.8 3a7.7 7.7 0 0 1 0 15.4Z" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        <input id="q" placeholder="Cari judul, tag, atau seri..." />
+      </div>
+      <button id="sortBtn" class="chip">Terbaru</button>
+
+      <div class="tag-wrap">
+        <button id="tagBtn" class="chip">#Tag ▾</button>
+        <div id="tagMenu" class="menu">
+          <h5>FILTER #TAG</h5>
+          <div data-tag="bab" class="item"># bab</div>
+          <div data-tag="catatan" class="item"># catatan</div>
+          <div data-tag="progres" class="item"># progres</div>
+          <h5>LAINNYA</h5>
+          <div data-tag="*" class="item">Tampilkan semua</div>
+        </div>
+      </div>
     </div>
   </div>
 
-  <div class="progress" id="progress"></div>
+  <!-- Main grid -->
+  <main class="wrap">
+    <div class="grid">
+      <div id="list" class="fade"></div>
 
-  <nav class="nav reveal-fade">
-    <div class="nav-inner container">
-      <a class="brand" href="#/" id="brand">Rafy • Blog</a>
-      <div class="nav-links">
-        <a class="chip" href="#/">Beranda</a>
-        <a class="chip" href="#/blog">Blog</a>
-        <a class="chip" href="#/novel">Novel</a>
-        <a class="chip" href="#/about">Tentang Penulis</a>
-        <button class="toggle" id="themeToggle" title="Tema">🌓</button>
-      </div>
-    </div>
-  </nav>
-
-  <header class="hero container reveal-up" id="hero"></header>
-
-  <main class="container">
-    <section class="toolbar reveal-up">
-      <div class="search">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="opacity:.7; margin-right:8px"><path d="M21 21l-4.3-4.3M10.5 18a7.5 7.5 0 100-15 7.5 7.5 0 000 15z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
-        <input id="searchInput" placeholder="Cari judul, tag, atau seri..." />
-      </div>
-      <button class="btn" id="newestBtn">Terbaru</button>
-      <div class="dropdown-wrap">
-        <button class="btn" id="tagsBtn">#Tag ▾</button>
-        <div id="tagDropdown" class="dropdown" style="display:none"></div>
-      </div>
-    </section>
-
-    <section id="listView"><div class="grid" id="grid"></div></section>
-
-    <section id="postView" style="display:none">
-      <div class="post">
-        <article class="body" id="postBody"></article>
-        <aside class="sidebar reveal-fade">
-          <div class="toc" id="toc">
-            <h4>Daftar Isi</h4>
-            <div id="tocLinks"></div>
-          </div>
-          <div style="height:14px"></div>
-          <div class="about">
-            <h3 style="margin-top:0">Tentang Penulis</h3>
-            <div id="authorCard"><p>Perkenalkan dirimu di halaman <a href="#/about">Tentang Penulis</a>.</p></div>
-          </div>
-        </aside>
-      </div>
-      <div id="comments" style="margin-top:22px"></div>
-    </section>
-
-    <section id="aboutView" style="display:none">
-      <div class="about" id="aboutBody"></div>
-    </section>
-  </main>
-
-  <footer>© 2025 • Made with ❤️ by <a href="https://www.instagram.com/rafy.rayyan/" target="_blank" rel="noopener">Rafy Rayyan</a>. Hak cipta dilindungi undang-undang. Mohon tidak menyalin atau mendistribusikan ulang tanpa izin.</footer>
-
-  <template id="cardTmpl">
-    <a class="card" href="#">
-      <div class="cover"></div>
-      <div class="card-content">
-        <div class="meta"><span class="date"></span> • <span class="read"></span></div>
-        <h3 class="h"></h3>
-        <p class="excerpt" style="color:var(--muted); margin:6px 0 8px"></p>
-        <div class="tags"></div>
-      </div>
-    </a>
-  </template>
-
-  <script>
-  (function(){
-    'use strict';
-
-    var SITE = {
-      title: 'Rafy • Blog',
-      titleBrand: 'Rafy • Blog',
-      author: 'Rafy Rayyan Ermadi',
-      tagline: 'Blog progres menulis & belajar—novel tugas akhir, catatan proses, dan eksperimen tulisan.',
-      authorAvatar: 'images/avatar.jpg', // ganti sesuai file-mu
-      repo: '',                           // isi "username/repo" utk aktifkan Giscus (opsional)
-      postsIndexPath: 'posts/posts.json',
-      aboutHtml: `
-        <h1 style="margin-top:0">Halo, aku Rafy Rayyan Ermadi 👋</h1>
-        <p>Aku siswa kelas 12 yang lagi nulis novel untuk tugas akhir. Di blog ini, aku upload progres, bab, dan catatan proses kreatif.</p>
-        <ul><li>Minat: sastra, web, desain</li><li>Target: rilis naskah final Desember</li></ul>
-      `
-    };
-
-    var SAMPLE_POSTS = [
-      { title:'Bab 1 — Bayang Kota', slug:'bab-1-bayang-kota', date:'2025-09-01', tags:['bab','progres','novel'], series:'Novel TA', excerpt:'Pengenalan tokoh utama dan konflik awal.', cover:'images/sample-1.jpg', published:true },
-      { title:'Catatan Proses #1 — Kenapa Tema Ini?', slug:'catatan-proses-1', date:'2025-08-30', tags:['progres','catatan'], series:'Catatan Proses', excerpt:'Kenapa milih tema dan rencana riset awal.', cover:'images/sample-2.jpg', published:true }
-    ];
-
-    var $  = function(s,el){ return (el||document).querySelector(s); };
-    var $$ = function(s,el){ return Array.prototype.slice.call((el||document).querySelectorAll(s)); };
-    var POSTS = [];
-    function fmtDate(d){ return new Date(d).toLocaleDateString('id-ID',{year:'numeric',month:'short',day:'numeric'}); }
-    function readingTime(t){ return Math.max(1, Math.round((t||'').split(/\s+/).length/200)); }
-    function getTheme(){ return localStorage.getItem('theme') || 'dark'; }
-    function setTheme(t){ document.documentElement.setAttribute('data-theme',t); localStorage.setItem('theme',t); }
-
-    // Router + init safety
-    window.addEventListener('hashchange', router);
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', init);
-    } else {
-      init();
-    }
-
-    function init(){
-      setTheme(getTheme());
-      var btn = $('#themeToggle'); if(btn){ btn.onclick = function(){ setTheme(getTheme()==='dark'?'light':'dark'); updateCommentsTheme(); }; }
-      var b = $('#brand'); if(b) b.textContent = SITE.titleBrand || SITE.title;
-      if(!location.hash) location.hash = '#/';
-      renderHero();
-      router();
-    }
-
-    async function router(){
-      const hash = location.hash || '#/';
-      const [_, route, param] = hash.split('/');
-      try{
-        if(route==='post' && param){ await ensurePosts(); showPost(param); return hideLoaderSoon(); }
-        if(route==='about'){ showAbout(); return hideLoaderSoon(); }
-        if(route==='blog'){ await ensurePosts(); renderList(p=> !(p.tags||[]).includes('bab')); return hideLoaderSoon(); }
-        if(route==='novel'){ await ensurePosts(); renderList(p=> (p.tags||[]).includes('bab') || (p.tags||[]).includes('novel')); return hideLoaderSoon(); }
-        if(route==='tag' && param){ await ensurePosts(); renderList(p=> (p.tags||[]).includes(decodeURIComponent(param))); return hideLoaderSoon(); }
-        await ensurePosts(); renderList(); hideLoaderSoon();
-      }catch(e){ console.error(e); hideLoaderSoon(); }
-    }
-
-    async function ensurePosts(){
-      if(POSTS.length) return;
-      try{
-        const r = await fetch(SITE.postsIndexPath, {cache:'no-store'});
-        if(!r.ok) throw new Error('no index');
-        const arr = await r.json();
-        POSTS = arr.filter(p=>p.published!==false);
-      }catch(e){
-        POSTS = SAMPLE_POSTS.slice();
-      }
-      POSTS.sort((a,b)=> new Date(b.date)-new Date(a.date));
-
-      const si = $('#searchInput');
-      if(si) si.oninput = (e)=>{
-        const q = (e.target.value||'').trim().toLowerCase();
-        renderList(p=> !q ||
-          p.title.toLowerCase().includes(q) ||
-          (p.series||'').toLowerCase().includes(q) ||
-          (p.tags||[]).join(' ').toLowerCase().includes(q));
-      };
-      const nb = $('#newestBtn'); if(nb) nb.onclick = ()=>{ POSTS.sort((a,b)=> new Date(b.date)-new Date(a.date)); renderList(); };
-      const tb = $('#tagsBtn'); if(tb) tb.onclick = openTagDropdown;
-
-      renderHero();
-    }
-
-    function renderHero(){
-      var el = $('#hero'); if(!el) return;
-      var stats = POSTS.length+' posting • '+
-                  POSTS.filter(p=>(p.tags||[]).includes('bab')).length+' bab • '+
-                  POSTS.filter(p=>(p.tags||[]).includes('catatan')).length+' catatan';
-      var html = `
-        <div style="display:flex; align-items:center; gap:16px; margin-bottom:8px">
-          <div class="avatar-ring"><div class="avatar">${SITE.authorAvatar?`<img src="${SITE.authorAvatar}" alt="${SITE.author}">`:''}</div></div>
-          <div>
-            <h1 class="title">${SITE.author?`Halo, aku ${SITE.author}`:'Halo'}</h1>
-            <p class="subtitle">${SITE.tagline}</p>
+      <aside class="side">
+        <div class="card">
+          <h4>DAFTAR ISI</h4>
+          <div id="toc" class="toc"></div>
+        </div>
+        <div class="card">
+          <h4>Tentang Penulis</h4>
+          <div style="display:flex;gap:14px;align-items:center">
+            <div class="avatar" style="width:52px;height:52px;border-width:4px;box-shadow:0 0 0 4px var(--hero-ring)"></div>
+            <div><strong>Rafy Rayyan Ermadi</strong><br/><span class="muted">Penulis</span></div>
           </div>
         </div>
-        <div class="bar"></div>
-        <div class="meta" style="margin-top:8px">${stats}</div>`;
-      el.innerHTML = html;
+      </aside>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="wrap">
+    © 2025 • Made with ❤️ by <a href="https://www.instagram.com/rafy.rayyan/" target="_blank" rel="noopener">Rafy Rayyan</a>.
+    Hak cipta dilindungi undang-undang. Mohon tidak menyalin atau mendistribusikan ulang tanpa izin.
+  </footer>
+
+  <!-- 4) App JS -->
+  <script>
+    // -----------------------
+    // Data contoh (edit sesukamu)
+    // -----------------------
+    const POSTS = [
+      {
+        slug: "bab-1-bayang-kota",
+        title: "Bab 1 — Bayang Kota",
+        type: "bab",
+        tags: ["bab","progres","novel"],
+        date: "2025-09-01",
+        minutes: 2,
+        excerpt: "Pengenalan tokoh utama dan konflik awal.",
+        html: `
+          <p>Ini paragraf pembuka yang menyiapkan suasana kota saat senja. Lampu-lampu mulai hidup, dan bayangan gedung merayap di aspal basah.</p>
+          <p>Tokoh utama berdiri di tepi trotoar, menatap persimpangan yang merubah nasibnya. Di situlah ia melihat tanda pertama—sebuah amplop ungu di bawah bangku halte.</p>
+          <p>Dan begitulah bab dimulai.</p>
+        `
+      },
+      {
+        slug: "catatan-proses-1-kenapa-tema-ini",
+        title: "Catatan Proses #1 — Kenapa Tema Ini?",
+        type: "catatan",
+        tags: ["catatan","progres"],
+        date: "2025-08-30",
+        minutes: 3,
+        excerpt: "Menjawab pertanyaan: kenapa milih tema ini, dan apa riset awalnya.",
+        html: `
+          <p>Aku milih tema ini karena dekat dengan keseharian: kota kecil, suara malam, dan rahasia orang-orangnya. Riset awalku berupa foto jalanan dan wawancara singkat.</p>
+          <p>Targetku: satu bab tiap pekan. Semoga konsisten!</p>
+        `
+      }
+    ];
+
+    // -----------------------
+    // Utilities
+    // -----------------------
+    const $ = (sel, el=document) => el.querySelector(sel);
+    const $$ = (sel, el=document) => [...el.querySelectorAll(sel)];
+
+    const loader = $("#loader");
+    function showLoader(){ loader.classList.add("show"); }
+    function hideLoader(){ loader.classList.remove("show"); }
+
+    function formatDate(d){
+      const dt = new Date(d+"T00:00:00");
+      return dt.toLocaleDateString("id-ID", { day:"2-digit", month:"short", year:"numeric"});
     }
 
-    function renderList(filterFn){
-      $('#listView').style.display='block'; $('#postView').style.display='none'; $('#aboutView').style.display='none';
-      var grid = $('#grid'); grid.innerHTML='';
-      var data = filterFn? POSTS.filter(filterFn) : POSTS;
-      var tmpl = $('#cardTmpl');
-
-      data.forEach(function(p, i){
-        var node = tmpl.content.cloneNode(true);
-        var a = node.querySelector('a'); a.href = `#/post/${p.slug}`;
-        var cover = node.querySelector('.cover'); if(p.cover) cover.style.backgroundImage = `url('${p.cover}')`;
-        node.querySelector('.date').textContent = fmtDate(p.date);
-        node.querySelector('.h').textContent = p.title;
-        node.querySelector('.excerpt').textContent = p.excerpt || '';
-        var tagsEl = node.querySelector('.tags');
-        (p.tags||[]).forEach(function(t){ var s = document.createElement('a'); s.href = `#/tag/${encodeURIComponent(t)}`; s.className='tag'; s.textContent = '# '+t; tagsEl.appendChild(s); });
-        node.querySelector('.read').textContent = '•';
-        var cardEl = node.querySelector('.card');
-        cardEl.classList.add('stagger');                    // animasi per kartu
-        cardEl.style.animationDelay = (i*60)+'ms';
-        grid.appendChild(node);
-      });
+    // Build TOC (Daftar isi = semua bab)
+    function buildTOC(){
+      const toc = $("#toc");
+      const items = POSTS.filter(p=>p.type==="bab")
+        .map(p=>`<a href="#/post/${p.slug}">${p.title}</a>`)
+        .join("");
+      toc.innerHTML = items || `<span class="muted">Belum ada bab.</span>`;
     }
 
-    async function showPost(slug){
-      $('#listView').style.display='none'; $('#aboutView').style.display='none'; $('#postView').style.display='block'; window.scrollTo({top:0, behavior:'auto'});
-      var p = POSTS.find(x=> x.slug===slug) || {title:slug, date:'', tags:[]};
-      var md = '';
-      try{ var r = await fetch(`posts/${slug}.md`, {cache:'no-store'}); md = await r.text(); }
-      catch(e){ md = `# ${p.title}\n\n> (Contoh) Tulis konten markdown untuk **${slug}** di folder \`posts/${slug}.md\``; }
-      var html = (window.marked? window.marked.parse(md) : '<p>'+md.replace(/\n\n/g,'</p><p>')+'</p>');
-      var body = document.createElement('div'); body.innerHTML = html; var fp = body.querySelector('p'); if(fp) fp.classList.add('dropcap');
-      $('#postBody').innerHTML = '';
-      var head = document.createElement('div'); head.innerHTML = `
-        <div class="meta" style="margin-bottom:10px">${p.date?fmtDate(p.date):''} • ${readingTime(md)} menit baca</div>
-        <h1>${p.title}</h1>
-        ${(p.tags||[]).map(t=>`<a class="tag" href="#/tag/${encodeURIComponent(t)}"># ${t}</a>`).join(' ')}
-        ${p.cover?`<div style="height:14px"></div><img src="${p.cover}" alt="${p.title}">`:''}
-        <div style="height:18px"></div>`;
-      $('#postBody').append(head, body);
-      buildTOC(); setupProgress(); renderComments();
-      $('#authorCard').innerHTML = `<strong>${SITE.author}</strong><br><span style="color:var(--muted)">Penulis</span>`;
+    // Stats line
+    function refreshStats(){
+      const postCount = POSTS.length;
+      const bab = POSTS.filter(p=>p.type==="bab").length;
+      const catatan = POSTS.filter(p=>p.type==="catatan").length;
+      $("#statLine").textContent = `${postCount} posting • ${bab} bab • ${catatan} catatan`;
     }
 
-    function showAbout(){ $('#listView').style.display='none'; $('#postView').style.display='none'; $('#aboutView').style.display='block'; $('#aboutBody').innerHTML = SITE.aboutHtml; }
+    // Card list
+    function renderList({q="", tag="*", sort="desc"}={}){
+      const wrap = $("#list");
+      wrap.classList.remove("in");
+      let data = [...POSTS];
 
-    function buildTOC(){ var c = $('#tocLinks'); c.innerHTML=''; var hs = $$('#postBody h1, #postBody h2, #postBody h3'); hs.forEach(function(h,i){ if(!h.id) h.id='h-'+i; var a=document.createElement('a'); a.href='#'+h.id; a.textContent=h.textContent; c.appendChild(a); }); $('#toc').style.display = hs.length? 'block':'none'; }
+      if(q){
+        const qq = q.toLowerCase();
+        data = data.filter(p =>
+          p.title.toLowerCase().includes(qq) ||
+          p.tags.join(" ").toLowerCase().includes(qq) ||
+          (p.excerpt||"").toLowerCase().includes(qq)
+        );
+      }
+      if(tag && tag!=="*"){
+        data = data.filter(p => p.tags.includes(tag));
+      }
+      data.sort((a,b)=> sort==="desc"
+        ? new Date(b.date)-new Date(a.date)
+        : new Date(a.date)-new Date(b.date));
 
-    function setupProgress(){ var bar = $('#progress'); function onScroll(){ var el = $('#postBody'); var total = el.scrollHeight - window.innerHeight + 80; var sc = Math.max(0, Math.min(1, window.scrollY / (total||1))); bar.style.width = (sc*100).toFixed(2)+'%'; } window.removeEventListener('scroll', onScroll); window.addEventListener('scroll', onScroll, {passive:true}); onScroll(); }
+      wrap.innerHTML = data.map(p => `
+        <article class="card">
+          <div class="meta">${formatDate(p.date)} • ${p.minutes} menit baca</div>
+          <a href="#/post/${p.slug}"><h3>${p.title}</h3></a>
+          <p style="color:var(--text-soft);margin:10px 0 14px">${p.excerpt||""}</p>
+          <div class="tags">
+            ${p.tags.map(t=>`<span class="t"># ${t}</span>`).join("")}
+          </div>
+        </article>
+      `).join("");
 
-    function renderComments(){ var el = $('#comments'); el.innerHTML=''; if(!SITE.repo){ el.innerHTML = '<div class="about"><b>Komentar</b><br><small>Aktifkan dengan mengisi <code>SITE.repo = "username/repo"</code> untuk Giscus.</small></div>'; return; } var wrap = document.createElement('div'); wrap.className='about'; wrap.innerHTML = '<b>Komentar</b><div id="giscus"></div>'; el.appendChild(wrap); var s = document.createElement('script'); s.src='https://giscus.app/client.js'; s.setAttribute('data-repo', SITE.repo); s.setAttribute('data-mapping','pathname'); s.setAttribute('data-reactions-enabled','1'); s.setAttribute('data-input-position','bottom'); s.setAttribute('data-theme', getTheme()==='dark'?'dark':'light'); s.crossOrigin='anonymous'; s.async=true; document.body.appendChild(s); }
-    function updateCommentsTheme(){ var f = document.querySelector('iframe.giscus-frame'); if(!f) return; f.contentWindow && f.contentWindow.postMessage({giscus:{setConfig:{theme:(getTheme()==='dark'?'dark':'light')}}}, 'https://giscus.app'); }
+      requestAnimationFrame(()=>wrap.classList.add("in"));
+    }
 
-    /* ==== Dropdown Tag (ikut scroll, nempel tombol) ==== */
-    function openTagDropdown(ev){
-      if(!POSTS.length) return;
-      const btn = ev.currentTarget;
-      const wrap = btn.parentElement;
-      const dd   = wrap.querySelector('#tagDropdown');
+    // Post page
+    function renderPost(slug){
+      const post = POSTS.find(p=>p.slug===slug);
+      const wrap = $("#list");
+      wrap.classList.remove("in");
 
-      dd.innerHTML = '';
-      const all = [...new Set(POSTS.flatMap(p => p.tags || []))].sort();
+      if(!post){
+        wrap.innerHTML = `<div class="card">Konten tidak ditemukan.</div>`;
+        requestAnimationFrame(()=>wrap.classList.add("in"));
+        return;
+      }
 
-      const menu = document.createElement('div');
-      menu.className = 'dropdown-menu';
+      wrap.innerHTML = `
+        <article class="card post">
+          <div class="lead">${formatDate(post.date)} • ${post.minutes} menit baca</div>
+          <h1>${post.title}</h1>
+          <div class="tags" style="margin-bottom:8px">
+            ${post.tags.map(t=>`<span class="t"># ${t}</span>`).join("")}
+          </div>
+          <div class="content">${post.html}</div>
+        </article>
+      `;
+      requestAnimationFrame(()=>wrap.classList.add("in"));
+    }
 
-      const title = document.createElement('div');
-      title.className = 'menu-title';
-      title.textContent = 'FILTER #TAG';
-      menu.appendChild(title);
+    // -----------------------
+    // Router (hash-based)
+    // -----------------------
+    function route(){
+      // Pastikan theme selalu diterapkan saat pindah halaman (fix “post jadi putih/pecah”)
+      ensureTheme();
 
-      all.forEach(t => {
-        const item = document.createElement('div');
-        item.className = 'menu-item';
-        item.textContent = '# ' + t;
-        item.onclick = () => { dd.style.display = 'none'; renderList(p => (p.tags || []).includes(t)); };
-        menu.appendChild(item);
-      });
+      showLoader();
+      const hash = location.hash || "#/";
+      const [_, path, param] = hash.split("/"); // ["#", "", "post", "slug"] -> path=""; param="post" (opsional)
+      const page = (path||"").toLowerCase();
 
-      const sep = document.createElement('div');
-      sep.className = 'menu-title';
-      sep.textContent = 'LAINNYA';
-      menu.appendChild(sep);
+      // kecilkan menu tag jika terbuka
+      $("#tagMenu").classList.remove("open");
 
-      const allItem = document.createElement('div');
-      allItem.className = 'menu-item';
-      allItem.textContent = 'Tampilkan semua';
-      allItem.onclick = () => { dd.style.display = 'none'; renderList(); };
-      menu.appendChild(allItem);
-
-      dd.appendChild(menu);
-      dd.style.display = 'block';
-      dd.style.left = '0px'; dd.style.right = 'auto';
-      requestAnimationFrame(() => {
-        const rect = dd.getBoundingClientRect();
-        if(rect.right > window.innerWidth - 12){
-          dd.style.left = 'auto';
-          dd.style.right = '0px';
+      setTimeout(()=>{
+        switch(page){
+          case "": // beranda
+          case "#":
+            renderList(currentFilter);
+            break;
+          case "blog":
+            renderList({...currentFilter, tag:"catatan"});
+            break;
+          case "novel":
+            renderList({...currentFilter, tag:"bab"});
+            break;
+          case "about":
+            $("#list").innerHTML = `
+              <article class="card">
+                <h3>Halo, aku Nama Kamu 👋</h3>
+                <p class="content">Aku siswa kelas 12 yang lagi nulis novel untuk tugas akhir Bahasa Indonesia. Di blog ini, aku upload progres, bab, dan catatan proses kreatif.</p>
+              </article>
+            `;
+            break;
+          case "post":
+            renderPost(param);
+            break;
+          default:
+            $("#list").innerHTML = `<div class="card">Halaman tidak ditemukan.</div>`;
         }
-      });
+        hideLoader();
+      }, 220); // beri sedikit waktu utk animasi loader
     }
-    document.addEventListener('click', function(e){
-      const dd = document.getElementById('tagDropdown');
-      if(!dd || dd.style.display==='none') return;
-      if(e.target.closest('#tagDropdown') || e.target.closest('#tagsBtn')) return;
-      dd.style.display='none';
+
+    window.addEventListener("hashchange", route);
+    document.addEventListener("DOMContentLoaded", () => {
+      buildTOC(); refreshStats(); route();
     });
-    document.addEventListener('keydown', function(e){
-      if(e.key==='Escape'){
-        const dd = document.getElementById('tagDropdown');
-        if(dd) dd.style.display='none';
+
+    // -----------------------
+    // Search & Tags & Sort
+    // -----------------------
+    const currentFilter = { q:"", tag:"*", sort:"desc" };
+
+    $("#q").addEventListener("input", (e)=>{
+      currentFilter.q = e.target.value.trim();
+      if(location.hash.startsWith("#/post/")) location.hash="#/"; // balik ke list saat cari
+      renderList(currentFilter);
+    });
+
+    $("#sortBtn").addEventListener("click", ()=>{
+      currentFilter.sort = currentFilter.sort==="desc" ? "asc" : "desc";
+      renderList(currentFilter);
+    });
+
+    const tagBtn = $("#tagBtn");
+    const tagMenu = $("#tagMenu");
+    tagBtn.addEventListener("click", ()=>{
+      tagMenu.classList.toggle("open");
+    });
+    document.addEventListener("click", (e)=>{
+      if(!tagMenu.contains(e.target) && !tagBtn.contains(e.target)){
+        tagMenu.classList.remove("open");
       }
     });
+    $$("#tagMenu .item").forEach(it=>{
+      it.addEventListener("click", ()=>{
+        const tg = it.getAttribute("data-tag");
+        currentFilter.tag = tg;
+        tagMenu.classList.remove("open");
+        if(location.hash.startsWith("#/post/")) location.hash="#/";
+        renderList(currentFilter);
+      });
+    });
 
-    /* ===== Loader Control ===== */
-    let loaderHidden = false;
-    function hideLoaderSoon(){
-      if(loaderHidden) return;
-      loaderHidden = true;
-      setTimeout(()=>{ const l = $('#pageLoader'); if(l) l.classList.add('hide'); }, 200); // beri waktu 200ms biar elegan
-      // reveal anim untuk hero/toolbar kalau user reduce-motion OFF
-      $$('.reveal-up, .reveal-fade').forEach((el,i)=>{ el.style.animationDelay = (120 + i*60)+'ms'; });
+    // -----------------------
+    // Theme toggle (selalu terapkan lebih dahulu sebelum render)
+    // -----------------------
+    function ensureTheme(){
+      const saved = localStorage.getItem("theme") || "dark";
+      document.documentElement.setAttribute("data-theme", saved);
     }
-
-  })();
+    $("#themeBtn").addEventListener("click", ()=>{
+      const cur = document.documentElement.getAttribute("data-theme");
+      const next = cur==="dark" ? "light" : "dark";
+      document.documentElement.setAttribute("data-theme", next);
+      try{ localStorage.setItem("theme", next); }catch(e){}
+    });
   </script>
 </body>
 </html>
-
-
