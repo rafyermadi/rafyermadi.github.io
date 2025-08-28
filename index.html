@@ -1,0 +1,441 @@
+<!doctype html>
+<html lang="id" data-theme="dark">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Rafy • Blog</title>
+  <meta name="description" content="Blog progres penulisan novel dan catatan proses." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <style>
+    :root{ --bg:#0b0b10; --fg:#e9ecf1; --muted:#b8c1d1; --card:rgba(255,255,255,.06); --border:rgba(255,255,255,.12); --accent:#7c9cff; --accent-2:#9f7cff; --glass:rgba(255,255,255,.07); --shadow:0 10px 30px rgba(0,0,0,.35); --radius:18px; }
+    html[data-theme='light']{ --bg:#f7f8fb; --fg:#0f1222; --muted:#5b6173; --card:rgba(255,255,255,.9); --border:rgba(10,12,20,.08); --glass:rgba(255,255,255,.7); --shadow:0 10px 30px rgba(0,0,0,.08); }
+    *{box-sizing:border-box}
+    body{margin:0; font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial; color:var(--fg);
+      background:radial-gradient(1200px 600px at 10% 10%, rgba(124,156,255,.25), transparent 60%),
+                 radial-gradient(1000px 500px at 90% 0%, rgba(159,124,255,.18), transparent 60%), var(--bg);}
+    a{color:inherit; text-decoration:none}
+    .container{max-width:1100px; margin:0 auto; padding:20px}
+
+    /* NAV */
+    .nav{position:sticky; top:0; backdrop-filter:saturate(1.2) blur(10px);
+      background:linear-gradient(180deg, rgba(0,0,0,.35), transparent); border-bottom:1px solid var(--border); z-index:20}
+    .nav-inner{display:flex; align-items:center; gap:14px; padding:12px 20px;}
+    .brand{font-family:'Playfair Display', serif; font-weight:800; letter-spacing:.4px; font-size:20px}
+    .nav-links{display:flex; gap:12px; margin-left:auto}
+    .chip{padding:8px 12px; border:1px solid var(--border); border-radius:999px; background:var(--card); transition:transform .15s ease;}
+    .chip:hover{transform:translateY(-2px)}
+    .toggle{padding:10px 12px; border:1px solid var(--border); border-radius:12px; background:var(--card); cursor:pointer; color:var(--fg)}
+
+    /* HERO */
+    .hero{padding:56px 20px 28px; position:relative}
+    .title{font-family:'Playfair Display',serif; font-weight:800; font-size:clamp(34px, 6vw, 54px); line-height:1.06; margin:0 0 10px}
+    .subtitle{color:var(--muted); font-size:clamp(14px, 2.2vw, 18px); max-width:800px}
+    .bar{height:4px; background:linear-gradient(90deg,var(--accent),var(--accent-2)); width:120px; border-radius:999px; margin:14px 0 0}
+    .avatar{width:96px; height:96px; border-radius:50%; border:2px solid var(--border); background:var(--glass); box-shadow:var(--shadow); overflow:hidden}
+    .avatar img{width:100%; height:100%; object-fit:cover}
+    .avatar-ring{padding:3px; border-radius:999px; background:linear-gradient(135deg,var(--accent),var(--accent-2)); display:inline-block}
+    .toolbar{display:flex; gap:12px; flex-wrap:wrap; margin:22px 0 8px;}
+
+    /* LIST / CARDS */
+    .search{flex:1 1 260px; display:flex; align-items:center; padding:12px 14px; border:1px solid var(--border); border-radius:12px; background:var(--card)}
+    .search input{all:unset; flex:1; font-size:15px; color:var(--fg)}
+    .dropdown-wrap{position:relative; display:inline-block}
+    .dropdown{position:absolute; z-index:60; left:0; top:calc(100% + 8px)}
+    .dropdown-menu{padding:8px; border:1px solid var(--border); border-radius:14px; background:var(--card); box-shadow:var(--shadow); max-height:280px; overflow:auto; min-width:220px}
+    .menu-title{font-size:12px; color:var(--muted); padding:6px 10px; text-transform:uppercase; letter-spacing:.3px}
+    .menu-item{display:flex; align-items:center; justify-content:space-between; gap:8px; padding:8px 10px; border-radius:10px; cursor:pointer}
+    .menu-item:hover{background:var(--glass)}
+    .btn{display:inline-flex; align-items:center; gap:8px; padding:10px 14px; border:1px solid var(--border); border-radius:12px; background:var(--card); box-shadow:var(--shadow); cursor:pointer; color:var(--fg)}
+    .grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(270px,1fr)); gap:18px;}
+    .card{position:relative; overflow:hidden; border-radius:var(--radius); border:1px solid var(--border); background:var(--glass); box-shadow:var(--shadow);}
+    .cover{aspect-ratio:16/10; background:linear-gradient(180deg,rgba(0,0,0,.0),rgba(0,0,0,.35)), center/cover no-repeat var(--card);}
+    .card-content{padding:14px 14px 16px}
+    .card h3{margin:6px 0 6px; font-size:18px}
+    .meta{display:flex; gap:10px; align-items:center; color:var(--muted); font-size:12px}
+    .tags{display:flex; gap:8px; flex-wrap:wrap; margin-top:10px}
+    .tag{font-size:11px; padding:6px 9px; border-radius:999px; border:1px solid var(--border); background:var(--card)}
+
+    /* POST */
+    .post{display:grid; grid-template-columns:minmax(0,1fr) 280px; gap:28px; margin-top:12px}
+    .post .body{padding:22px; border:1px solid var(--border); border-radius:var(--radius); background:var(--glass); box-shadow:var(--shadow)}
+    .post .body h1{font-family:'Playfair Display',serif; font-size:34px; margin:4px 0 8px}
+    .post .sidebar{position:sticky; top:90px; height:fit-content}
+    .toc{padding:16px; border:1px solid var(--border); border-radius:16px; background:var(--card)}
+    .toc h4{margin:0 0 10px; font-size:13px; letter-spacing:.4px; text-transform:uppercase; color:var(--muted)}
+    .toc a{display:block; padding:6px 6px; border-radius:8px; font-size:14px; color:var(--muted)}
+    .toc a:hover{background:var(--glass); color:var(--fg)}
+    .progress{position:fixed; left:0; top:0; height:4px; width:0%; background:linear-gradient(90deg,var(--accent),var(--accent-2)); z-index:30}
+    .about{padding:22px; border:1px solid var(--border); border-radius:var(--radius); background:var(--glass); box-shadow:var(--shadow);}
+
+    footer{margin:40px 0 20px; color:var(--muted); font-size:13px; text-align:center}
+
+    /* ===== ANIMATIONS ===== */
+    @media (prefers-reduced-motion:no-preference){
+      .reveal-up{opacity:0; transform:translateY(10px); animation:revealUp .6s cubic-bezier(.22,.61,.36,1) .1s forwards}
+      .reveal-fade{opacity:0; animation:fadeIn .6s ease .2s forwards}
+      .card.stagger{opacity:0; transform:translateY(8px); animation:cardIn .5s ease forwards}
+      @keyframes revealUp{to{opacity:1; transform:none}}
+      @keyframes fadeIn{to{opacity:1}}
+      @keyframes cardIn{to{opacity:1; transform:none}}
+      /* Page Loader */
+      .loader{position:fixed; inset:0; display:grid; place-items:center; background:radial-gradient(800px 400px at 15% 20%, rgba(124,156,255,.25), transparent 60%),
+                                                  radial-gradient(700px 350px at 85% 10%, rgba(159,124,255,.18), transparent 60%), var(--bg);
+              z-index:99; transition:opacity .5s ease; }
+      .loader.hide{opacity:0; pointer-events:none}
+      .orb{position:absolute; width:260px; height:260px; border-radius:50%;
+           background:conic-gradient(from 0deg, var(--accent), var(--accent-2), var(--accent), var(--accent-2));
+           filter:blur(22px); opacity:.30; animation:spin 6s linear infinite;}
+      @keyframes spin{to{transform:rotate(360deg)}}
+      .loader h1{font-family:'Playfair Display',serif; font-size:28px; letter-spacing:.4px}
+      .loader small{color:var(--muted)}
+    }
+    @media (max-width: 920px){ .post{grid-template-columns:1fr} }
+    @media (max-width: 860px){ .hero-grid{grid-template-columns:1fr} }
+    @media (max-width: 760px){
+      .container{padding:14px}
+      .nav-inner{gap:8px; padding:10px 12px}
+      .brand{font-size:18px; white-space:nowrap}
+      .nav-links{gap:8px; overflow-x:auto; -webkit-overflow-scrolling:touch}
+      .nav-links::-webkit-scrollbar{display:none}
+      .chip{padding:6px 10px; font-size:13px}
+      .hero{padding:28px 14px 16px}
+      .avatar{width:72px; height:72px}
+      .title{font-size:clamp(26px,8vw,34px)}
+      .subtitle{font-size:14px}
+      .toolbar{gap:8px; margin:16px 0 6px}
+      .search{padding:10px 12px}
+      .btn{padding:8px 12px; font-size:13px}
+      .grid{grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:12px}
+      .card-content{padding:12px}
+      .post .body{padding:16px}
+      .toc{display:none}
+    }
+    @media (max-width: 420px){
+      .container{padding:10px}
+      .grid{grid-template-columns:1fr}
+      .avatar{width:64px; height:64px}
+      .search input{font-size:14px}
+    }
+
+    /* Markdown niceties */
+    .body blockquote{border-left:3px solid var(--accent); margin:12px 0; padding:10px 14px; background:linear-gradient(90deg, rgba(124,156,255,.14), transparent); border-radius:8px}
+    .body pre{background:#0f1126; color:#e7e7ff; padding:12px 14px; border-radius:10px; overflow:auto; border:1px solid var(--border)}
+    .body code{background:rgba(124,156,255,.14); padding:2px 6px; border-radius:6px}
+    .dropcap:first-letter{float:left; font-family:'Playfair Display',serif; font-size:3.2em; line-height:.9; margin:.07em .18em 0 0; color:var(--accent)}
+  </style>
+</head>
+<body>
+  <!-- Page Loader -->
+  <div class="loader" id="pageLoader" aria-hidden="true">
+    <div class="orb"></div>
+    <div style="text-align:center; z-index:1">
+      <h1>Rafy • Blog</h1>
+      <small>memuat…</small>
+    </div>
+  </div>
+
+  <div class="progress" id="progress"></div>
+
+  <nav class="nav reveal-fade">
+    <div class="nav-inner container">
+      <a class="brand" href="#/" id="brand">Rafy • Blog</a>
+      <div class="nav-links">
+        <a class="chip" href="#/">Beranda</a>
+        <a class="chip" href="#/blog">Blog</a>
+        <a class="chip" href="#/novel">Novel</a>
+        <a class="chip" href="#/about">Tentang Penulis</a>
+        <button class="toggle" id="themeToggle" title="Tema">🌓</button>
+      </div>
+    </div>
+  </nav>
+
+  <header class="hero container reveal-up" id="hero"></header>
+
+  <main class="container">
+    <section class="toolbar reveal-up">
+      <div class="search">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="opacity:.7; margin-right:8px"><path d="M21 21l-4.3-4.3M10.5 18a7.5 7.5 0 100-15 7.5 7.5 0 000 15z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        <input id="searchInput" placeholder="Cari judul, tag, atau seri..." />
+      </div>
+      <button class="btn" id="newestBtn">Terbaru</button>
+      <div class="dropdown-wrap">
+        <button class="btn" id="tagsBtn">#Tag ▾</button>
+        <div id="tagDropdown" class="dropdown" style="display:none"></div>
+      </div>
+    </section>
+
+    <section id="listView"><div class="grid" id="grid"></div></section>
+
+    <section id="postView" style="display:none">
+      <div class="post">
+        <article class="body" id="postBody"></article>
+        <aside class="sidebar reveal-fade">
+          <div class="toc" id="toc">
+            <h4>Daftar Isi</h4>
+            <div id="tocLinks"></div>
+          </div>
+          <div style="height:14px"></div>
+          <div class="about">
+            <h3 style="margin-top:0">Tentang Penulis</h3>
+            <div id="authorCard"><p>Perkenalkan dirimu di halaman <a href="#/about">Tentang Penulis</a>.</p></div>
+          </div>
+        </aside>
+      </div>
+      <div id="comments" style="margin-top:22px"></div>
+    </section>
+
+    <section id="aboutView" style="display:none">
+      <div class="about" id="aboutBody"></div>
+    </section>
+  </main>
+
+  <footer>© 2025 • Made with ❤️ by <a href="https://www.instagram.com/rafy.rayyan/" target="_blank" rel="noopener">Rafy Rayyan</a>. Hak cipta dilindungi undang-undang. Mohon tidak menyalin atau mendistribusikan ulang tanpa izin.</footer>
+
+  <template id="cardTmpl">
+    <a class="card" href="#">
+      <div class="cover"></div>
+      <div class="card-content">
+        <div class="meta"><span class="date"></span> • <span class="read"></span></div>
+        <h3 class="h"></h3>
+        <p class="excerpt" style="color:var(--muted); margin:6px 0 8px"></p>
+        <div class="tags"></div>
+      </div>
+    </a>
+  </template>
+
+  <script>
+  (function(){
+    'use strict';
+
+    var SITE = {
+      title: 'Rafy • Blog',
+      titleBrand: 'Rafy • Blog',
+      author: 'Rafy Rayyan Ermadi',
+      tagline: 'Blog progres menulis & belajar—novel tugas akhir, catatan proses, dan eksperimen tulisan.',
+      authorAvatar: 'images/avatar.jpg', // ganti sesuai file-mu
+      repo: '',                           // isi "username/repo" utk aktifkan Giscus (opsional)
+      postsIndexPath: 'posts/posts.json',
+      aboutHtml: `
+        <h1 style="margin-top:0">Halo, aku Rafy Rayyan Ermadi 👋</h1>
+        <p>Aku siswa kelas 12 yang lagi nulis novel untuk tugas akhir. Di blog ini, aku upload progres, bab, dan catatan proses kreatif.</p>
+        <ul><li>Minat: sastra, web, desain</li><li>Target: rilis naskah final Desember</li></ul>
+      `
+    };
+
+    var SAMPLE_POSTS = [
+      { title:'Bab 1 — Bayang Kota', slug:'bab-1-bayang-kota', date:'2025-09-01', tags:['bab','progres','novel'], series:'Novel TA', excerpt:'Pengenalan tokoh utama dan konflik awal.', cover:'images/sample-1.jpg', published:true },
+      { title:'Catatan Proses #1 — Kenapa Tema Ini?', slug:'catatan-proses-1', date:'2025-08-30', tags:['progres','catatan'], series:'Catatan Proses', excerpt:'Kenapa milih tema dan rencana riset awal.', cover:'images/sample-2.jpg', published:true }
+    ];
+
+    var $  = function(s,el){ return (el||document).querySelector(s); };
+    var $$ = function(s,el){ return Array.prototype.slice.call((el||document).querySelectorAll(s)); };
+    var POSTS = [];
+    function fmtDate(d){ return new Date(d).toLocaleDateString('id-ID',{year:'numeric',month:'short',day:'numeric'}); }
+    function readingTime(t){ return Math.max(1, Math.round((t||'').split(/\s+/).length/200)); }
+    function getTheme(){ return localStorage.getItem('theme') || 'dark'; }
+    function setTheme(t){ document.documentElement.setAttribute('data-theme',t); localStorage.setItem('theme',t); }
+
+    // Router + init safety
+    window.addEventListener('hashchange', router);
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', init);
+    } else {
+      init();
+    }
+
+    function init(){
+      setTheme(getTheme());
+      var btn = $('#themeToggle'); if(btn){ btn.onclick = function(){ setTheme(getTheme()==='dark'?'light':'dark'); updateCommentsTheme(); }; }
+      var b = $('#brand'); if(b) b.textContent = SITE.titleBrand || SITE.title;
+      if(!location.hash) location.hash = '#/';
+      renderHero();
+      router();
+    }
+
+    async function router(){
+      const hash = location.hash || '#/';
+      const [_, route, param] = hash.split('/');
+      try{
+        if(route==='post' && param){ await ensurePosts(); showPost(param); return hideLoaderSoon(); }
+        if(route==='about'){ showAbout(); return hideLoaderSoon(); }
+        if(route==='blog'){ await ensurePosts(); renderList(p=> !(p.tags||[]).includes('bab')); return hideLoaderSoon(); }
+        if(route==='novel'){ await ensurePosts(); renderList(p=> (p.tags||[]).includes('bab') || (p.tags||[]).includes('novel')); return hideLoaderSoon(); }
+        if(route==='tag' && param){ await ensurePosts(); renderList(p=> (p.tags||[]).includes(decodeURIComponent(param))); return hideLoaderSoon(); }
+        await ensurePosts(); renderList(); hideLoaderSoon();
+      }catch(e){ console.error(e); hideLoaderSoon(); }
+    }
+
+    async function ensurePosts(){
+      if(POSTS.length) return;
+      try{
+        const r = await fetch(SITE.postsIndexPath, {cache:'no-store'});
+        if(!r.ok) throw new Error('no index');
+        const arr = await r.json();
+        POSTS = arr.filter(p=>p.published!==false);
+      }catch(e){
+        POSTS = SAMPLE_POSTS.slice();
+      }
+      POSTS.sort((a,b)=> new Date(b.date)-new Date(a.date));
+
+      const si = $('#searchInput');
+      if(si) si.oninput = (e)=>{
+        const q = (e.target.value||'').trim().toLowerCase();
+        renderList(p=> !q ||
+          p.title.toLowerCase().includes(q) ||
+          (p.series||'').toLowerCase().includes(q) ||
+          (p.tags||[]).join(' ').toLowerCase().includes(q));
+      };
+      const nb = $('#newestBtn'); if(nb) nb.onclick = ()=>{ POSTS.sort((a,b)=> new Date(b.date)-new Date(a.date)); renderList(); };
+      const tb = $('#tagsBtn'); if(tb) tb.onclick = openTagDropdown;
+
+      renderHero();
+    }
+
+    function renderHero(){
+      var el = $('#hero'); if(!el) return;
+      var stats = POSTS.length+' posting • '+
+                  POSTS.filter(p=>(p.tags||[]).includes('bab')).length+' bab • '+
+                  POSTS.filter(p=>(p.tags||[]).includes('catatan')).length+' catatan';
+      var html = `
+        <div style="display:flex; align-items:center; gap:16px; margin-bottom:8px">
+          <div class="avatar-ring"><div class="avatar">${SITE.authorAvatar?`<img src="${SITE.authorAvatar}" alt="${SITE.author}">`:''}</div></div>
+          <div>
+            <h1 class="title">${SITE.author?`Halo, aku ${SITE.author}`:'Halo'}</h1>
+            <p class="subtitle">${SITE.tagline}</p>
+          </div>
+        </div>
+        <div class="bar"></div>
+        <div class="meta" style="margin-top:8px">${stats}</div>`;
+      el.innerHTML = html;
+    }
+
+    function renderList(filterFn){
+      $('#listView').style.display='block'; $('#postView').style.display='none'; $('#aboutView').style.display='none';
+      var grid = $('#grid'); grid.innerHTML='';
+      var data = filterFn? POSTS.filter(filterFn) : POSTS;
+      var tmpl = $('#cardTmpl');
+
+      data.forEach(function(p, i){
+        var node = tmpl.content.cloneNode(true);
+        var a = node.querySelector('a'); a.href = `#/post/${p.slug}`;
+        var cover = node.querySelector('.cover'); if(p.cover) cover.style.backgroundImage = `url('${p.cover}')`;
+        node.querySelector('.date').textContent = fmtDate(p.date);
+        node.querySelector('.h').textContent = p.title;
+        node.querySelector('.excerpt').textContent = p.excerpt || '';
+        var tagsEl = node.querySelector('.tags');
+        (p.tags||[]).forEach(function(t){ var s = document.createElement('a'); s.href = `#/tag/${encodeURIComponent(t)}`; s.className='tag'; s.textContent = '# '+t; tagsEl.appendChild(s); });
+        node.querySelector('.read').textContent = '•';
+        var cardEl = node.querySelector('.card');
+        cardEl.classList.add('stagger');                    // animasi per kartu
+        cardEl.style.animationDelay = (i*60)+'ms';
+        grid.appendChild(node);
+      });
+    }
+
+    async function showPost(slug){
+      $('#listView').style.display='none'; $('#aboutView').style.display='none'; $('#postView').style.display='block'; window.scrollTo({top:0, behavior:'auto'});
+      var p = POSTS.find(x=> x.slug===slug) || {title:slug, date:'', tags:[]};
+      var md = '';
+      try{ var r = await fetch(`posts/${slug}.md`, {cache:'no-store'}); md = await r.text(); }
+      catch(e){ md = `# ${p.title}\n\n> (Contoh) Tulis konten markdown untuk **${slug}** di folder \`posts/${slug}.md\``; }
+      var html = (window.marked? window.marked.parse(md) : '<p>'+md.replace(/\n\n/g,'</p><p>')+'</p>');
+      var body = document.createElement('div'); body.innerHTML = html; var fp = body.querySelector('p'); if(fp) fp.classList.add('dropcap');
+      $('#postBody').innerHTML = '';
+      var head = document.createElement('div'); head.innerHTML = `
+        <div class="meta" style="margin-bottom:10px">${p.date?fmtDate(p.date):''} • ${readingTime(md)} menit baca</div>
+        <h1>${p.title}</h1>
+        ${(p.tags||[]).map(t=>`<a class="tag" href="#/tag/${encodeURIComponent(t)}"># ${t}</a>`).join(' ')}
+        ${p.cover?`<div style="height:14px"></div><img src="${p.cover}" alt="${p.title}">`:''}
+        <div style="height:18px"></div>`;
+      $('#postBody').append(head, body);
+      buildTOC(); setupProgress(); renderComments();
+      $('#authorCard').innerHTML = `<strong>${SITE.author}</strong><br><span style="color:var(--muted)">Penulis</span>`;
+    }
+
+    function showAbout(){ $('#listView').style.display='none'; $('#postView').style.display='none'; $('#aboutView').style.display='block'; $('#aboutBody').innerHTML = SITE.aboutHtml; }
+
+    function buildTOC(){ var c = $('#tocLinks'); c.innerHTML=''; var hs = $$('#postBody h1, #postBody h2, #postBody h3'); hs.forEach(function(h,i){ if(!h.id) h.id='h-'+i; var a=document.createElement('a'); a.href='#'+h.id; a.textContent=h.textContent; c.appendChild(a); }); $('#toc').style.display = hs.length? 'block':'none'; }
+
+    function setupProgress(){ var bar = $('#progress'); function onScroll(){ var el = $('#postBody'); var total = el.scrollHeight - window.innerHeight + 80; var sc = Math.max(0, Math.min(1, window.scrollY / (total||1))); bar.style.width = (sc*100).toFixed(2)+'%'; } window.removeEventListener('scroll', onScroll); window.addEventListener('scroll', onScroll, {passive:true}); onScroll(); }
+
+    function renderComments(){ var el = $('#comments'); el.innerHTML=''; if(!SITE.repo){ el.innerHTML = '<div class="about"><b>Komentar</b><br><small>Aktifkan dengan mengisi <code>SITE.repo = "username/repo"</code> untuk Giscus.</small></div>'; return; } var wrap = document.createElement('div'); wrap.className='about'; wrap.innerHTML = '<b>Komentar</b><div id="giscus"></div>'; el.appendChild(wrap); var s = document.createElement('script'); s.src='https://giscus.app/client.js'; s.setAttribute('data-repo', SITE.repo); s.setAttribute('data-mapping','pathname'); s.setAttribute('data-reactions-enabled','1'); s.setAttribute('data-input-position','bottom'); s.setAttribute('data-theme', getTheme()==='dark'?'dark':'light'); s.crossOrigin='anonymous'; s.async=true; document.body.appendChild(s); }
+    function updateCommentsTheme(){ var f = document.querySelector('iframe.giscus-frame'); if(!f) return; f.contentWindow && f.contentWindow.postMessage({giscus:{setConfig:{theme:(getTheme()==='dark'?'dark':'light')}}}, 'https://giscus.app'); }
+
+    /* ==== Dropdown Tag (ikut scroll, nempel tombol) ==== */
+    function openTagDropdown(ev){
+      if(!POSTS.length) return;
+      const btn = ev.currentTarget;
+      const wrap = btn.parentElement;
+      const dd   = wrap.querySelector('#tagDropdown');
+
+      dd.innerHTML = '';
+      const all = [...new Set(POSTS.flatMap(p => p.tags || []))].sort();
+
+      const menu = document.createElement('div');
+      menu.className = 'dropdown-menu';
+
+      const title = document.createElement('div');
+      title.className = 'menu-title';
+      title.textContent = 'FILTER #TAG';
+      menu.appendChild(title);
+
+      all.forEach(t => {
+        const item = document.createElement('div');
+        item.className = 'menu-item';
+        item.textContent = '# ' + t;
+        item.onclick = () => { dd.style.display = 'none'; renderList(p => (p.tags || []).includes(t)); };
+        menu.appendChild(item);
+      });
+
+      const sep = document.createElement('div');
+      sep.className = 'menu-title';
+      sep.textContent = 'LAINNYA';
+      menu.appendChild(sep);
+
+      const allItem = document.createElement('div');
+      allItem.className = 'menu-item';
+      allItem.textContent = 'Tampilkan semua';
+      allItem.onclick = () => { dd.style.display = 'none'; renderList(); };
+      menu.appendChild(allItem);
+
+      dd.appendChild(menu);
+      dd.style.display = 'block';
+      dd.style.left = '0px'; dd.style.right = 'auto';
+      requestAnimationFrame(() => {
+        const rect = dd.getBoundingClientRect();
+        if(rect.right > window.innerWidth - 12){
+          dd.style.left = 'auto';
+          dd.style.right = '0px';
+        }
+      });
+    }
+    document.addEventListener('click', function(e){
+      const dd = document.getElementById('tagDropdown');
+      if(!dd || dd.style.display==='none') return;
+      if(e.target.closest('#tagDropdown') || e.target.closest('#tagsBtn')) return;
+      dd.style.display='none';
+    });
+    document.addEventListener('keydown', function(e){
+      if(e.key==='Escape'){
+        const dd = document.getElementById('tagDropdown');
+        if(dd) dd.style.display='none';
+      }
+    });
+
+    /* ===== Loader Control ===== */
+    let loaderHidden = false;
+    function hideLoaderSoon(){
+      if(loaderHidden) return;
+      loaderHidden = true;
+      setTimeout(()=>{ const l = $('#pageLoader'); if(l) l.classList.add('hide'); }, 200); // beri waktu 200ms biar elegan
+      // reveal anim untuk hero/toolbar kalau user reduce-motion OFF
+      $$('.reveal-up, .reveal-fade').forEach((el,i)=>{ el.style.animationDelay = (120 + i*60)+'ms'; });
+    }
+
+  })();
+  </script>
+</body>
+</html>
