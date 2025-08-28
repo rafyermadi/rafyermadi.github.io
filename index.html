@@ -1,408 +1,549 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="id" data-theme="dark">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Rafy • Blog</title>
-  <meta name="color-scheme" content="dark light" />
+  <meta name="description" content="Blog progres menulis & belajar—novel tugas akhir, catatan proses, dan eksperimen tulisan." />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='50' fill='%239b8cff'/%3E%3C/svg%3E">
 
-  <!-- Set tema sedini mungkin agar bebas flicker/flash -->
-  <script>
-    (() => {
-      try {
-        const saved = localStorage.getItem("theme");
-        const system = matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
-        document.documentElement.setAttribute("data-theme", saved || system);
-        document.documentElement.classList.add("no-trans");
-      } catch (_) {}
-    })();
-  </script>
+  <!-- Fonts untuk “rasa lama” -->
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
   <style>
-    /* ====== Palet mirip desain lama (dark elegan) ====== */
+    /* ============ THEME TOKENS ============ */
     :root{
-      --bg: #0d1117;            /* dasar gelap */
-      --surface: #0f1420;       /* panel */
-      --fg: #e6edf3;            /* teks */
-      --muted: #9aa7b6;         /* teks sekunder */
-      --chip: #171b24;          /* chip/nav */
-      --chip-bd: #263041;       /* garis chip */
-      --stroke: rgba(255,255,255,.08);
-      --primary: #8b7cff;       /* ungu lembut */
-      --accent: #5bd4ff;        /* biru lembut */
-      --radius: 16px;
-      --shadow: 0 8px 24px rgba(0,0,0,.35);
+      --font-display: "Playfair Display", serif;
+      --font-sans: "Inter", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+
+      --bg-0: #0b0f1a;
+      --bg-1: #0f1524;
+      --bg-2: #11182a;
+      --elev: rgba(255,255,255,0.06);
+      --stroke: rgba(255,255,255,0.12);
+      --muted: rgba(255,255,255,0.65);
+      --text: rgba(255,255,255,0.9);
+      --accent: #9b8cff;
+      --accent-2: #c7b7ff;
+      --chip: rgba(255,255,255,0.08);
+      --shadow: 0 12px 32px rgba(0,0,0,.35);
+      --shadow-sm: 0 8px 20px rgba(0,0,0,.25);
+      --card-bg: linear-gradient(180deg, #111623cc, #0c111acc);
     }
-    [data-theme="light"]{
-      --bg:#f7f8fb;
-      --surface:#ffffff;
-      --fg:#0f172a;
-      --muted:#546179;
-      --chip:#f3f5f8;
-      --chip-bd:#e1e6ef;
-      --stroke: rgba(0,0,0,.08);
-      --shadow: 0 10px 24px rgba(20,32,60,.10);
+    html[data-theme="light"]{
+      --bg-0: #f7f7fb;
+      --bg-1: #ffffff;
+      --bg-2: #f1f3f9;
+      --elev: rgba(0,0,0,0.04);
+      --stroke: rgba(0,0,0,0.08);
+      --muted: rgba(0,0,0,0.68);
+      --text: rgba(0,0,0,0.92);
+      --chip: rgba(0,0,0,0.06);
+      --shadow: 0 10px 28px rgba(12, 18, 32, .12);
+      --shadow-sm: 0 6px 18px rgba(12,18,32,.10);
+      --card-bg: linear-gradient(180deg, #ffffffee, #fafbff);
     }
 
-    /* Hilangkan transisi sampai siap */
-    .no-trans *, .no-trans *::before, .no-trans *::after { transition: none !important; }
-
-    /* ====== Base ====== */
+    /* ============ RESET & BASE ============ */
     *{ box-sizing: border-box; }
-    html,body{ height:100%; }
+    html, body{ height: 100%; }
     body{
-      margin:0; color:var(--fg); background:var(--bg);
-      font: 16px/1.6 ui-sans-serif, system-ui, -apple-system, Inter, Segoe UI, Roboto, Helvetica, Arial;
-      /* gradient hero halus seperti versi lama */
-      background-image:
-        radial-gradient(1200px 500px at 10% -10%, rgba(139,124,255,.22), transparent 60%),
-        radial-gradient(1000px 500px at 90% -20%, rgba(91,212,255,.16), transparent 60%);
-      background-attachment: fixed;
+      margin: 0;
+      font-family: var(--font-sans);
+      color: var(--text);
+      background:
+        radial-gradient(1200px 600px at 10% -200px, #1c1f3b 0%, #101629 60%, #0b0f1a 100%),
+        linear-gradient(180deg, var(--bg-0), var(--bg-1) 60%, var(--bg-0));
+      transition: background .3s ease;
     }
-    a{ color:inherit; text-decoration:none; }
-    .wrap{ max-width:1100px; margin:0 auto; padding:20px; }
+    html[data-theme="light"] body{
+      background:
+        radial-gradient(1200px 600px at 10% -200px, #e7eaff 0%, #f5f7ff 60%, #ffffff 100%),
+        linear-gradient(180deg, #fbfcff, #ffffff 60%, #f7f8ff);
+    }
 
-    /* ====== Navbar (chip bulat seperti sebelumnya) ====== */
+    a{ color: inherit; text-decoration: none; }
+    .wrap{ width: min(1200px, 92vw); margin: 0 auto; }
+
+    /* ============ NAVBAR ============ */
     .nav{
-      position:sticky; top:0; z-index:50;
-      border-bottom: 1px solid var(--stroke);
-      background: linear-gradient(to bottom, color-mix(in oklab,var(--bg),transparent 55%), transparent 100%);
-      backdrop-filter: blur(8px) saturate(130%);
-      -webkit-backdrop-filter: blur(8px) saturate(130%);
-    }
-    .nav .wrap{ display:flex; align-items:center; gap:12px; }
-    .brand{ font-weight:800; font-size:22px; letter-spacing:.3px; }
-    .spacer{ flex:1; }
-    .chip{
-      display:inline-flex; align-items:center; gap:8px;
-      padding:10px 16px; border-radius:999px;
-      background:var(--chip); border:1px solid var(--chip-bd); cursor:pointer;
-      box-shadow: inset 0 0 0 1px color-mix(in oklab,var(--chip-bd),transparent 25%);
-    }
-    .chip:hover{ background: color-mix(in oklab, var(--chip), #ffffff 3%); }
-    .icon{ width:18px; height:18px; border-radius:6px;
-      background: conic-gradient(from 210deg, var(--primary), var(--accent)); }
-
-    /* ====== Hero author-first (lebih mirip layout lama) ====== */
-    .hero{ padding:46px 20px 18px; }
-    .hero .wrap{ display:grid; grid-template-columns: 120px 1fr; gap:22px; align-items:center; }
-    .avatar{
-      width:120px; height:120px; border-radius:50%; display:grid; place-items:center;
-      color:#fff; font-weight:900; text-align:center; line-height:1.15;
-      background: radial-gradient(circle at 30% 30%, #d0c6ff, #9987ff);
-      box-shadow: inset 0 0 0 6px rgba(255,255,255,.18), 0 15px 30px rgba(0,0,0,.35);
-    }
-    .hero-title{ margin:0; font-weight:900; line-height:1.08;
-      font-size: clamp(28px, 5vw, 62px); letter-spacing:.2px; }
-    .hero-sub{ margin:10px 0 0; color:var(--muted); font-size: clamp(14px, 2vw, 20px); }
-    .meta{ margin-top:12px; color:var(--muted); font-size:14px; }
-
-    /* ====== Controls (search + sort + tag) ====== */
-    .controls{ display:flex; align-items:center; gap:10px; margin-top:18px; }
-    .search{
-      flex:1; display:flex; align-items:center; gap:10px;
-      background:var(--surface); border:1px solid var(--stroke); border-radius:999px; padding:12px 16px;
-      box-shadow: var(--shadow), inset 0 0 0 1px color-mix(in oklab,var(--stroke),transparent 40%);
-      backdrop-filter: blur(4px);
-    }
-    .search input{ flex:1; border:none; outline:none; background:transparent; color:var(--fg); font:inherit; }
-    .btn{ padding:10px 14px; border-radius:12px; background:var(--chip); border:1px solid var(--chip-bd); cursor:pointer; }
-    .btn:hover{ background: color-mix(in oklab, var(--chip), #ffffff 3%); }
-
-    .tag-wrap{ position:relative; }
-    .tag-menu{
-      position:absolute; right:0; top:calc(100% + 8px);
-      width:260px; padding:12px; border-radius:14px;
-      background:var(--surface); border:1px solid var(--stroke);
-      box-shadow: var(--shadow);
-      display:none; z-index:20;
-    }
-    .tag-menu.open{ display:block; }
-    .tag-menu .sec{ font-size:12px; color:var(--muted); margin:4px 0 8px; }
-
-    /* ====== Grid cards (mirip sebelumnya) ====== */
-    .grid{ display:grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap:18px; margin:20px 0 54px; }
-    .card{
-      border-radius:16px; overflow:hidden; background:var(--surface); border:1px solid var(--stroke);
-      box-shadow: var(--shadow);
+      position: sticky; top: 0; z-index: 20;
+      background: linear-gradient(180deg, rgba(0,0,0,.35), rgba(0,0,0,0));
       backdrop-filter: blur(6px);
     }
-    .card .thumb{ height:210px; background:linear-gradient(135deg, #8b7cff 0%, #5bd4ff 100%); opacity:.16; }
-    .card .body{ padding:16px 16px 18px; }
-    .title{ font-weight:800; font-size:20px; margin:6px 0 6px; }
-    .muted{ color:var(--muted); font-size:14px; }
-    .tags{ display:flex; gap:8px; flex-wrap:wrap; margin-top:10px; }
-    .tag{ font-size:12px; padding:6px 10px; border-radius:999px; background:var(--chip); border:1px solid var(--chip-bd); }
-
-    /* ====== Halaman post ====== */
-    .post-layout{ display:grid; grid-template-columns: minmax(0,1fr) 300px; gap:18px; margin:20px 0 60px; }
-    .prose{
-      border-radius:16px; padding:22px; background:var(--surface); border:1px solid var(--stroke);
-      box-shadow: var(--shadow);
+    html[data-theme="light"] .nav{ background: linear-gradient(180deg, rgba(255,255,255,.8), rgba(255,255,255,0)); }
+    .nav-inner{
+      display:flex; align-items:center; justify-content:space-between;
+      padding: 18px 0 8px;
     }
-    .prose h1{ margin:4px 0 8px; font-size: clamp(22px, 3.2vw, 38px); }
-    .prose p{ margin:12px 0; }
-    .toc{
-      position:sticky; top:90px;
-      border-radius:14px; padding:16px; background:var(--surface); border:1px solid var(--stroke);
-      box-shadow: var(--shadow);
+    .brand{
+      font-family: var(--font-display); font-weight: 900; letter-spacing:.4px;
+      font-size: 22px;
     }
-    .toc h4{ margin:0 0 8px; }
-    .toc a{ display:block; padding:6px 0; color:var(--muted); }
-    .toc a:hover{ color:var(--fg); }
-
-    /* Fallback bila backdrop-filter tidak didukung (hindari putih/pecah) */
-    @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
-      .search, .card, .prose, .toc, .btn { background: color-mix(in oklab, var(--bg), #ffffff 3%); }
-      [data-theme="light"] .search, [data-theme="light"] .card, [data-theme="light"] .prose, [data-theme="light"] .toc, [data-theme="light"] .btn { background:#fff; }
+    .nav-right{ display:flex; gap:12px; align-items:center; }
+    .pill{
+      padding:10px 16px; border-radius: 999px; border:1px solid var(--stroke);
+      background: var(--chip); box-shadow: var(--shadow-sm); font-weight:600;
+      display:inline-flex; align-items:center; gap:10px;
+    }
+    .theme{
+      width:42px; height:42px; border-radius:14px; border:1px solid var(--stroke);
+      display:grid; place-items:center; background: var(--chip); box-shadow: var(--shadow-sm);
+      cursor:pointer;
     }
 
-    /* ====== Footer ====== */
-    footer{ border-top:1px solid var(--stroke); }
-    footer .wrap{ display:flex; justify-content:center; align-items:center; padding:18px; color:var(--muted); gap:6px; }
-    footer a{ text-decoration: underline; text-decoration-color: color-mix(in oklab, var(--muted), transparent 30%); }
-
-    /* ====== Preloader (tetap halus) ====== */
-    .pre{
-      position:fixed; inset:0; display:grid; place-items:center; z-index:9999;
-      pointer-events:none; opacity:0; transition:opacity .35s ease;
-      background: radial-gradient(900px 400px at 20% -10%, rgba(139,124,255,.10), transparent 60%),
-                  radial-gradient(900px 400px at 80% -20%, rgba(91,212,255,.10), transparent 60%),
-                  var(--bg);
-    }
-    .pre.show{ opacity:1; pointer-events:auto; }
-    .spin{
-      width:56px; height:56px; border-radius:50%;
+    /* ============ HERO ============ */
+    .hero{
+      padding: 56px 0 28px;
       background:
-        conic-gradient(from 0deg, color-mix(in oklab, var(--primary), transparent 25%), transparent 60%),
-        conic-gradient(from 180deg, color-mix(in oklab, var(--accent), transparent 25%), transparent 60%);
-      mask: radial-gradient(circle at center, transparent 46%, #000 47%);
-      animation: spin 1.1s linear infinite;
+        radial-gradient(900px 420px at 12% -120px, rgba(155,140,255,.18) 0%, rgba(155,140,255,0) 60%),
+        radial-gradient(900px 420px at 92% -140px, rgba(199,183,255,.12) 0%, rgba(199,183,255,0) 60%);
     }
-    @keyframes spin{ to{ transform: rotate(1turn); } }
-    @media (prefers-reduced-motion: reduce){
-      .spin{ animation: none; }
-      .pre{ transition:none; }
+    .hero-grid{
+      display:grid; grid-template-columns: 120px 1fr; gap:28px; align-items:center;
     }
+    .avatar{
+      width:120px; height:120px; border-radius:50%;
+      background: radial-gradient(circle at 35% 30%, #d3c7ff 0%, #9b8cff 55%, #7e6cff 100%);
+      box-shadow: 0 8px 24px rgba(0,0,0,.35), 0 0 0 6px rgba(155,140,255,.15) inset;
+      display:grid; place-items:center; color:#fff; font-weight:800; line-height:1.1; text-align:center;
+      padding:10px;
+    }
+    .title{
+      font-family: var(--font-display); font-weight: 900; letter-spacing:-.02em;
+      font-size: clamp(28px, 4vw + 18px, 64px); line-height: 1.05; margin: 0 0 8px;
+      text-shadow: 0 2px 0 rgba(0,0,0,.08);
+    }
+    .sub{ color: var(--muted); font-size: clamp(14px, 1.4vw + 8px, 18px); }
+    .meter{
+      width: 160px; height: 6px; border-radius: 999px; background: rgba(255,255,255,.1);
+      position: relative; overflow: hidden; margin-top: 10px;
+    }
+    .meter::after{
+      content:""; position:absolute; inset:0;
+      background: linear-gradient(90deg, var(--accent), var(--accent-2));
+      transform: scaleX(.6); transform-origin: left center;
+      border-radius:999px;
+    }
+    .stat{ margin-top:10px; color: var(--muted); font-weight:600; letter-spacing:.2px; }
 
-    /* ====== Responsive ====== */
-    @media (max-width: 900px){
-      .grid{ grid-template-columns:1fr; }
-      .post-layout{ grid-template-columns:1fr; }
-      .toc{ position:relative; top:auto; }
-      .hero .wrap{ grid-template-columns: 84px 1fr; gap:16px; }
-      .avatar{ width:84px; height:84px; font-size:12px; }
+    /* ============ SEARCH & FILTERS ============ */
+    .tools{
+      display:flex; gap:12px; align-items:center; margin: 18px 0 28px;
     }
+    .search{
+      flex:1; height:54px; border-radius:16px; border:1px solid var(--stroke);
+      background: var(--elev); box-shadow: var(--shadow-sm);
+      display:flex; align-items:center; gap:12px; padding:0 16px; color: var(--muted);
+    }
+    .search input{
+      all:unset; flex:1; color: var(--text); font-size:16px;
+    }
+    .btn{ cursor:pointer; }
+    .tag-wrap{ position: relative; } /* <== supaya dropdown nempel tombol */
+    .menu{
+      position:absolute; top: calc(100% + 10px); right: 0;
+      width: 320px; max-width: calc(100vw - 32px);
+      background: var(--card-bg); border:1px solid var(--stroke); border-radius:18px;
+      box-shadow: var(--shadow); padding: 14px 14px 10px; display:none;
+    }
+    .menu.open{ display:block; }
+    .menu h5{ margin: 0 0 10px; color: var(--muted); font-size: 12px; letter-spacing:.5px; }
+    .menu a{
+      display:block; padding: 10px 12px; border-radius: 12px; font-weight:700;
+      background: transparent; border:1px solid transparent;
+    }
+    .menu a:hover{ background: var(--elev); border-color: var(--stroke); }
+
+    /* ============ GRID & CARDS ============ */
+    .grid{ display:grid; grid-template-columns: 1.8fr .95fr; gap:18px; align-items:start; }
+    @media (max-width: 900px){ .grid{ grid-template-columns: 1fr; } }
+
+    .card{
+      background: var(--card-bg);
+      border:1px solid var(--stroke);
+      border-radius: 22px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+    .card.pad{ padding: 18px; }
+    .post{ padding: 22px 22px 10px; }
+    .post h3{ margin: 0 0 8px; font-family: var(--font-display); font-size: 34px; letter-spacing:-.02em; }
+    .meta{ color: var(--muted); font-size: 14px; display:flex; gap:10px; align-items:center; }
+    .chips{ display:flex; gap:8px; flex-wrap:wrap; margin: 6px 0 12px; }
+    .chip{
+      display:inline-flex; align-items:center; height: 32px; padding:0 12px;
+      background: var(--chip); border:1px solid var(--stroke); border-radius:999px; font-weight:700;
+    }
+    .thumb{
+      height: 180px; border-top:1px solid var(--stroke); background: linear-gradient(135deg, #1b2038, #161c2f);
+    }
+    html[data-theme="light"] .thumb{ background: linear-gradient(135deg, #e8ebff, #f3f5ff); }
+    .excerpt{ color: var(--muted); line-height:1.65; }
+
+    .side h4{ margin:6px 0 12px; font-size:18px; }
+    .toc a{ display:block; padding:10px 12px; border-radius:12px; border:1px solid transparent; }
+    .toc a:hover{ background: var(--elev); border-color: var(--stroke); }
+
+    /* ============ FOOTER ============ */
+    footer{
+      margin: 36px 0 56px; color: var(--muted); text-align:center; font-size:14px;
+    }
+    footer a{ color: var(--accent); font-weight:800; }
+
+    /* ============ LOADER ============ */
+    .loader{
+      position:fixed; inset:0; z-index:1000; display:none; place-items:center;
+      background: radial-gradient(600px 260px at 50% -80px, rgba(155,140,255,.18), transparent 70%), rgba(0,0,0,.45);
+      backdrop-filter: blur(4px);
+    }
+    .loader.show{ display:grid; }
+    .spinner{
+      width: 72px; height: 72px; border-radius: 50%;
+      border: 6px solid rgba(255,255,255,.18);
+      border-top-color: var(--accent);
+      animation: spin 900ms linear infinite;
+      box-shadow: 0 8px 30px rgba(0,0,0,.4), 0 0 0 6px rgba(155,140,255,.18) inset;
+    }
+    @keyframes spin{ to { transform: rotate(1turn); } }
+
+    /* Small helpers */
+    .srch-ico{opacity:.6}
   </style>
 </head>
 <body>
-  <!-- Preloader -->
-  <div class="pre" id="pre"><div class="spin"></div></div>
-
-  <!-- Navbar -->
-  <div class="nav">
-    <div class="wrap">
-      <div class="brand">Rafy • Blog</div>
-      <div class="spacer"></div>
-      <a href="#/" class="chip">Beranda</a>
-      <a href="#/blog" class="chip">Blog</a>
-      <a href="#/novel" class="chip">Novel</a>
-      <a href="#/about" class="chip">Tentang Penulis</a>
-      <button id="themeBtn" class="chip" title="Dark / Light"><span class="icon"></span></button>
-    </div>
+  <!-- Loader -->
+  <div id="loader" class="loader">
+    <div class="spinner"></div>
   </div>
 
-  <!-- Hero -->
-  <header class="hero">
-    <div class="wrap">
-      <div class="avatar">Rafy<br>Rayyan<br>Ermadi</div>
-      <div>
-        <h1 class="hero-title">Halo, aku Rafy Rayyan Ermadi</h1>
-        <p class="hero-sub">Blog progres menulis & belajar—novel tugas akhir, catatan proses, dan eksperimen tulisan.</p>
-        <div class="meta"><span id="metaCount">0 posting • 0 bab • 0 catatan</span></div>
-      </div>
+  <!-- NAV -->
+  <header class="nav">
+    <div class="wrap nav-inner">
+      <a class="brand" href="#/">Rafy • Blog</a>
+      <nav class="nav-right">
+        <a class="pill" href="#/">Beranda</a>
+        <a class="pill" href="#/blog">Blog</a>
+        <a class="pill" href="#/novel">Novel</a>
+        <a class="pill" href="#/about">Tentang Penulis</a>
+        <button id="themeBtn" class="theme" title="Ganti tema">
+          <!-- little emoji disk -->
+          <span>🟣</span>
+        </button>
+      </nav>
     </div>
   </header>
 
-  <!-- Controls -->
-  <div class="wrap">
-    <div class="controls">
-      <label class="search">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" opacity=".5" stroke-width="2"/><path d="M20 20L17 17" stroke="currentColor" opacity=".5" stroke-width="2" stroke-linecap="round"/></svg>
-        <input id="q" placeholder="Cari judul, tag, atau seri…" />
-      </label>
-      <button class="btn" id="sortBtn">Terbaru</button>
-      <div class="tag-wrap">
-        <button class="btn" id="tagBtn">#Tag ▾</button>
-        <div class="tag-menu" id="tagMenu">
-          <div class="sec">FILTER #TAG</div>
-          <div id="tagList"></div>
-          <div class="sec">LAINNYA</div>
-          <a href="#" id="showAll" class="btn" style="display:inline-flex;padding:8px 10px;margin-top:6px;">Tampilkan semua</a>
+  <!-- HERO -->
+  <section class="hero">
+    <div class="wrap">
+      <div class="hero-grid">
+        <div class="avatar">Rafy<br>Rayyan<br>Ermadi</div>
+        <div>
+          <h1 class="title">Halo, aku Rafy Rayyan Ermadi</h1>
+          <p class="sub">Blog progres menulis & belajar—novel tugas akhir, catatan proses, dan eksperimen tulisan.</p>
+          <div class="meter"></div>
+          <div id="stat" class="stat">0 posting • 0 bab • 0 catatan</div>
         </div>
       </div>
     </div>
+  </section>
 
-    <!-- View mount -->
-    <div id="view"></div>
-  </div>
-
-  <!-- Footer -->
-  <footer>
-    <div class="wrap">
-      © 2025 • Made with ❤️ by
-      <a href="https://www.instagram.com/rafy.rayyan/" target="_blank" rel="noopener">Rafy Rayyan</a>.
-      Hak cipta dilindungi undang-undang. Mohon tidak menyalin atau mendistribusikan ulang tanpa izin.
+  <!-- TOOLS -->
+  <section class="wrap">
+    <div class="tools">
+      <label class="search" aria-label="Pencarian">
+        <svg class="srch-ico" width="18" height="18" viewBox="0 0 24 24"><path fill="currentColor" d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5m-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5S14 7.01 14 9.5S11.99 14 9.5 14"/></svg>
+        <input id="searchInput" type="text" placeholder="Cari judul, tag, atau seri..." />
+      </label>
+      <button id="sortBtn" class="pill btn">Terbaru</button>
+      <div class="tag-wrap">
+        <button id="tagBtn" class="pill btn">#Tag ▾</button>
+        <div id="tagMenu" class="menu" role="menu" aria-labelledby="tagBtn">
+          <h5>FILTER #TAG</h5>
+          <a data-tag="bab" href="#"># bab</a>
+          <a data-tag="catatan" href="#"># catatan</a>
+          <a data-tag="progres" href="#"># progres</a>
+          <h5 style="margin-top:12px">LAINNYA</h5>
+          <a data-tag="__all" href="#">Tampilkan semua</a>
+        </div>
+      </div>
     </div>
+  </section>
+
+  <!-- CONTENT -->
+  <main class="wrap" id="app"></main>
+
+  <!-- FOOTER -->
+  <footer class="wrap">
+    © 2025 • Made with ❤️ by
+    <a href="https://www.instagram.com/rafy.rayyan/" target="_blank" rel="noopener">Rafy Rayyan</a>.
+    Hak cipta dilindungi undang-undang. Mohon tidak menyalin atau mendistribusikan ulang tanpa izin.
   </footer>
 
   <script>
-    // Lepas blok transisi setelah konten siap
-    window.addEventListener("DOMContentLoaded", () => {
-      document.documentElement.classList.remove("no-trans");
-    });
-
-    /* ====== Data sample (ganti dengan punyamu) ====== */
+    /* ================== DATA DUMMY ================== */
     const POSTS = [
       {
-        slug:"bab-1-bayang-kota",
-        title:"Bab 1 — Bayang Kota",
-        date:"2025-09-01",
-        tags:["bab","progres","novel"],
-        excerpt:"Pengenalan tokoh utama dan konflik awal.",
-        body:`<p>Ini paragraf pembuka yang menyiapkan suasana kota saat senja. Lampu-lampu mulai hidup, dan bayangan gedung merayap di aspal basah.</p>
-        <p>Tokoh utama berdiri di tepi trotoar, menatap persimpangan yang mengubah nasibnya. Di sinilah cerita berangkat.</p>`
+        id: "bab-1-bayang-kota",
+        date: "2025-09-01",
+        read: "2 menit baca",
+        title: "Bab 1 — Bayang Kota",
+        tags: ["bab","progres","novel"],
+        excerpt: "Pengenalan tokoh utama dan konflik awal. Lampu-lampu malam mulai hidup; bayangan gedung merayap di aspal basah.",
+        body: `
+          <p>Ini paragraf pembuka yang menyiapkan suasana kota saat senja. Lampu-lampu mulai hidup, dan bayangan gedung merayap di aspal basah. Tokoh utama berdiri di tepi trotoar, menatap persimpangan yang mengubah nasibnya.</p>
+          <p>Di bab ini, konflik awal pelan-pelan muncul. Ada janji yang harus ditepati, ada rahasia yang mulai retak.</p>
+        `
       },
       {
-        slug:"catatan-proses-1",
-        title:"Catatan Proses #1 — Kenapa Tema Ini?",
-        date:"2025-08-30",
-        tags:["progres","catatan"],
-        excerpt:"Kenapa milih tema ini, dan apa riset awalnya.",
-        body:`<p>Catatan proses tentang pemilihan tema, riset kecil-kecilan, dan eksperimen gaya bahasa.</p>`
+        id: "catatan-proses-1",
+        date: "2025-08-30",
+        read: "1 menit baca",
+        title: "Catatan Proses #1 — Kenapa Tema Ini?",
+        tags: ["catatan","progres"],
+        excerpt: "Menjawab: kenapa pilih tema ini, dan apa riset awalnya.",
+        body: `
+          <p>Aku milih tema ini karena dekat dengan pengalaman sehari-hari tapi tetap punya ruang fiksi yang luas. Riset awal terutama ngumpulin dokumentasi suasana kota, kebiasaan warga, rute transportasi, dan dengar cerita-cerita kecil.</p>
+          <p>Target mingguan: nulis 700–900 kata / bab, dan ngepos progres tiap akhir pekan.</p>
+        `
       }
     ];
 
-    /* ====== State ====== */
-    let currentSort = "newest";
-    let activeTag = null;
+    /* ================== STATE ================== */
+    const state = {
+      query: "",
+      sortDesc: true,
+      tag: "__all" // "__all" | "bab" | "catatan" | "progres"
+    };
 
-    /* ====== Helpers ====== */
-    const qs = (s, el=document) => el.querySelector(s);
-    const qsa = (s, el=document) => [...el.querySelectorAll(s)];
-    const pre = qs("#pre");
-    const showPre = () => pre.classList.add("show");
-    const hidePre = () => setTimeout(()=> pre.classList.remove("show"), 220);
+    /* ================== HELPERS ================== */
+    const $ = sel => document.querySelector(sel);
+    const $$ = sel => Array.from(document.querySelectorAll(sel));
 
-    /* ====== Theme toggle ====== */
-    qs("#themeBtn").addEventListener("click", ()=>{
-      const cur = document.documentElement.getAttribute("data-theme") || "dark";
-      const next = cur === "dark" ? "light" : "dark";
-      document.documentElement.setAttribute("data-theme", next);
-      localStorage.setItem("theme", next);
-    });
+    function showLoader() { $("#loader").classList.add("show"); }
+    function hideLoader() { $("#loader").classList.remove("show"); }
 
-    /* ====== Tag dropdown (ikut scroll, anchor ke tombol) ====== */
-    const tagBtn = qs("#tagBtn"), tagMenu = qs("#tagMenu");
-    tagBtn.addEventListener("click", (e)=>{ e.stopPropagation(); tagMenu.classList.toggle("open"); });
-    document.addEventListener("click", (e)=>{ if (!tagMenu.contains(e.target) && !tagBtn.contains(e.target)) tagMenu.classList.remove("open"); });
-
-    /* ====== Build Tag List ====== */
-    function buildTags(){
-      const map = new Map();
-      POSTS.forEach(p => p.tags.forEach(t => map.set(t, (map.get(t)||0) + 1)));
-      const wrap = qs("#tagList"); wrap.innerHTML = "";
-      [...map.keys()].sort().forEach(t=>{
-        const b = document.createElement("button");
-        b.className="btn"; b.style.margin="4px 6px 0 0"; b.textContent=`# ${t} (${map.get(t)})`;
-        b.onclick = ()=>{ activeTag = t; tagMenu.classList.remove("open"); render(); };
-        wrap.appendChild(b);
-      });
-      qs("#showAll").onclick = (e)=>{ e.preventDefault(); activeTag=null; render(); };
+    function formatDate(iso){
+      try{
+        const d = new Date(iso + 'T00:00:00');
+        return d.toLocaleDateString('id-ID', { day:'numeric', month:'short', year:'numeric' }).replace('.', '');
+      }catch{ return iso; }
     }
 
-    /* ====== Search & Sort ====== */
-    qs("#q").addEventListener("input", render);
-    qs("#sortBtn").addEventListener("click", ()=>{
-      currentSort = currentSort === "newest" ? "oldest" : "newest"; render();
-    });
-
-    /* ====== Router ====== */
-    const view = qs("#view");
-    const routes = { "/": renderHome, "/blog": renderHome, "/novel": renderHome, "/about": renderAbout };
-    const getPath = () => (location.hash || "#/").replace(/^#/, "");
-    window.addEventListener("hashchange", ()=>{ showPre(); setTimeout(render, 40); });
-
-    /* ====== Renderers ====== */
-    function render(){
-      const path = getPath();
+    function computeStats(){
       const total = POSTS.length;
       const bab = POSTS.filter(p=>p.tags.includes("bab")).length;
-      const cat = POSTS.filter(p=>p.tags.includes("catatan")).length;
-      qs("#metaCount").textContent = `${total} posting • ${bab} bab • ${cat} catatan`;
+      const catatan = POSTS.filter(p=>p.tags.includes("catatan")).length;
+      $("#stat").textContent = `${total} posting • ${bab} bab • ${catatan} catatan`;
+    }
 
-      if (path.startsWith("/post/")){ renderPost(path.replace("/post/","")); hidePre(); return; }
-      (routes[path] || renderHome)(); hidePre();
+    /* ================== RENDERERS ================== */
+    function renderList(list){
+      const cards = list.map(p => `
+        <article class="card post">
+          <div class="meta">
+            <span>${formatDate(p.date)}</span>
+            <span>•</span>
+            <span>${p.read}</span>
+          </div>
+          <h3><a href="#/post/${p.id}">${p.title}</a></h3>
+          <div class="chips">
+            ${p.tags.map(t=>`<span class="chip"># ${t}</span>`).join("")}
+          </div>
+          <div class="thumb"></div>
+          <p class="excerpt">${p.excerpt}</p>
+        </article>
+      `).join("");
+
+      return `
+        <section class="grid">
+          <div class="stack">
+            <div class="card">${cards || `<div class="pad">Tidak ada posting yang cocok.</div>`}</div>
+          </div>
+          <aside class="side">
+            <div class="card pad toc">
+              <h4>DAFTAR ISI</h4>
+              ${POSTS.filter(p=>p.tags.includes("bab")).map(p=>`<a href="#/post/${p.id}">${p.title}</a>`).join("")}
+              <div style="height:8px"></div>
+              <h4>Tentang Penulis</h4>
+              <a href="#/about">Rafy Rayyan Ermadi</a>
+            </div>
+          </aside>
+        </section>
+      `;
     }
 
     function renderHome(){
-      const term = qs("#q").value.trim().toLowerCase();
-      let list = POSTS.slice();
-      if (activeTag) list = list.filter(p=> p.tags.includes(activeTag));
-      if (term) list = list.filter(p => (p.title + " " + p.excerpt + " " + p.tags.join(" ")).toLowerCase().includes(term));
-      list.sort((a,b)=> currentSort==="newest" ? b.date.localeCompare(a.date) : a.date.localeCompare(b.date));
-
-      view.innerHTML = `
-        <div class="grid">
-          ${list.map(p => `
-            <article class="card" data-slug="${p.slug}">
-              <div class="thumb"></div>
-              <div class="body">
-                <div class="muted">${new Date(p.date).toLocaleDateString("id-ID",{day:"2-digit",month:"short",year:"numeric"})}</div>
-                <div class="title">${p.title}</div>
-                <div class="muted">${p.excerpt}</div>
-                <div class="tags">${p.tags.map(t=>`<span class="tag"># ${t}</span>`).join("")}</div>
-              </div>
-            </article>`).join("")}
-        </div>`;
-      buildTags();
-      qsa(".card").forEach(c => c.addEventListener("click", ()=> location.hash = "#/post/" + c.dataset.slug));
+      const list = filteredPosts();
+      return renderList(list);
     }
 
-    function renderPost(slug){
-      const p = POSTS.find(x=>x.slug===slug);
-      if (!p){ view.innerHTML = `<p>Tulisan tidak ditemukan.</p>`; return; }
-      const d = new Date(p.date).toLocaleDateString("id-ID",{day:"2-digit",month:"long",year:"numeric"});
-      view.innerHTML = `
-        <div class="post-layout">
-          <article class="prose">
-            <h1>${p.title}</h1>
-            <div class="muted">${d} • ${p.tags.map(t=>`#${t}`).join("  •  ")}</div>
-            ${p.body}
-          </article>
-          <aside class="toc">
-            <h4>DAFTAR ISI</h4>
-            <a href="#/post/${slug}">${p.title}</a>
-            <div class="sec" style="margin-top:10px;font-size:12px;color:var(--muted)">Tentang</div>
-            <a href="#/about">Tentang Penulis</a>
-          </aside>
-        </div>`;
-      setTimeout(hidePre, 140);
+    function renderBlog(){
+      // tampilkan semua (tetap hormati filter & search)
+      return renderList(filteredPosts());
+    }
+
+    function renderNovel(){
+      // paksa filter tag "bab"
+      const prev = state.tag;
+      state.tag = "bab";
+      const html = renderList(filteredPosts());
+      state.tag = prev;
+      return html;
     }
 
     function renderAbout(){
-      view.innerHTML = `
-        <article class="prose">
-          <h1>Halo, aku Nama Kamu 👋</h1>
-          <p>Aku siswa kelas 12 yang lagi nulis novel untuk tugas akhir Bahasa Indonesia. Di blog ini, aku upload progres, bab, dan catatan proses kreatif.</p>
-          <p>Kritik & saran sangat membantu! 🙏</p>
-        </article>`;
+      return `
+        <section class="grid">
+          <div class="card pad">
+            <h3 style="font-family:var(--font-display); font-size:34px; margin:4px 0 8px;">Halo, aku Nama Kamu 👋</h3>
+            <p>Aku siswa kelas 12 yang lagi nulis novel untuk tugas akhir Bahasa Indonesia. Di blog ini, aku upload progres, bab, dan catatan proses kreatif.</p>
+            <p><strong>Kritik & saran sangat membantu!</strong> Kalau ada masukan soal alur, gaya bahasa, atau ritme, feel free kirim pesan ke Instagram ya.</p>
+          </div>
+          <aside class="side">
+            <div class="card pad">
+              <h4>Kontak</h4>
+              <p>Instagram: <a style="color:var(--accent); font-weight:800" href="https://www.instagram.com/rafy.rayyan/" target="_blank" rel="noopener">@rafy.rayyan</a></p>
+            </div>
+          </aside>
+        </section>
+      `;
     }
 
-    // Boot
-    buildTags();
-    showPre();
-    window.addEventListener("load", ()=>{ render(); hidePre(); });
+    function renderPost(id){
+      const p = POSTS.find(x=>x.id===id);
+      if(!p) return `<div class="card pad">Posting tidak ditemukan.</div>`;
+      return `
+        <article class="grid">
+          <div class="card pad">
+            <div class="meta">
+              <span>${formatDate(p.date)}</span>
+              <span>•</span>
+              <span>${p.read}</span>
+            </div>
+            <h1 class="title" style="font-size:42px">${p.title}</h1>
+            <div class="chips">${p.tags.map(t=>`<span class="chip"># ${t}</span>`).join("")}</div>
+            <div class="thumb" style="height:220px; border-radius:16px; margin: 6px 0 16px;"></div>
+            <div class="excerpt" style="color:var(--text)">${p.body}</div>
+          </div>
+          <aside class="side">
+            <div class="card pad toc">
+              <h4>DAFTAR ISI</h4>
+              ${POSTS.filter(x=>x.tags.includes("bab")).map(x=>`<a href="#/post/${x.id}">${x.title}</a>`).join("")}
+              <div style="height:8px"></div>
+              <h4>Tentang Penulis</h4>
+              <a href="#/about">Rafy Rayyan Ermadi</a>
+            </div>
+          </aside>
+        </article>
+      `;
+    }
+
+    function filteredPosts(){
+      let list = [...POSTS];
+      // tag
+      if(state.tag !== "__all"){
+        list = list.filter(p => p.tags.includes(state.tag));
+      }
+      // search
+      const q = state.query.trim().toLowerCase();
+      if(q){
+        list = list.filter(p =>
+          p.title.toLowerCase().includes(q) ||
+          p.excerpt.toLowerCase().includes(q) ||
+          p.tags.some(t => ("# " + t).includes(q) || t.includes(q))
+        );
+      }
+      // sort
+      list.sort((a,b) => (state.sortDesc ? (b.date.localeCompare(a.date)) : (a.date.localeCompare(b.date))));
+      return list;
+    }
+
+    /* ================== ROUTER ================== */
+    function parseRoute(){
+      const hash = location.hash || "#/";
+      const seg = hash.slice(2).split("/"); // remove "#/"
+      // / -> [""] ; /post/xxx -> ["post","xxx"]
+      if(seg[0] === "") return {view:"home"};
+      if(seg[0] === "blog") return {view:"blog"};
+      if(seg[0] === "novel") return {view:"novel"};
+      if(seg[0] === "about") return {view:"about"};
+      if(seg[0] === "post" && seg[1]) return {view:"post", id: seg[1]};
+      return {view:"home"};
+    }
+
+    async function showRoute(){
+      showLoader();
+      await new Promise(r => setTimeout(r, 350)); // beri momen ke loader muncul
+      const {view, id} = parseRoute();
+      let html = "";
+      if(view==="home") html = renderHome();
+      else if(view==="blog") html = renderBlog();
+      else if(view==="novel") html = renderNovel();
+      else if(view==="about") html = renderAbout();
+      else if(view==="post") html = renderPost(id);
+      $("#app").innerHTML = html;
+      computeStats();
+      hideLoader();
+      closeTagMenu(); // pastikan menu menutup saat berpindah halaman
+      // scroll ke atas tiap rute baru
+      window.scrollTo({top:0, behavior:"instant"});
+    }
+
+    /* ================== THEME ================== */
+    function applyStoredTheme(){
+      const saved = localStorage.getItem("theme") || "dark";
+      document.documentElement.setAttribute("data-theme", saved);
+    }
+    function toggleTheme(){
+      const cur = document.documentElement.getAttribute("data-theme");
+      const next = cur==="dark" ? "light" : "dark";
+      document.documentElement.setAttribute("data-theme", next);
+      localStorage.setItem("theme", next);
+    }
+
+    /* ================== UI EVENTS ================== */
+    // Search
+    $("#searchInput").addEventListener("input", (e)=>{ state.query = e.target.value; showRoute(); });
+    // Sort
+    $("#sortBtn").addEventListener("click", ()=>{
+      state.sortDesc = !state.sortDesc;
+      $("#sortBtn").textContent = state.sortDesc ? "Terbaru" : "Terlama";
+      showRoute();
+    });
+    // Tag dropdown
+    const tagBtn = $("#tagBtn");
+    const tagMenu = $("#tagMenu");
+    function closeTagMenu(){ tagMenu.classList.remove("open"); }
+    tagBtn.addEventListener("click", (e)=>{
+      e.stopPropagation();
+      tagMenu.classList.toggle("open");
+    });
+    tagMenu.addEventListener("click", (e)=>{
+      const a = e.target.closest("a[data-tag]");
+      if(!a) return;
+      e.preventDefault();
+      state.tag = a.dataset.tag;
+      closeTagMenu();
+      showRoute();
+      // Update label tombol
+      tagBtn.textContent = state.tag==="__all" ? "#Tag ▾" : `#${state.tag} ▾`;
+    });
+    document.addEventListener("click", (e)=>{
+      // tutup kalau klik di luar
+      if(!tagMenu.contains(e.target) && !tagBtn.contains(e.target)) closeTagMenu();
+    });
+    // Tutup saat scroll (tetap ikut posisi tombol karena absolute di wrapper)
+    document.addEventListener("scroll", ()=> closeTagMenu(), {passive:true});
+
+    // Theme toggle
+    $("#themeBtn").addEventListener("click", toggleTheme);
+
+    // Router hooks
+    window.addEventListener("hashchange", showRoute);
+    window.addEventListener("load", ()=>{ applyStoredTheme(); showRoute(); });
+
   </script>
 </body>
 </html>
