@@ -5,221 +5,193 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Rafy • Blog</title>
   <meta name="color-scheme" content="dark light" />
-  <!-- 1) Set tema sedini mungkin biar tidak “flash putih” di GitHub Pages -->
+
+  <!-- Set tema sedini mungkin agar bebas flicker/flash -->
   <script>
     (() => {
       try {
         const saved = localStorage.getItem("theme");
         const system = matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
-        const theme = saved || system;
-        document.documentElement.setAttribute("data-theme", theme);
-        // Matikan transisi sebelum siap (hindari pecah saat awal render)
+        document.documentElement.setAttribute("data-theme", saved || system);
         document.documentElement.classList.add("no-trans");
       } catch (_) {}
     })();
   </script>
+
   <style>
-    /* ================== Design Tokens ================== */
+    /* ====== Palet mirip desain lama (dark elegan) ====== */
     :root{
-      --bg: #0b0e16;
-      --fg: #dfe7ff;
-      --muted:#9aa4bd;
-      --brand:#a992ff;
-      --brand-2:#6ee7ff;
-
-      --card-0:rgba(255,255,255,.04);
-      --card-1:rgba(255,255,255,.06);
-      --card-2:rgba(255,255,255,.08);
-      --stroke:rgba(255,255,255,.12);
-
-      --shadow: 0 10px 30px rgba(0,0,0,.4);
-      --ring: 0 0 0 1px var(--stroke) inset;
-
-      --radius:16px;
-
-      /* fallback untuk device tanpa backdrop-filter */
-      --card-opaque-dark:#151a26;
-      --card-opaque-light:#ffffff;
+      --bg: #0d1117;            /* dasar gelap */
+      --surface: #0f1420;       /* panel */
+      --fg: #e6edf3;            /* teks */
+      --muted: #9aa7b6;         /* teks sekunder */
+      --chip: #171b24;          /* chip/nav */
+      --chip-bd: #263041;       /* garis chip */
+      --stroke: rgba(255,255,255,.08);
+      --primary: #8b7cff;       /* ungu lembut */
+      --accent: #5bd4ff;        /* biru lembut */
+      --radius: 16px;
+      --shadow: 0 8px 24px rgba(0,0,0,.35);
     }
     [data-theme="light"]{
       --bg:#f7f8fb;
+      --surface:#ffffff;
       --fg:#0f172a;
-      --muted:#49536a;
-      --brand:#6f63ff;
-      --brand-2:#0088ff;
-
-      --card-0:rgba(0,0,0,.03);
-      --card-1:rgba(0,0,0,.04);
-      --card-2:rgba(0,0,0,.06);
-      --stroke:rgba(0,0,0,.12);
-
-      --shadow: 0 10px 30px rgba(15,23,42,.12);
+      --muted:#546179;
+      --chip:#f3f5f8;
+      --chip-bd:#e1e6ef;
+      --stroke: rgba(0,0,0,.08);
+      --shadow: 0 10px 24px rgba(20,32,60,.10);
     }
 
-    /* Hilangkan transisi sampai JS melepas no-trans (anti pecah/flicker) */
+    /* Hilangkan transisi sampai siap */
     .no-trans *, .no-trans *::before, .no-trans *::after { transition: none !important; }
 
-    /* =============== Base =============== */
-    * { box-sizing: border-box; }
-    html,body { height:100%; }
+    /* ====== Base ====== */
+    *{ box-sizing: border-box; }
+    html,body{ height:100%; }
     body{
-      margin:0;
-      font: 16px/1.6 ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Inter, "Helvetica Neue", Arial;
-      color:var(--fg);
-      background: radial-gradient(1200px 600px at 20% -10%, rgba(169,146,255,.18), transparent 60%),
-                  radial-gradient(1000px 500px at 80% -20%, rgba(110,231,255,.15), transparent 60%),
-                  var(--bg);
+      margin:0; color:var(--fg); background:var(--bg);
+      font: 16px/1.6 ui-sans-serif, system-ui, -apple-system, Inter, Segoe UI, Roboto, Helvetica, Arial;
+      /* gradient hero halus seperti versi lama */
+      background-image:
+        radial-gradient(1200px 500px at 10% -10%, rgba(139,124,255,.22), transparent 60%),
+        radial-gradient(1000px 500px at 90% -20%, rgba(91,212,255,.16), transparent 60%);
       background-attachment: fixed;
     }
     a{ color:inherit; text-decoration:none; }
-    .wrap{ max-width:1200px; margin:0 auto; padding:24px; }
+    .wrap{ max-width:1100px; margin:0 auto; padding:20px; }
 
-    /* =============== Navbar =============== */
+    /* ====== Navbar (chip bulat seperti sebelumnya) ====== */
     .nav{
-      position: sticky; top:0; z-index:50;
-      background: linear-gradient(to bottom, color-mix(in oklab, var(--bg), transparent 40%) 0%, transparent 100%);
-      backdrop-filter: blur(10px) saturate(130%);
-      -webkit-backdrop-filter: blur(10px) saturate(130%);
-      border-bottom:1px solid var(--stroke);
+      position:sticky; top:0; z-index:50;
+      border-bottom: 1px solid var(--stroke);
+      background: linear-gradient(to bottom, color-mix(in oklab,var(--bg),transparent 55%), transparent 100%);
+      backdrop-filter: blur(8px) saturate(130%);
+      -webkit-backdrop-filter: blur(8px) saturate(130%);
     }
-    .nav .wrap{ display:flex; align-items:center; gap:14px; }
+    .nav .wrap{ display:flex; align-items:center; gap:12px; }
     .brand{ font-weight:800; font-size:22px; letter-spacing:.3px; }
     .spacer{ flex:1; }
     .chip{
       display:inline-flex; align-items:center; gap:8px;
       padding:10px 16px; border-radius:999px;
-      background:var(--card-0); border:1px solid var(--stroke);
-      box-shadow: var(--ring);
-      cursor:pointer; user-select:none;
+      background:var(--chip); border:1px solid var(--chip-bd); cursor:pointer;
+      box-shadow: inset 0 0 0 1px color-mix(in oklab,var(--chip-bd),transparent 25%);
     }
-    .chip:hover{ background:var(--card-1); }
+    .chip:hover{ background: color-mix(in oklab, var(--chip), #ffffff 3%); }
     .icon{ width:18px; height:18px; border-radius:6px;
-      background: conic-gradient(from 220deg, var(--brand), var(--brand-2)); }
+      background: conic-gradient(from 210deg, var(--primary), var(--accent)); }
 
-    /* =============== Hero Author-First =============== */
-    .hero{
-      padding:52px 24px 24px;
-      background:
-        radial-gradient(600px 300px at 10% 0%, color-mix(in oklab, var(--brand), transparent 75%), transparent 60%),
-        radial-gradient(700px 340px at 90% 0%, color-mix(in oklab, var(--brand-2), transparent 78%), transparent 60%);
-    }
-    .hero .wrap{ display:grid; grid-template-columns: 120px 1fr; gap:24px; align-items:center; }
+    /* ====== Hero author-first (lebih mirip layout lama) ====== */
+    .hero{ padding:46px 20px 18px; }
+    .hero .wrap{ display:grid; grid-template-columns: 120px 1fr; gap:22px; align-items:center; }
     .avatar{
       width:120px; height:120px; border-radius:50%; display:grid; place-items:center;
-      background: radial-gradient(circle at 30% 30%, #c9b8ff, #917aff);
-      box-shadow: inset 0 0 0 6px color-mix(in oklab, #fff, transparent 70%), 0 15px 30px rgba(0,0,0,.35);
-      color:#fff; font-weight:900; text-align:center; line-height:1.2;
+      color:#fff; font-weight:900; text-align:center; line-height:1.15;
+      background: radial-gradient(circle at 30% 30%, #d0c6ff, #9987ff);
+      box-shadow: inset 0 0 0 6px rgba(255,255,255,.18), 0 15px 30px rgba(0,0,0,.35);
     }
-    .hero-title{ font-size: clamp(26px, 4.4vw, 64px); line-height:1.1; margin:0; font-weight:900; }
-    .hero-sub{ margin-top:10px; color:var(--muted); font-size: clamp(14px, 1.8vw, 20px); }
-    .meta{ margin-top:14px; color:var(--muted); font-size:14px; }
+    .hero-title{ margin:0; font-weight:900; line-height:1.08;
+      font-size: clamp(28px, 5vw, 62px); letter-spacing:.2px; }
+    .hero-sub{ margin:10px 0 0; color:var(--muted); font-size: clamp(14px, 2vw, 20px); }
+    .meta{ margin-top:12px; color:var(--muted); font-size:14px; }
 
-    /* =============== Controls row =============== */
-    .controls{ display:flex; gap:10px; align-items:center; margin-top:16px; }
+    /* ====== Controls (search + sort + tag) ====== */
+    .controls{ display:flex; align-items:center; gap:10px; margin-top:18px; }
     .search{
-      flex:1; display:flex; align-items:center; gap:12px;
-      background:var(--card-0); border:1px solid var(--stroke); box-shadow: var(--ring);
-      border-radius:999px; padding:12px 16px;
+      flex:1; display:flex; align-items:center; gap:10px;
+      background:var(--surface); border:1px solid var(--stroke); border-radius:999px; padding:12px 16px;
+      box-shadow: var(--shadow), inset 0 0 0 1px color-mix(in oklab,var(--stroke),transparent 40%);
+      backdrop-filter: blur(4px);
     }
-    .search input{ flex:1; background:transparent; border:none; outline:none; color:var(--fg); font:inherit; }
+    .search input{ flex:1; border:none; outline:none; background:transparent; color:var(--fg); font:inherit; }
+    .btn{ padding:10px 14px; border-radius:12px; background:var(--chip); border:1px solid var(--chip-bd); cursor:pointer; }
+    .btn:hover{ background: color-mix(in oklab, var(--chip), #ffffff 3%); }
 
-    .btn{ padding:10px 14px; border-radius:12px; background:var(--card-0); border:1px solid var(--stroke); cursor:pointer; }
-    .btn:hover{ background:var(--card-1); }
-
-    /* =============== List Cards =============== */
-    .grid{ display:grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap:20px; margin:24px 0 56px; }
-    .card{
-      border-radius:16px; overflow:hidden;
-      background:var(--card-0); border:1px solid var(--stroke); box-shadow: var(--shadow), var(--ring);
-      backdrop-filter: blur(12px) saturate(150%);
-      -webkit-backdrop-filter: blur(12px) saturate(150%);
-    }
-    .card .thumb{ height:220px; background:linear-gradient(135deg, var(--brand) 0%, var(--brand-2) 100%); opacity:.16; }
-    .card .body{ padding:18px; }
-    .title{ font-weight:800; font-size:20px; margin:8px 0; }
-    .muted{ color:var(--muted); font-size:14px; }
-    .tags{ display:flex; flex-wrap:wrap; gap:8px; margin-top:12px; }
-    .tag{ font-size:12px; padding:6px 10px; border-radius:999px; background:var(--card-1); border:1px solid var(--stroke); }
-
-    /* =============== Post Page =============== */
-    .post-layout{ display:grid; grid-template-columns: minmax(0,1fr) 300px; gap:20px; margin:24px 0 64px; }
-    .prose{
-      border-radius:16px; background:var(--card-0); border:1px solid var(--stroke);
-      padding:22px; box-shadow: var(--shadow), var(--ring);
-      backdrop-filter: blur(10px) saturate(150%);
-      -webkit-backdrop-filter: blur(10px) saturate(150%);
-    }
-    .prose h1{ margin:0 0 8px; font-size: clamp(22px, 3vw, 38px); }
-    .prose p{ margin:12px 0; }
-    .toc{
-      position: sticky; top:90px;
-      border-radius:16px; background:var(--card-0); border:1px solid var(--stroke);
-      padding:18px; box-shadow: var(--shadow), var(--ring);
-      backdrop-filter: blur(8px) saturate(150%);
-      -webkit-backdrop-filter: blur(8px) saturate(150%);
-    }
-    .toc h4{ margin:0 0 10px; }
-    .toc a{ display:block; padding:6px 0; color:var(--muted); }
-    .toc a:hover{ color:var(--fg); }
-
-    /* ======= Fallback tanpa backdrop-filter (hindari “putih/pecah”) ======= */
-    @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
-      .card, .prose, .toc, .search, .btn{
-        background: color-mix(in oklab, var(--bg), #ffffff 3%);
-      }
-      [data-theme="light"] .card,
-      [data-theme="light"] .prose,
-      [data-theme="light"] .toc,
-      [data-theme="light"] .search,
-      [data-theme="light"] .btn{
-        background: #fff;
-      }
-    }
-
-    /* =============== Tag dropdown =============== */
     .tag-wrap{ position:relative; }
     .tag-menu{
       position:absolute; right:0; top:calc(100% + 8px);
-      width:280px; padding:14px; border-radius:16px; background:var(--card-0); border:1px solid var(--stroke);
-      box-shadow: var(--shadow), var(--ring);
-      backdrop-filter: blur(10px) saturate(150%);
-      -webkit-backdrop-filter: blur(10px) saturate(150%);
-      display:none;
+      width:260px; padding:12px; border-radius:14px;
+      background:var(--surface); border:1px solid var(--stroke);
+      box-shadow: var(--shadow);
+      display:none; z-index:20;
     }
     .tag-menu.open{ display:block; }
-    .tag-menu .sec{ font-size:12px; color:var(--muted); margin:6px 0 10px; }
+    .tag-menu .sec{ font-size:12px; color:var(--muted); margin:4px 0 8px; }
 
-    /* =============== Footer =============== */
-    footer{ border-top:1px solid var(--stroke); margin-top:40px; }
-    footer .wrap{ display:flex; align-items:center; justify-content:center; padding:18px; color:var(--muted); gap:6px; }
-    footer a{ color:inherit; text-decoration: underline; text-decoration-color: color-mix(in oklab, var(--muted), transparent 30%); }
+    /* ====== Grid cards (mirip sebelumnya) ====== */
+    .grid{ display:grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap:18px; margin:20px 0 54px; }
+    .card{
+      border-radius:16px; overflow:hidden; background:var(--surface); border:1px solid var(--stroke);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(6px);
+    }
+    .card .thumb{ height:210px; background:linear-gradient(135deg, #8b7cff 0%, #5bd4ff 100%); opacity:.16; }
+    .card .body{ padding:16px 16px 18px; }
+    .title{ font-weight:800; font-size:20px; margin:6px 0 6px; }
+    .muted{ color:var(--muted); font-size:14px; }
+    .tags{ display:flex; gap:8px; flex-wrap:wrap; margin-top:10px; }
+    .tag{ font-size:12px; padding:6px 10px; border-radius:999px; background:var(--chip); border:1px solid var(--chip-bd); }
 
-    /* =============== Preloader (animasi reload) =============== */
+    /* ====== Halaman post ====== */
+    .post-layout{ display:grid; grid-template-columns: minmax(0,1fr) 300px; gap:18px; margin:20px 0 60px; }
+    .prose{
+      border-radius:16px; padding:22px; background:var(--surface); border:1px solid var(--stroke);
+      box-shadow: var(--shadow);
+    }
+    .prose h1{ margin:4px 0 8px; font-size: clamp(22px, 3.2vw, 38px); }
+    .prose p{ margin:12px 0; }
+    .toc{
+      position:sticky; top:90px;
+      border-radius:14px; padding:16px; background:var(--surface); border:1px solid var(--stroke);
+      box-shadow: var(--shadow);
+    }
+    .toc h4{ margin:0 0 8px; }
+    .toc a{ display:block; padding:6px 0; color:var(--muted); }
+    .toc a:hover{ color:var(--fg); }
+
+    /* Fallback bila backdrop-filter tidak didukung (hindari putih/pecah) */
+    @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+      .search, .card, .prose, .toc, .btn { background: color-mix(in oklab, var(--bg), #ffffff 3%); }
+      [data-theme="light"] .search, [data-theme="light"] .card, [data-theme="light"] .prose, [data-theme="light"] .toc, [data-theme="light"] .btn { background:#fff; }
+    }
+
+    /* ====== Footer ====== */
+    footer{ border-top:1px solid var(--stroke); }
+    footer .wrap{ display:flex; justify-content:center; align-items:center; padding:18px; color:var(--muted); gap:6px; }
+    footer a{ text-decoration: underline; text-decoration-color: color-mix(in oklab, var(--muted), transparent 30%); }
+
+    /* ====== Preloader (tetap halus) ====== */
     .pre{
       position:fixed; inset:0; display:grid; place-items:center; z-index:9999;
       pointer-events:none; opacity:0; transition:opacity .35s ease;
-      background: radial-gradient(900px 400px at 20% -10%, color-mix(in oklab, var(--brand), transparent 82%), transparent 60%),
-                  radial-gradient(900px 400px at 80% -20%, color-mix(in oklab, var(--brand-2), transparent 84%), transparent 60%),
+      background: radial-gradient(900px 400px at 20% -10%, rgba(139,124,255,.10), transparent 60%),
+                  radial-gradient(900px 400px at 80% -20%, rgba(91,212,255,.10), transparent 60%),
                   var(--bg);
     }
     .pre.show{ opacity:1; pointer-events:auto; }
     .spin{
-      width:64px; height:64px; border-radius:50%;
+      width:56px; height:56px; border-radius:50%;
       background:
-        conic-gradient(from 0deg, color-mix(in oklab, var(--brand), transparent 25%), transparent 60%),
-        conic-gradient(from 180deg, color-mix(in oklab, var(--brand-2), transparent 25%), transparent 60%);
+        conic-gradient(from 0deg, color-mix(in oklab, var(--primary), transparent 25%), transparent 60%),
+        conic-gradient(from 180deg, color-mix(in oklab, var(--accent), transparent 25%), transparent 60%);
       mask: radial-gradient(circle at center, transparent 46%, #000 47%);
-      animation: spin 1.2s linear infinite;
+      animation: spin 1.1s linear infinite;
     }
     @keyframes spin{ to{ transform: rotate(1turn); } }
+    @media (prefers-reduced-motion: reduce){
+      .spin{ animation: none; }
+      .pre{ transition:none; }
+    }
 
-    /* =============== Responsive =============== */
+    /* ====== Responsive ====== */
     @media (max-width: 900px){
-      .grid{ grid-template-columns: 1fr; }
-      .post-layout{ grid-template-columns: 1fr; }
+      .grid{ grid-template-columns:1fr; }
+      .post-layout{ grid-template-columns:1fr; }
       .toc{ position:relative; top:auto; }
-      .hero .wrap{ grid-template-columns: 80px 1fr; }
-      .avatar{ width:80px; height:80px; font-size:12px; }
+      .hero .wrap{ grid-template-columns: 84px 1fr; gap:16px; }
+      .avatar{ width:84px; height:84px; font-size:12px; }
     }
   </style>
 </head>
@@ -236,9 +208,7 @@
       <a href="#/blog" class="chip">Blog</a>
       <a href="#/novel" class="chip">Novel</a>
       <a href="#/about" class="chip">Tentang Penulis</a>
-      <button id="themeBtn" class="chip" title="Dark / Light">
-        <span class="icon"></span>
-      </button>
+      <button id="themeBtn" class="chip" title="Dark / Light"><span class="icon"></span></button>
     </div>
   </div>
 
@@ -273,7 +243,7 @@
       </div>
     </div>
 
-    <!-- Content mount -->
+    <!-- View mount -->
     <div id="view"></div>
   </div>
 
@@ -287,12 +257,12 @@
   </footer>
 
   <script>
-    // Lepas class anti-transisi setelah halaman siap
+    // Lepas blok transisi setelah konten siap
     window.addEventListener("DOMContentLoaded", () => {
       document.documentElement.classList.remove("no-trans");
     });
 
-    /* ======= Fake data (bisa kamu ganti) ======= */
+    /* ====== Data sample (ganti dengan punyamu) ====== */
     const POSTS = [
       {
         slug:"bab-1-bayang-kota",
@@ -300,163 +270,109 @@
         date:"2025-09-01",
         tags:["bab","progres","novel"],
         excerpt:"Pengenalan tokoh utama dan konflik awal.",
-        body:`<p>Ini adalah paragraf pembuka yang menyiapkan suasana kota saat senja. Lampu-lampu mulai hidup, dan bayangan gedung merayap di aspal basah.</p>
+        body:`<p>Ini paragraf pembuka yang menyiapkan suasana kota saat senja. Lampu-lampu mulai hidup, dan bayangan gedung merayap di aspal basah.</p>
         <p>Tokoh utama berdiri di tepi trotoar, menatap persimpangan yang mengubah nasibnya. Di sinilah cerita berangkat.</p>`
       },
       {
         slug:"catatan-proses-1",
         title:"Catatan Proses #1 — Kenapa Tema Ini?",
         date:"2025-08-30",
-        tags:["progres", "catatan"],
-        excerpt:"Menjawab pertanyaan: kenapa milih tema ini, dan apa riset awalnya.",
-        body:`<p>Catatan proses tentang pemilihan tema, riset kecil-kecilan, dan beberapa eksperimen gaya bahasa. Tempatku menata alasan kreatif.</p>`
+        tags:["progres","catatan"],
+        excerpt:"Kenapa milih tema ini, dan apa riset awalnya.",
+        body:`<p>Catatan proses tentang pemilihan tema, riset kecil-kecilan, dan eksperimen gaya bahasa.</p>`
       }
     ];
 
-    /* ======= State ======= */
+    /* ====== State ====== */
     let currentSort = "newest";
     let activeTag = null;
 
+    /* ====== Helpers ====== */
     const qs = (s, el=document) => el.querySelector(s);
     const qsa = (s, el=document) => [...el.querySelectorAll(s)];
-
-    /* ======= Preloader helper ======= */
     const pre = qs("#pre");
     const showPre = () => pre.classList.add("show");
-    const hidePre = () => setTimeout(()=> pre.classList.remove("show"), 250);
+    const hidePre = () => setTimeout(()=> pre.classList.remove("show"), 220);
 
-    /* ======= Theme toggle ======= */
-    const themeBtn = qs("#themeBtn");
-    const setTheme = t => {
-      document.documentElement.setAttribute("data-theme", t);
-      localStorage.setItem("theme", t);
-    };
-    themeBtn.addEventListener("click", ()=>{
+    /* ====== Theme toggle ====== */
+    qs("#themeBtn").addEventListener("click", ()=>{
       const cur = document.documentElement.getAttribute("data-theme") || "dark";
-      setTheme(cur === "dark" ? "light" : "dark");
+      const next = cur === "dark" ? "light" : "dark";
+      document.documentElement.setAttribute("data-theme", next);
+      localStorage.setItem("theme", next);
     });
 
-    /* ======= Tags menu (anchor ke tombol, ikut scroll) ======= */
-    const tagBtn = qs("#tagBtn");
-    const tagMenu = qs("#tagMenu");
-    tagBtn.addEventListener("click", (e)=>{
-      e.stopPropagation();
-      tagMenu.classList.toggle("open");
-    });
-    document.addEventListener("click", (e)=>{
-      if (!tagMenu.contains(e.target) && !tagBtn.contains(e.target)) tagMenu.classList.remove("open");
-    });
+    /* ====== Tag dropdown (ikut scroll, anchor ke tombol) ====== */
+    const tagBtn = qs("#tagBtn"), tagMenu = qs("#tagMenu");
+    tagBtn.addEventListener("click", (e)=>{ e.stopPropagation(); tagMenu.classList.toggle("open"); });
+    document.addEventListener("click", (e)=>{ if (!tagMenu.contains(e.target) && !tagBtn.contains(e.target)) tagMenu.classList.remove("open"); });
 
-    /* ======= Build Tag List ======= */
-    const buildTags = () => {
-      const all = new Map();
-      POSTS.forEach(p => p.tags.forEach(t => all.set(t, (all.get(t)||0) + 1)));
-      const list = [...all.keys()].sort();
-      const wrap = qs("#tagList");
-      wrap.innerHTML = "";
-      list.forEach(t=>{
+    /* ====== Build Tag List ====== */
+    function buildTags(){
+      const map = new Map();
+      POSTS.forEach(p => p.tags.forEach(t => map.set(t, (map.get(t)||0) + 1)));
+      const wrap = qs("#tagList"); wrap.innerHTML = "";
+      [...map.keys()].sort().forEach(t=>{
         const b = document.createElement("button");
-        b.className = "btn";
-        b.style.margin = "4px 6px 0 0";
-        b.textContent = `# ${t} (${all.get(t)})`;
-        b.onclick = () => { activeTag = t; tagMenu.classList.remove("open"); render(); };
+        b.className="btn"; b.style.margin="4px 6px 0 0"; b.textContent=`# ${t} (${map.get(t)})`;
+        b.onclick = ()=>{ activeTag = t; tagMenu.classList.remove("open"); render(); };
         wrap.appendChild(b);
       });
       qs("#showAll").onclick = (e)=>{ e.preventDefault(); activeTag=null; render(); };
-    };
-
-    /* ======= Search & Sort ======= */
-    const input = qs("#q");
-    input.addEventListener("input", () => render());
-    qs("#sortBtn").addEventListener("click", ()=>{
-      currentSort = currentSort === "newest" ? "oldest" : "newest";
-      render();
-    });
-
-    /* ======= Router ======= */
-    const view = qs("#view");
-
-    const routes = {
-      "/": renderHome,
-      "/blog": renderHome,
-      "/novel": renderHome,
-      "/about": renderAbout
-    };
-
-    function getHashPath(){
-      const h = location.hash || "#/";
-      const path = h.replace(/^#/, "");
-      return path;
     }
 
-    window.addEventListener("hashchange", ()=> { showPre(); setTimeout(()=> { render(); }, 50); });
+    /* ====== Search & Sort ====== */
+    qs("#q").addEventListener("input", render);
+    qs("#sortBtn").addEventListener("click", ()=>{
+      currentSort = currentSort === "newest" ? "oldest" : "newest"; render();
+    });
 
-    /* ======= Renderers ======= */
+    /* ====== Router ====== */
+    const view = qs("#view");
+    const routes = { "/": renderHome, "/blog": renderHome, "/novel": renderHome, "/about": renderAbout };
+    const getPath = () => (location.hash || "#/").replace(/^#/, "");
+    window.addEventListener("hashchange", ()=>{ showPre(); setTimeout(render, 40); });
+
+    /* ====== Renderers ====== */
     function render(){
-      const path = getHashPath();
-      // meta count
+      const path = getPath();
       const total = POSTS.length;
-      const bab = POSTS.filter(p=> p.tags.includes("bab")).length;
-      const cat = POSTS.filter(p=> p.tags.includes("catatan")).length;
+      const bab = POSTS.filter(p=>p.tags.includes("bab")).length;
+      const cat = POSTS.filter(p=>p.tags.includes("catatan")).length;
       qs("#metaCount").textContent = `${total} posting • ${bab} bab • ${cat} catatan`;
 
-      // route: post detail?
-      if (path.startsWith("/post/")){
-        const slug = path.replace("/post/","");
-        renderPost(slug);
-        hidePre();
-        return;
-      }
-
-      // normal routes
-      const fn = routes[path] || renderHome;
-      fn();
-      hidePre();
+      if (path.startsWith("/post/")){ renderPost(path.replace("/post/","")); hidePre(); return; }
+      (routes[path] || renderHome)(); hidePre();
     }
 
     function renderHome(){
-      const term = input.value.trim().toLowerCase();
+      const term = qs("#q").value.trim().toLowerCase();
       let list = POSTS.slice();
-
-      if (activeTag) list = list.filter(p => p.tags.includes(activeTag));
+      if (activeTag) list = list.filter(p=> p.tags.includes(activeTag));
       if (term) list = list.filter(p => (p.title + " " + p.excerpt + " " + p.tags.join(" ")).toLowerCase().includes(term));
-      list.sort((a,b)=> currentSort==="newest" ? (b.date.localeCompare(a.date)) : (a.date.localeCompare(b.date)));
+      list.sort((a,b)=> currentSort==="newest" ? b.date.localeCompare(a.date) : a.date.localeCompare(b.date));
 
       view.innerHTML = `
         <div class="grid">
-          ${list.map(cardHTML).join("")}
-        </div>
-      `;
+          ${list.map(p => `
+            <article class="card" data-slug="${p.slug}">
+              <div class="thumb"></div>
+              <div class="body">
+                <div class="muted">${new Date(p.date).toLocaleDateString("id-ID",{day:"2-digit",month:"short",year:"numeric"})}</div>
+                <div class="title">${p.title}</div>
+                <div class="muted">${p.excerpt}</div>
+                <div class="tags">${p.tags.map(t=>`<span class="tag"># ${t}</span>`).join("")}</div>
+              </div>
+            </article>`).join("")}
+        </div>`;
       buildTags();
-      // Pasang handler untuk kartu
-      qsa(".card").forEach(c=>{
-        c.addEventListener("click", ()=> {
-          location.hash = "#/post/" + c.dataset.slug;
-        });
-      });
-    }
-
-    function cardHTML(p){
-      const d = new Date(p.date).toLocaleDateString("id-ID", { day:"2-digit", month:"short", year:"numeric" });
-      return `
-        <article class="card" data-slug="${p.slug}">
-          <div class="thumb"></div>
-          <div class="body">
-            <div class="muted">${d} • ${(p.tags||[]).length ? "•" : ""}</div>
-            <div class="title">${p.title}</div>
-            <div class="muted">${p.excerpt}</div>
-            <div class="tags">${p.tags.map(t => `<span class="tag"># ${t}</span>`).join("")}</div>
-          </div>
-        </article>
-      `;
+      qsa(".card").forEach(c => c.addEventListener("click", ()=> location.hash = "#/post/" + c.dataset.slug));
     }
 
     function renderPost(slug){
-      const p = POSTS.find(x => x.slug === slug);
+      const p = POSTS.find(x=>x.slug===slug);
       if (!p){ view.innerHTML = `<p>Tulisan tidak ditemukan.</p>`; return; }
-
-      const d = new Date(p.date).toLocaleDateString("id-ID", { day:"2-digit", month:"long", year:"numeric" });
-
+      const d = new Date(p.date).toLocaleDateString("id-ID",{day:"2-digit",month:"long",year:"numeric"});
       view.innerHTML = `
         <div class="post-layout">
           <article class="prose">
@@ -467,13 +383,11 @@
           <aside class="toc">
             <h4>DAFTAR ISI</h4>
             <a href="#/post/${slug}">${p.title}</a>
-            <div class="sec">Tentang Penulis</div>
-            <a href="#/about">Profil & kontak</a>
+            <div class="sec" style="margin-top:10px;font-size:12px;color:var(--muted)">Tentang</div>
+            <a href="#/about">Tentang Penulis</a>
           </aside>
-        </div>
-      `;
-      // kecilkan efek preloader agar halus di GH Pages
-      setTimeout(()=> hidePre(), 150);
+        </div>`;
+      setTimeout(hidePre, 140);
     }
 
     function renderAbout(){
@@ -482,18 +396,13 @@
           <h1>Halo, aku Nama Kamu 👋</h1>
           <p>Aku siswa kelas 12 yang lagi nulis novel untuk tugas akhir Bahasa Indonesia. Di blog ini, aku upload progres, bab, dan catatan proses kreatif.</p>
           <p>Kritik & saran sangat membantu! 🙏</p>
-        </article>
-      `;
+        </article>`;
     }
 
     // Boot
     buildTags();
     showPre();
-    // render awal (deep-link aman di GH Pages)
-    window.addEventListener("load", () => {
-      render();
-      hidePre();
-    });
+    window.addEventListener("load", ()=>{ render(); hidePre(); });
   </script>
 </body>
 </html>
