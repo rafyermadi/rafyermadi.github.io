@@ -38,6 +38,7 @@
       linear-gradient(180deg, var(--bg), var(--bg));
       color:var(--text);
       font-family:"Plus Jakarta Sans", system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      scroll-behavior:smooth;
     }
     a{color:inherit;text-decoration:none}
     img{max-width:100%;display:block}
@@ -142,6 +143,13 @@
     .quote{background:var(--card);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:14px;font-style:italic}
     .copy{margin-top:18px;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
 
+    /* PAGINATION */
+    .pager{display:flex;gap:8px;justify-content:center;margin-top:16px;flex-wrap:wrap}
+    .pager .btn{padding:8px 12px;border-radius:10px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.04)}
+    html[data-theme="light"] .pager .btn{border-color:rgba(16,19,33,.12);background:rgba(16,19,33,.04)}
+    .pager .btn[disabled]{opacity:.5;cursor:not-allowed}
+    .pager .btn.active{background:linear-gradient(135deg,var(--brand),var(--brand-2));border:none;color:#fff}
+
     /* MODAL */
     .modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;z-index:120}
     .modal:not(.hidden){display:flex}
@@ -204,6 +212,7 @@
 
     <main class="section container" aria-live="polite">
       <div class="grid" id="grid-home"></div>
+      <div class="pager" id="pager-home"></div>
     </main>
   </div>
 
@@ -223,6 +232,7 @@
     </div>
     <main class="section container" aria-live="polite">
       <div class="grid" id="grid-blog"></div>
+      <div class="pager" id="pager-blog"></div>
     </main>
   </div>
 
@@ -242,6 +252,7 @@
     </div>
     <main class="section container" aria-live="polite">
       <div class="grid" id="grid-novel"></div>
+      <div class="pager" id="pager-novel"></div>
     </main>
   </div>
 
@@ -357,93 +368,93 @@
   const fmtDate = (iso) => { const d = new Date(iso + 'T00:00:00'); return `${d.getDate()} ${monthID[d.getMonth()]} ${d.getFullYear()}`; };
 
   // ===== DATA (posts with body) =====
-const posts = [
-  { id:'novel-bab-1', title:'Novel — Bab 1: Pagi yang Menggantung', date:'2025-08-20',
-    tags:['Novel','Progres','Bab 1'],
-    image:'https://images.unsplash.com/photo-1507842217343-583bb7270b66?q=80&w=1200&auto=format&fit=crop',
-    excerpt:'Awal cerita—sebuah pagi di Jakarta, ketika segalanya terasa biasa saja, sampai tidak lagi…',
-    body:`<p>Pagi di Jakarta selalu terdengar sama: klakson, pedagang roti, dan radio tetangga yang tak pernah tepat frekuensi. Aku berjalan menembus lorong kos yang sempit sambil menghitung napas.</p>
-    <p>Di halaman, ada sandal yang ditinggalkan tergesa. "Pertanda baik atau buruk?" batinku. Telepon bergetar—pesan dari Ibu, hanya satu kata: <em>Pulang.</em></p>
-    <h2>Set up konflik</h2><p>Bab ini memperkenalkan dua hal: hilangnya figur jangkar dan kota yang ikut menelan suara.</p>`},
+  const posts = [
+    { id:'novel-bab-1', title:'Novel — Bab 1: Pagi yang Menggantung', date:'2025-08-20',
+      tags:['Novel','Progres','Bab 1'],
+      image:'https://images.unsplash.com/photo-1507842217343-583bb7270b66?q=80&w=1200&auto=format&fit=crop',
+      excerpt:'Awal cerita—sebuah pagi di Jakarta, ketika segalanya terasa biasa saja, sampai tidak lagi…',
+      body:`<p>Pagi di Jakarta selalu terdengar sama: klakson, pedagang roti, dan radio tetangga yang tak pernah tepat frekuensi. Aku berjalan menembus lorong kos yang sempit sambil menghitung napas.</p>
+      <p>Di halaman, ada sandal yang ditinggalkan tergesa. "Pertanda baik atau buruk?" batinku. Telepon bergetar—pesan dari Ibu, hanya satu kata: <em>Pulang.</em></p>
+      <h2>Set up konflik</h2><p>Bab ini memperkenalkan dua hal: hilangnya figur jangkar dan kota yang ikut menelan suara.</p>`},
 
-  { id:'catatan-riset', title:'Catatan Riset: Menentukan Setting & Perspektif', date:'2025-08-18',
-    tags:['Novel','Catatan','Riset'],
-    image:'https://images.unsplash.com/photo-1519681393784-d120267933ba?q=80&w=1200&auto=format&fit=crop',
-    excerpt:'Kenapa memilih sudut pandang orang pertama? Plus daftar referensi yang kupakai.',
-    body:`<p>Aku membandingkan POV orang pertama vs orang ketiga terbatas. Pilihan jatuh ke orang pertama untuk menangkap kegelisahan tokoh secara dekat.</p>
-    <blockquote>Satu kota bisa menjadi tokoh, jika kita memberinya napas.</blockquote>
-    <p>Referensi: <em>Norwegian Wood</em>, <em>Lelaki Harimau</em>, dan esai dialog.</p>`},
+    { id:'catatan-riset', title:'Catatan Riset: Menentukan Setting & Perspektif', date:'2025-08-18',
+      tags:['Novel','Catatan','Riset'],
+      image:'https://images.unsplash.com/photo-1519681393784-d120267933ba?q=80&w=1200&auto=format&fit=crop',
+      excerpt:'Kenapa memilih sudut pandang orang pertama? Plus daftar referensi yang kupakai.',
+      body:`<p>Aku membandingkan POV orang pertama vs orang ketiga terbatas. Pilihan jatuh ke orang pertama untuk menangkap kegelisahan tokoh secara dekat.</p>
+      <blockquote>Satu kota bisa menjadi tokoh, jika kita memberinya napas.</blockquote>
+      <p>Referensi: <em>Norwegian Wood</em>, <em>Lelaki Harimau</em>, dan esai dialog.</p>`},
 
-  { id:'teknik-dialog', title:'Teknik Dialog: Biar Ngobrolnya Hidup', date:'2025-08-16',
-    tags:['Tips Menulis','Workshop','Blog'],
-    image:'https://images.unsplash.com/photo-1515516969-d4008cc6241a?q=80&w=1200&auto=format&fit=crop',
-    excerpt:'Beberapa trik sederhana untuk bikin dialog terasa alami tanpa “ceramah”.',
-    body:`<p>Trik cepat: kurangi penjelasan setelah dialog, biarkan respon lawan bicara memikul makna.</p>
-      <ul><li>Gunakan jeda seperlunya.</li><li>Gesture kecil menandai emosi.</li><li>Seimbangkan “kataku, katanya” dengan aksi.</li></ul>`},
+    { id:'teknik-dialog', title:'Teknik Dialog: Biar Ngobrolnya Hidup', date:'2025-08-16',
+      tags:['Tips Menulis','Workshop','Blog'],
+      image:'https://images.unsplash.com/photo-1515516969-d4008cc6241a?q=80&w=1200&auto=format&fit=crop',
+      excerpt:'Beberapa trik sederhana untuk bikin dialog terasa alami tanpa “ceramah”.',
+      body:`<p>Trik cepat: kurangi penjelasan setelah dialog, biarkan respon lawan bicara memikul makna.</p>
+        <ul><li>Gunakan jeda seperlunya.</li><li>Gesture kecil menandai emosi.</li><li>Seimbangkan “kataku, katanya” dengan aksi.</li></ul>`},
 
-  { id:'novel-outline', title:'Outline Kasar: Alur Besar Novel', date:'2025-08-14',
-    tags:['Novel','Outline','Progres'],
-    image:'https://images.unsplash.com/photo-1491841550275-ad7854e35ca6?q=80&w=1200&auto=format&fit=crop',
-    excerpt:'Kerangka 3 babak + benang merah konflik utama dan subplot keluarga.',
-    body:`<p>Struktur 3 babak: pengenalan — eskalasi — resolusi. Subplot keluarga menempel pada pilihan kuliah tokoh.</p>`},
+    { id:'novel-outline', title:'Outline Kasar: Alur Besar Novel', date:'2025-08-14',
+      tags:['Novel','Outline','Progres'],
+      image:'https://images.unsplash.com/photo-1491841550275-ad7854e35ca6?q=80&w=1200&auto=format&fit=crop',
+      excerpt:'Kerangka 3 babak + benang merah konflik utama dan subplot keluarga.',
+      body:`<p>Struktur 3 babak: pengenalan — eskalasi — resolusi. Subplot keluarga menempel pada pilihan kuliah tokoh.</p>`},
 
-  { id:'random-thoughts', title:'Random Thoughts: Nulis di Tengah Deadline', date:'2025-08-12',
-    tags:['Blog','Opini','Produktivitas'],
-    image:'https://images.unsplash.com/photo-1516542076529-1ea3854896e1?q=80&w=1200&auto=format&fit=crop',
-    excerpt:'Cara bagiku menjaga ritme nulis tanpa ngorbanin sekolah.',
-    body:`<p>Strategi: nulis 25 menit, rehat 5 menit—ulang 3 kali. Satu sesi ≈ 1 halaman.</p>`},
+    { id:'random-thoughts', title:'Random Thoughts: Nulis di Tengah Deadline', date:'2025-08-12',
+      tags:['Blog','Opini','Produktivitas'],
+      image:'https://images.unsplash.com/photo-1516542076529-1ea3854896e1?q=80&w=1200&auto=format&fit=crop',
+      excerpt:'Cara bagiku menjaga ritme nulis tanpa ngorbanin sekolah.',
+      body:`<p>Strategi: nulis 25 menit, rehat 5 menit—ulang 3 kali. Satu sesi ≈ 1 halaman.</p>`},
 
-  { id:'novel-bab-2', title:'Novel — Bab 2: Peta yang Hilang', date:'2025-08-10',
-    tags:['Novel','Progres','Bab 2'],
-    image:'https://images.unsplash.com/photo-1455390582262-044cdead277a?q=80&w=1200&auto=format&fit=crop',
-    excerpt:'Tokoh menemukan peta usang yang menuntun ke masa lalu ayahnya.',
-    body:`<p>Peta jadi pemicu babak dua.</p>`},
+    { id:'novel-bab-2', title:'Novel — Bab 2: Peta yang Hilang', date:'2025-08-10',
+      tags:['Novel','Progres','Bab 2'],
+      image:'https://images.unsplash.com/photo-1455390582262-044cdead277a?q=80&w=1200&auto=format&fit=crop',
+      excerpt:'Tokoh menemukan peta usang yang menuntun ke masa lalu ayahnya.',
+      body:`<p>Peta jadi pemicu babak dua.</p>`},
 
-  { id:'tips-outline', title:'Tips Outline yang Nggak Bikin Pusing', date:'2025-08-08',
-    tags:['Blog','Tips Menulis'],
-    image:'https://images.unsplash.com/photo-1524578271613-d550eacf6090?q=80&w=1200&auto=format&fit=crop',
-    excerpt:'Cara cepat bikin outline versi “kabel rapi”.',
-    body:`<p>Pakai pola 3 babak, tulis konflik per babak dalam 1 kalimat.</p>`},
+    { id:'tips-outline', title:'Tips Outline yang Nggak Bikin Pusing', date:'2025-08-08',
+      tags:['Blog','Tips Menulis'],
+      image:'https://images.unsplash.com/photo-1524578271613-d550eacf6090?q=80&w=1200&auto=format&fit=crop',
+      excerpt:'Cara cepat bikin outline versi “kabel rapi”.',
+      body:`<p>Pakai pola 3 babak, tulis konflik per babak dalam 1 kalimat.</p>`},
 
-  { id:'novel-riset-lokasi', title:'Riset Lokasi: Catatan Lapangan', date:'2025-08-06',
-    tags:['Novel','Riset'],
-    image:'https://images.unsplash.com/photo-1456425712190-0dd8c2b00156?q=80&w=1200&auto=format&fit=crop',
-    excerpt:'Rute bus, suara pasar pagi, dan aroma hujan—semua dicatat.',
-    body:`<p>Merekam detail sensorik untuk adegan.</p>`},
+    { id:'novel-riset-lokasi', title:'Riset Lokasi: Catatan Lapangan', date:'2025-08-06',
+      tags:['Novel','Riset'],
+      image:'https://images.unsplash.com/photo-1456425712190-0dd8c2b00156?q=80&w=1200&auto=format&fit=crop',
+      excerpt:'Rute bus, suara pasar pagi, dan aroma hujan—semua dicatat.',
+      body:`<p>Merekam detail sensorik untuk adegan.</p>`},
 
-  { id:'esai-favorit', title:'Esai Favorit tentang Penokohan', date:'2025-08-04',
-    tags:['Blog','Opini'],
-    image:'https://images.unsplash.com/photo-1455390582262-044cdead277a?q=80&w=1200&auto=format&fit=crop',
-    excerpt:'Kumpulan esai yang bikin mikir ulang cara membangun karakter.',
-    body:`<p>Daftar esai dan ringkasannya.</p>`},
+    { id:'esai-favorit', title:'Esai Favorit tentang Penokohan', date:'2025-08-04',
+      tags:['Blog','Opini'],
+      image:'https://images.unsplash.com/photo-1455390582262-044cdead277a?q=80&w=1200&auto=format&fit=crop',
+      excerpt:'Kumpulan esai yang bikin mikir ulang cara membangun karakter.',
+      body:`<p>Daftar esai dan ringkasannya.</p>`},
 
-  { id:'novel-bab-3', title:'Novel — Bab 3: Telepon Tengah Malam', date:'2025-08-02',
-    tags:['Novel','Progres','Bab 3'],
-    image:'https://images.unsplash.com/photo-1497250681960-ef046c08a56e?q=80&w=1200&auto=format&fit=crop',
-    excerpt:'Sebuah telepon mengubah keputusan tokoh.',
-    body:`<p>Twist pertama muncul.</p>`},
+    { id:'novel-bab-3', title:'Novel — Bab 3: Telepon Tengah Malam', date:'2025-08-02',
+      tags:['Novel','Progres','Bab 3'],
+      image:'https://images.unsplash.com/photo-1497250681960-ef046c08a56e?q=80&w=1200&auto=format&fit=crop',
+      excerpt:'Sebuah telepon mengubah keputusan tokoh.',
+      body:`<p>Twist pertama muncul.</p>`},
 
-  { id:'catatan-gaya', title:'Catatan Gaya: Metafora yang Hemat', date:'2025-07-30',
-    tags:['Blog','Catatan'],
-    image:'https://images.unsplash.com/photo-1526318472351-c75fcf070305?q=80&w=1200&auto=format&fit=crop',
-    excerpt:'Menjaga metafora tetap jernih dan tepat sasaran.',
-    body:`<p>Contoh sebelum–sesudah.</p>`},
+    { id:'catatan-gaya', title:'Catatan Gaya: Metafora yang Hemat', date:'2025-07-30',
+      tags:['Blog','Catatan'],
+      image:'https://images.unsplash.com/photo-1526318472351-c75fcf070305?q=80&w=1200&auto=format&fit=crop',
+      excerpt:'Menjaga metafora tetap jernih dan tepat sasaran.',
+      body:`<p>Contoh sebelum–sesudah.</p>`},
 
-  { id:'review-buku', title:'Review Buku: Cara Menulis Dialog', date:'2025-07-28',
-    tags:['Blog','Review'],
-    image:'https://images.unsplash.com/photo-1544930834-45e1b225b0cc?q=80&w=1200&auto=format&fit=crop',
-    excerpt:'Catatan dari buku craft writing favorit.',
-    body:`<p>Tiga poin yang bisa langsung dipraktikkan.</p>`},
+    { id:'review-buku', title:'Review Buku: Cara Menulis Dialog', date:'2025-07-28',
+      tags:['Blog','Review'],
+      image:'https://images.unsplash.com/photo-1544930834-45e1b225b0cc?q=80&w=1200&auto=format&fit=crop',
+      excerpt:'Catatan dari buku craft writing favorit.',
+      body:`<p>Tiga poin yang bisa langsung dipraktikkan.</p>`},
 
-  { id:'novel-bab-4', title:'Novel — Bab 4: Hujan di Peron', date:'2025-07-26',
-    tags:['Novel','Progres','Bab 4'],
-    image:'https://images.unsplash.com/photo-1444723121867-7a241cacace9?q=80&w=1200&auto=format&fit=crop',
-    excerpt:'Adegan peron jadi titik balik relasi.',
-    body:`<p>Adegan dialog singkat namun tajam.</p>`},
-];
+    { id:'novel-bab-4', title:'Novel — Bab 4: Hujan di Peron', date:'2025-07-26',
+      tags:['Novel','Progres','Bab 4'],
+      image:'https://images.unsplash.com/photo-1444723121867-7a241cacace9?q=80&w=1200&auto=format&fit=crop',
+      excerpt:'Adegan peron jadi titik balik relasi.',
+      body:`<p>Adegan dialog singkat namun tajam.</p>`},
+  ];
 
-  // ===== STATE (query per view) =====
-  const states = { home:{q:''}, blog:{q:''}, novel:{q:''} };
+  // ===== STATE (query per view + page) =====
+  const states = { home:{q:'', page:1}, blog:{q:'', page:1}, novel:{q:'', page:1} };
 
   // ===== COMMON RENDERERS =====
   function cardHTML(p){
@@ -481,26 +492,77 @@ const posts = [
     if(!input || input.dataset.inited){return;}
     input.dataset.inited='1';
     window.addEventListener('keydown', (e)=>{ if(document.getElementById(`view-${view}`).classList.contains('hidden')) return; if(e.key==='/' && document.activeElement!==input){ e.preventDefault(); input.focus(); } });
-    input.addEventListener('input', e=>{ S.q = e.target.value; routeRender(); });
+    input.addEventListener('input', e=>{ S.q = e.target.value; S.page = 1; routeRender(); });
+  }
+
+  // ===== PAGINATION =====
+  const perPageForViewport = ()=> (innerWidth < 640 ? 8 : (innerWidth <= 1024 ? 8 : 12));
+
+  function renderPager(view, totalPages){
+    const wrap = document.getElementById(`pager-${view}`);
+    if(!wrap) return;
+    const cur = states[view].page;
+    if(totalPages <= 1){ wrap.innerHTML = ''; return; }
+
+    const nums = [];
+    const push = n => nums.push(`<button class="btn ${n===cur?'active':''}" data-p="${n}">${n}</button>`);
+    const addDots = ()=> nums.push(`<span style="padding:8px 6px;color:var(--muted)">…</span>`);
+
+    push(1);
+    if(cur > 3) addDots();
+    for(let n=Math.max(2,cur-1); n<=Math.min(totalPages-1,cur+1); n++) push(n);
+    if(cur < totalPages-2) addDots();
+    if(totalPages>1) push(totalPages);
+
+    wrap.innerHTML = `
+      <button class="btn" data-p="prev" ${cur===1?'disabled':''}>←</button>
+      ${nums.join('')}
+      <button class="btn" data-p="next" ${cur===totalPages?'disabled':''}>→</button>
+    `;
+
+    wrap.onclick = (e)=>{
+      const p = e.target.getAttribute('data-p');
+      if(!p) return;
+      if(p==='prev' && states[view].page>1) states[view].page--;
+      else if(p==='next' && states[view].page<totalPages) states[view].page++;
+      else if(/^\d+$/.test(p)) states[view].page = parseInt(p,10);
+      routeRender();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
   }
 
   // ===== RENDER PER ROUTE =====
   function renderHome(){
     setupSearch('home');
-    const list = searchFilter(posts.slice(), states.home.q);
-    renderGrid(document.getElementById('grid-home'), list);
+    const filtered = searchFilter(posts.slice(), states.home.q);
+    const per = perPageForViewport();
+    const total = Math.max(1, Math.ceil(filtered.length / per));
+    states.home.page = Math.min(Math.max(1, states.home.page), total);
+    const start = (states.home.page-1)*per;
+    renderGrid(document.getElementById('grid-home'), filtered.slice(start, start+per));
+    renderPager('home', total);
   }
   function renderBlog(){
     setupSearch('blog');
     const base = posts.filter(p=> p.tags.includes('Blog'));
-    const list = searchFilter(base, states.blog.q);
-    renderGrid(document.getElementById('grid-blog'), list);
+    const filtered = searchFilter(base, states.blog.q);
+    const per = perPageForViewport();
+    const total = Math.max(1, Math.ceil(filtered.length / per));
+    states.blog.page = Math.min(Math.max(1, states.blog.page), total);
+    const start = (states.blog.page-1)*per;
+    renderGrid(document.getElementById('grid-blog'), filtered.slice(start, start+per));
+    renderPager('blog', total);
   }
   function renderNovel(){
     setupSearch('novel');
     const base = posts.filter(p=> p.tags.includes('Novel'));
-    const list = searchFilter(base, states.novel.q);
-    renderGrid(document.getElementById('grid-novel'), list);
+    const filtered = searchFilter(base, states.novel.q);
+    const per = perPageForViewport();
+    const total = Math.max(1, Math.ceil(filtered.length / per));
+    states.novel.page = Math.min(Math.max(1, states.novel.page), total);
+    const start = (states.novel.page-1)*per;
+    renderGrid(document.getElementById('grid-novel'), filtered.slice(start, start+per));
+    renderPager('novel', total);
   }
   function renderPost(id){
     const idx = posts.findIndex(p=>p.id===id); const post = posts[idx] || posts[0];
@@ -530,7 +592,7 @@ const posts = [
     $('#view-post').classList.toggle('hidden', view!=='post');
     $('#view-blog').classList.toggle('hidden', view!=='blog');
     $('#view-novel').classList.toggle('hidden', view!=='novel');
-    window.scrollTo({top:0, behavior:'instant'});
+    window.scrollTo({top:0, behavior:'auto'});
   }
   function routeRender(){
     const h = location.hash || '#/' ;
@@ -568,9 +630,13 @@ const posts = [
 
   // initial
   routeRender();
+
   // back-to-top
   $('#toTop')?.addEventListener('click', ()=> window.scrollTo({top:0, behavior:'smooth'}));
+
+  // re-render on resize (for responsive per-page)
+  let rszT; 
+  window.addEventListener('resize', ()=>{ clearTimeout(rszT); rszT = setTimeout(()=> routeRender(), 120); });
   </script>
 </body>
 </html>
-
