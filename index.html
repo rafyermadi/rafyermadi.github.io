@@ -1,531 +1,411 @@
 <!doctype html>
 <html lang="id" data-theme="dark">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Rafy • Blog</title>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Rafy Rayyan — Blog & Arsip Progres Novel</title>
+<style>
+:root{
+  --bg:#0c0e12; --panel:#11141a; --panel-2:#0f1217; --card:#161a22;
+  --text:#e8edf5; --muted:#aab3c2; --accent:#64b5ff; --accent2:#8b5cf6;
+  --ring:rgba(255,255,255,.08); --shadow:rgba(0,0,0,.35);
+}
+:root[data-theme="light"]{
+  --bg:#f6f8fb; --panel:#ffffff; --panel-2:#f2f5f9; --card:#ffffff;
+  --text:#10131a; --muted:#596273; --accent:#0b78ff; --accent2:#6b4bff;
+  --ring:rgba(0,0,0,.08); --shadow:rgba(0,0,0,.07);
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0; font:16px/1.6 "Inter",system-ui,Segoe UI,Roboto,Arial;
+  color:var(--text); background:radial-gradient(1200px 600px at 15% -10%,#123 0%,transparent 60%) , var(--bg);
+}
+a{color:inherit;text-decoration:none}
+img{max-width:100%;display:block}
+.container{max-width:1150px;margin:0 auto;padding:0 18px}
+.header{
+  position:sticky; top:0; z-index:30; backdrop-filter:saturate(140%) blur(8px);
+  background:color-mix(in hsl, var(--bg) 85%, transparent);
+  border-bottom:1px solid var(--ring);
+}
+.nav{display:flex;align-items:center;gap:18px;height:64px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:700}
+.brand .logo{width:28px;height:28px;border-radius:9px;
+  background:linear-gradient(135deg,#4dd4ff,#7a5cff); display:grid;place-items:center;color:#fff;font-weight:800}
+.navlinks{display:flex;gap:18px;margin-left:auto}
+.navlinks a{padding:8px 12px;border-radius:10px}
+.navlinks a.active{background:var(--ring)}
+.theme{margin-left:8px}
+.theme button{width:36px;height:36px;border-radius:10px;border:1px solid var(--ring);background:var(--panel);
+  display:grid;place-items:center;cursor:pointer}
 
-  <!-- 1) Anti FOUC & Theme-First: terapkan tema sebelum CSS diload -->
-  <script>
-    (function () {
-      try {
-        const saved = localStorage.getItem("theme") || "dark";
-        document.documentElement.setAttribute("data-theme", saved);
-      } catch (e) {
-        document.documentElement.setAttribute("data-theme", "dark");
-      }
-    })();
-  </script>
+.hero{padding:36px 0 18px;background:linear-gradient(110deg, rgba(123,92,255,.08), transparent 60%)}
+.hero .wrap{display:grid;grid-template-columns:120px 1fr;gap:22px;align-items:center}
+.avatar{width:120px;height:120px;border-radius:50%;overflow:hidden;box-shadow:0 10px 30px var(--shadow)}
+.hi{font-size:44px;line-height:1.2;margin:0 0 8px;font-weight:800;letter-spacing:.2px}
+.hi .grad{background:linear-gradient(90deg,var(--accent),var(--accent2));-webkit-background-clip:text;color:transparent}
+.hero p{margin:0 0 10px;color:var(--muted)}
+.btn{background:linear-gradient(90deg,#5cc3ff,#7b5bff);color:white;padding:10px 14px;border:0;border-radius:12px;
+  box-shadow:0 6px 20px rgba(0,0,0,.25);cursor:pointer}
+.btn.outline{background:transparent;color:var(--text);border:1px solid var(--ring);box-shadow:none}
+.searchbar{margin:14px 0 8px}
+.search{display:flex;align-items:center;gap:10px;background:var(--panel);border:1px solid var(--ring);border-radius:14px;padding:10px 12px}
+.search input{all:unset;flex:1;color:var(--text)}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.card{background:var(--card);border:1px solid var(--ring);border-radius:18px;overflow:hidden;box-shadow:0 10px 28px var(--shadow)}
+.card .thumb{height:190px;background:#0e1117;display:grid;place-items:center;overflow:hidden}
+.card .thumb img{width:100%;height:100%;object-fit:cover}
+.card .body{padding:16px}
+.meta{font-size:13px;color:var(--muted)}
+.h3{font-size:20px;line-height:1.3;margin:6px 0 8px;font-weight:800;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.excerpt{color:var(--muted);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.tags{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0 4px}
+.tag{font-size:12px;padding:6px 10px;border-radius:999px;background:var(--panel);border:1px solid var(--ring);color:var(--muted)}
 
-  <!-- 2) Font -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet">
+.article{padding:24px 0}
+.article h1{font-size:46px;line-height:1.15;margin:0 0 4px}
+.article .ameta{color:var(--muted);margin-bottom:12px}
+.post-hero{border-radius:18px;border:1px solid var(--ring);background:var(--panel);
+  padding:8px;margin:12px 0}
+.post-hero img{width:100%;height:420px;object-fit:contain;border-radius:12px}
+.article .content{background:var(--card);border:1px solid var(--ring);border-radius:18px;padding:22px}
 
-  <!-- 3) CSS -->
-  <style>
-    :root{
-      --radius:18px;
-      --shadow-1: 0 6px 30px rgba(0,0,0,.25);
-      --shadow-2: 0 18px 60px rgba(0,0,0,.35);
-      --tr-150: 150ms ease;
-    }
-    :root[data-theme="dark"]{
-      color-scheme: dark;
-      --bg: #0d1117;
-      --bg-soft: #0f1320;
-      --surface: #161b22;
-      --text: #e6edf3;
-      --text-soft:#c6d2de;
-      --muted:#8b98a5;
-      --primary:#9bbcf9;
-      --accent:#c59cff;
-      --chip:#202736;
-      --chip-text:#d7e2ef;
-      --border: #243044;
-      --hero-grad-1:#101626;
-      --hero-grad-2:#0d1324;
-      --hero-ring:#5b76ff33;
-    }
-    :root[data-theme="light"]{
-      color-scheme: light;
-      --bg: #f7f8fb;
-      --bg-soft: #f1f4fb;
-      --surface: #ffffff;
-      --text: #0b1523;
-      --text-soft:#344055;
-      --muted:#5d6a7a;
-      --primary:#2b59ff;
-      --accent:#6b3cff;
-      --chip:#eef2fb;
-      --chip-text:#0b1523;
-      --border: #dde4f2;
-      --hero-grad-1:#eef3ff;
-      --hero-grad-2:#fafcff;
-      --hero-ring:#2b59ff22;
-    }
+.pager{display:flex;gap:10px;align-items:center;justify-content:center;margin:18px 0 0}
+.pager .info{color:var(--muted);font-size:14px}
+.pager .btn[disabled]{opacity:.5;cursor:not-allowed}
 
-    *{box-sizing:border-box}
-    html,body{height:100%}
-    body{
-      margin:0;
-      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, "Helvetica Neue", Arial, "Apple Color Emoji","Segoe UI Emoji", "Segoe UI Symbol";
-      background: var(--bg);
-      color: var(--text);
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
-    }
-    a{color:inherit;text-decoration:none}
-    .wrap{max-width:1180px;margin:0 auto;padding:0 20px}
+.footer{margin-top:24px;background:linear-gradient(90deg,rgba(123,92,255,.08),transparent 70%)}
+.footer .wrap{display:grid;grid-template-columns:1fr 1fr 1fr;gap:18px;padding:26px 0}
+.bio .logo{width:28px;height:28px;border-radius:9px;background:linear-gradient(135deg,#4dd4ff,#7a5cff);display:grid;place-items:center;color:#fff;font-weight:800;margin-right:8px}
+.kecil{font-size:13px;color:var(--muted)}
+.stat{display:flex;gap:14px}
+.kartu{background:var(--panel);border:1px solid var(--ring);border-radius:14px;padding:16px;text-align:center;min-width:120px}
+.kartu .n{font-size:26px;font-weight:800}
+.quote{background:var(--panel);border:1px solid var(--ring);border-radius:14px;padding:16px}
+.copy{padding:10px 0;border-top:1px solid var(--ring);display:flex;align-items:center;justify-content:space-between}
+.copy a{color:var(--accent);text-decoration:underline}
+#toTop{border-radius:12px;border:1px solid var(--ring);background:var(--panel);color:var(--text);padding:10px 14px}
 
-    /* Topbar */
-    .topbar{
-      position:sticky;top:0;z-index:50;
-      backdrop-filter:saturate(1.2) blur(10px);
-      background: linear-gradient(180deg, rgba(0,0,0,.25), rgba(0,0,0,0)) ;
-      border-bottom:1px solid transparent;
-    }
-    .nav{
-      display:flex;align-items:center;gap:14px;justify-content:space-between;
-      padding:18px 0;
-    }
-    .brand{
-      font-family:"Playfair Display",serif;
-      font-size:26px;font-weight:800;letter-spacing:.2px;
-    }
-    .tabs{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
-    .chip{
-      background: var(--chip);color:var(--chip-text);
-      padding:10px 16px;border-radius:999px;border:1px solid var(--border);
-      box-shadow: 0 1px 0 rgba(255,255,255,.06) inset;
-      transition: transform var(--tr-150), background var(--tr-150);
-      font-weight:600
-    }
-    .chip:hover{transform:translateY(-1px)}
-    .toggle{
-      width:38px;height:38px;border-radius:12px;border:1px solid var(--border);
-      display:grid;place-items:center;background:var(--surface);cursor:pointer;
-      box-shadow: var(--shadow-1);
-    }
-    .toggle i{width:18px;height:18px;border-radius:50%;
-      background: conic-gradient(from 0deg,#f7c948 0 50%, #6b3cff 0 100%);
-      box-shadow:0 0 0 3px var(--hero-ring) inset
-    }
+.modal{position:fixed;inset:0;display:none;place-items:center;background:rgba(0,0,0,.45);z-index:50}
+.modal.open{display:grid}
+.mod{background:var(--panel);border:1px solid var(--ring);border-radius:16px;padding:18px;min-width:320px;max-width:92vw}
+.mod h3{margin:0 0 8px}
+.mod form{display:flex;gap:10px}
+.mod input{flex:1;padding:10px;border-radius:10px;border:1px solid var(--ring);background:var(--card);color:var(--text)}
 
-    /* Hero */
-    .hero{
-      position:relative;margin-top:-8px;padding:56px 0 28px;
-      background: radial-gradient(1200px 600px at 10% -10%, var(--hero-grad-1), transparent 60%),
-                  radial-gradient(900px 500px at 90% -20%, var(--hero-grad-2), transparent 60%);
-      border-bottom:1px solid var(--border);
-    }
-    .hero-inner{display:grid;grid-template-columns:110px 1fr;gap:24px;align-items:center}
-    .avatar{
-      width:110px;height:110px;border-radius:999px;
-      background: radial-gradient(80% 80% at 30% 20%, #e0d3ff, #9ea7ff 70%, #7b59ff);
-      border:6px solid var(--bg);
-      box-shadow: 0 0 0 8px var(--hero-ring), var(--shadow-2);
-    }
-    .hero h1{
-      margin:0;
-      font-family:"Playfair Display",serif;
-      font-weight:800;
-      letter-spacing:.3px;
-      line-height:1.1;
-      font-size: clamp(28px, 6vw, 64px);
-      text-shadow: 0 1px 0 rgba(0,0,0,.3);
-    }
-    .hero .desc{margin-top:8px;color:var(--text-soft);font-size:18px}
-    .meter{height:6px;width:220px;background:var(--chip);border-radius:999px;margin-top:14px;position:relative;overflow:hidden;border:1px solid var(--border)}
-    .meter::after{
-      content:"";position:absolute;left:0;top:0;height:100%;width:45%;
-      background: linear-gradient(90deg, var(--accent), var(--primary));
-      box-shadow: 0 0 18px var(--primary);
-    }
-    .stats{margin-top:10px;color:var(--muted);font-weight:600}
-
-    /* Search & filters */
-    .toolbar{display:flex;gap:12px;align-items:center;margin:18px 0 10px;flex-wrap:wrap}
-    .search{
-      flex:1;display:flex;align-items:center;gap:10px;
-      background: var(--surface); border:1px solid var(--border); border-radius:999px; padding:14px 18px;
-      box-shadow: var(--shadow-1);
-      color:var(--muted)
-    }
-    .search input{
-      outline:0;border:0;background:transparent;color:var(--text);
-      width:100%;font-size:16px
-    }
-
-    /* Tag dropdown */
-    .tag-wrap{position:relative}
-    .menu{
-      position:absolute;right:0;top:calc(100% + 10px);min-width:280px;
-      background:var(--surface);border:1px solid var(--border);border-radius:16px;
-      box-shadow: var(--shadow-2);padding:14px;display:none
-    }
-    .menu.open{display:block}
-    .menu h5{margin:4px 8px 10px;color:var(--muted);letter-spacing:.6px}
-    .menu .item{padding:10px 12px;border-radius:12px;cursor:pointer}
-    .menu .item:hover{background:var(--chip)}
-
-    /* Grid list & cards */
-    .grid{display:grid;grid-template-columns:1fr 360px;gap:18px}
-    @media (max-width: 980px){.grid{grid-template-columns:1fr}}
-    .card{
-      background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
-      box-shadow: var(--shadow-1);padding:22px; overflow:hidden
-    }
-    .card h3{margin:0 0 6px;font-family:"Playfair Display",serif;font-size: clamp(22px, 3.8vw, 38px)}
-    .meta{color:var(--muted);font-size:14px;margin:6px 0 12px;display:flex;gap:14px;align-items:center}
-    .tags{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
-    .t{font-weight:700; font-size:13px; padding:6px 10px; border-radius:999px; background:var(--chip); color:var(--chip-text); border:1px solid var(--border)}
-
-    /* Sidebar */
-    .side .card h4{margin:0 0 10px;font-size:14px;letter-spacing:.8px;color:var(--muted)}
-    .toc a{display:block;padding:10px 12px;border-radius:10px}
-    .toc a:hover{background:var(--chip)}
-
-    /* Post page */
-    .post h1{font-family:"Playfair Display",serif;font-size: clamp(28px,5vw,52px);margin:0 0 10px}
-    .post .content{line-height:1.75;color:var(--text-soft);font-size:18px}
-    .post .content p{margin:10px 0 18px}
-    .post .content img{max-width:100%;border-radius:14px;border:1px solid var(--border)}
-    .lead{color:var(--muted);margin-bottom:12px}
-
-    /* Footer */
-    footer{padding:28px 0 40px;color:var(--muted);text-align:center}
-    footer a{color:var(--primary);font-weight:700}
-
-    /* Loader */
-    .loader{
-      position:fixed;inset:0;background:rgba(0,0,0,.25);
-      display:none;place-items:center;z-index:70;backdrop-filter: blur(4px) saturate(1.2);
-    }
-    .loader.show{display:grid}
-    .spinner{
-      width:58px;height:58px;border-radius:50%;
-      border:4px solid rgba(255,255,255,.18);
-      border-top-color: var(--primary);
-      animation: spin 900ms linear infinite;
-      box-shadow: 0 0 0 6px var(--hero-ring);
-    }
-    @keyframes spin{to{transform:rotate(1turn)}}
-
-    /* Page transition */
-    .fade{opacity:0; transform:translateY(6px); transition:opacity 180ms ease, transform 180ms ease}
-    .fade.in{opacity:1; transform:none}
-  </style>
+@media (max-width:1024px){
+  .grid{grid-template-columns:repeat(2,1fr)}
+}
+@media (max-width:640px){
+  .nav{height:56px}
+  .navlinks{gap:8px}
+  .hero .wrap{grid-template-columns:1fr;justify-items:center;text-align:center}
+  .avatar{margin-bottom:6px}
+  .hi{font-size:34px}
+  .grid{grid-template-columns:1fr}
+  .footer .wrap{grid-template-columns:1fr}
+}
+</style>
 </head>
 <body>
-  <!-- Loader -->
-  <div id="loader" class="loader"><div class="spinner"></div></div>
+<header class="header">
+  <div class="container nav">
+    <div class="brand"><div class="logo">R</div> Rafy Rayyan</div>
+    <nav class="navlinks" id="navlinks">
+      <a href="#/" data-nav="home" class="active">Beranda</a>
+      <a href="#/blog" data-nav="blog">Blog</a>
+      <a href="#/novel" data-nav="novel">Novel</a>
+      <a href="#/about" data-nav="about">About</a>
+    </nav>
+    <div class="theme"><button id="themeBtn" title="Ganti tema">🌓</button></div>
+  </div>
+</header>
 
-  <!-- Topbar -->
-  <header class="topbar">
+<main id="app"></main>
+
+<footer class="footer">
+  <div class="container">
     <div class="wrap">
-      <div class="nav">
-        <div class="brand">Rafy • Blog</div>
-        <div class="tabs">
-          <a href="#/" class="chip">Beranda</a>
-          <a href="#/blog" class="chip">Blog</a>
-          <a href="#/novel" class="chip">Novel</a>
-          <a href="#/about" class="chip">Tentang Penulis</a>
-          <button id="themeBtn" class="toggle" aria-label="Toggle theme"><i></i></button>
+      <div class="bio">
+        <div style="display:flex;align-items:center;margin-bottom:6px;">
+          <div class="logo">R</div><strong>Rafy Rayyan</strong>
+        </div>
+        <div class="kecil">Blog ini mendokumentasikan perjalanan menulis novel dan belajar hal-hal kreatif lainnya. Terima kasih sudah mampir dan membaca. 🙌</div>
+        <div style="margin-top:10px"><a class="btn outline" href="https://www.instagram.com/rafy.rayyan/" target="_blank" rel="noopener">IG</a></div>
+      </div>
+      <div>
+        <div class="stat">
+          <div class="kartu"><div class="n" id="stat-post">0</div><div class="kecil">Total Post</div></div>
+          <div class="kartu"><div class="n" id="stat-tag">0</div><div class="kecil">Jumlah Tag</div></div>
         </div>
       </div>
+      <div class="quote">“Menulis itu merawat ingatan. Setiap paragraf adalah jejak yang tidak ingin hilang.”</div>
     </div>
-  </header>
-
-  <!-- Hero -->
-  <section class="hero">
-    <div class="wrap">
-      <div class="hero-inner">
-        <div class="avatar"></div>
-        <div>
-          <h1>Halo, aku Rafy Rayyan Ermadi</h1>
-          <div class="desc">Blog progres menulis & belajar—novel tugas akhir, catatan proses, dan eksperimen tulisan.</div>
-          <div class="meter"></div>
-          <div id="statLine" class="stats">2 posting • 1 bab • 1 catatan</div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Toolbar -->
-  <div class="wrap">
-    <div class="toolbar">
-      <div class="search">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M21 21l-3.8-3.8M10.8 18.5A7.7 7.7 0 1 1 10.8 3a7.7 7.7 0 0 1 0 15.4Z" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-        <input id="q" placeholder="Cari judul, tag, atau seri..." />
-      </div>
-      <button id="sortBtn" class="chip">Terbaru</button>
-
-      <div class="tag-wrap">
-        <button id="tagBtn" class="chip">#Tag ▾</button>
-        <div id="tagMenu" class="menu">
-          <h5>FILTER #TAG</h5>
-          <div data-tag="bab" class="item"># bab</div>
-          <div data-tag="catatan" class="item"># catatan</div>
-          <div data-tag="progres" class="item"># progres</div>
-          <h5>LAINNYA</h5>
-          <div data-tag="*" class="item">Tampilkan semua</div>
-        </div>
-      </div>
+    <div class="copy">
+      <div>© 2025 — Dibuat oleh Rafy Rayyan. Semua konten dilindungi hak cipta.</div>
+      <button class="btn outline" id="toTop" type="button">Kembali ke atas</button>
     </div>
   </div>
+</footer>
 
-  <!-- Main grid -->
-  <main class="wrap">
-    <div class="grid">
-      <div id="list" class="fade"></div>
+<!-- Modal Subscribe -->
+<div class="modal" id="subModal" aria-hidden="true">
+  <div class="mod">
+    <h3>Berlangganan via Email</h3>
+    <p class="kecil" style="margin-top:-6px">Masukkan email untuk mendapat kabar jika ada tulisan baru.</p>
+    <form onsubmit="event.preventDefault(); alert('Terima kasih! (dummy)'); modal(false);">
+      <input type="email" placeholder="nama@contoh.com" required>
+      <button class="btn" type="submit">Simpan</button>
+      <button class="btn outline" type="button" onclick="modal(false)">Batal</button>
+    </form>
+  </div>
+</div>
 
-      <aside class="side">
-        <div class="card">
-          <h4>DAFTAR ISI</h4>
-          <div id="toc" class="toc"></div>
-        </div>
-        <div class="card">
-          <h4>Tentang Penulis</h4>
-          <div style="display:flex;gap:14px;align-items:center">
-            <div class="avatar" style="width:52px;height:52px;border-width:4px;box-shadow:0 0 0 4px var(--hero-ring)"></div>
-            <div><strong>Rafy Rayyan Ermadi</strong><br/><span class="muted">Penulis</span></div>
-          </div>
-        </div>
-      </aside>
+<script>
+// ====== DATA POST (DEMO) =====================================================
+const posts = [
+  { id:'novel-bab-1', title:'Novel — Bab 1: Pagi yang Menggantung', date:'2025-08-20',
+    tags:['Novel','Progres','Bab 1'],
+    image:'https://images.unsplash.com/photo-1507842217343-583bb7270b66?q=80&w=1200&auto=format&fit=crop',
+    excerpt:'Awal cerita—sebuah pagi di Jakarta, ketika segalanya terasa biasa saja, sampai tidak lagi…',
+    body:`<p>Pagi di Jakarta selalu terdengar sama: klakson, pedagang roti, dan radio tetangga yang tak pernah tepat frekuensi. Aku berjalan menembus lorong kos yang sempit sambil menghitung napas.</p>
+    <p>Di halaman, ada sandal yang ditinggalkan tergesa. "Pertanda baik atau buruk?" batinku. Telepon bergetar—pesan dari Ibu, hanya satu kata: <em>Pulang.</em></p>
+    <h2>Set up konflik</h2><p>Bab ini memperkenalkan dua hal: hilangnya figur jangkar dan kota yang ikut menelan suara.</p>`},
+  { id:'catatan-riset', title:'Catatan Riset: Menentukan Setting & Perspektif', date:'2025-08-18',
+    tags:['Novel','Catatan','Riset'],
+    image:'https://images.unsplash.com/photo-1519681393784-d120267933ba?q=80&w=1200&auto=format&fit=crop',
+    excerpt:'Kenapa memilih sudut pandang orang pertama? Plus daftar referensi yang kupakai.',
+    body:`<p>Aku membandingkan POV orang pertama vs orang ketiga terbatas. Pilihan jatuh ke orang pertama untuk menangkap kegelisahan tokoh secara dekat.</p>
+    <blockquote>Satu kota bisa menjadi tokoh, jika kita memberinya napas.</blockquote>
+    <p>Referensi: <em>Norwegian Wood</em>, <em>Lelaki Harimau</em>, dan esai dialog.</p>`},
+  { id:'teknik-dialog', title:'Teknik Dialog: Biar Ngobrolnya Hidup', date:'2025-08-16',
+    tags:['Tips Menulis','Workshop','Blog'],
+    image:'https://images.unsplash.com/photo-1515516969-d4008cc6241a?q=80&w=1200&auto=format&fit=crop',
+    excerpt:'Beberapa trik sederhana untuk bikin dialog terasa alami tanpa “ceramah”.',
+    body:`<p>Trik cepat: kurangi penjelasan setelah dialog, biarkan respon lawan bicara memikul makna.</p>
+      <ul><li>Gunakan jeda seperlunya.</li><li>Gesture kecil menandai emosi.</li><li>Seimbangkan “kataku, katanya” dengan aksi.</li></ul>`},
+  { id:'novel-outline', title:'Outline Kasar: Alur Besar Novel', date:'2025-08-14',
+    tags:['Novel','Outline','Progres'],
+    image:'https://images.unsplash.com/photo-1491841550275-ad7854e35ca6?q=80&w=1200&auto=format&fit=crop',
+    excerpt:'Kerangka 3 babak + benang merah konflik utama dan subplot keluarga.',
+    body:`<p>Struktur 3 babak: pengenalan — eskalasi — resolusi. Subplot keluarga menempel pada pilihan kuliah tokoh.</p>`},
+  { id:'random-thoughts', title:'Random Thoughts: Nulis di Tengah Deadline', date:'2025-08-12',
+    tags:['Blog','Opini','Produktivitas'],
+    image:'https://images.unsplash.com/photo-1516542076529-1ea3854896e1?q=80&w=1200&auto=format&fit=crop',
+    excerpt:'Cara bagiku menjaga ritme nulis tanpa ngorbanin sekolah.',
+    body:`<p>Strategi: nulis 25 menit, rehat 5 menit—ulang 3 kali. Satu sesi ≈ 1 halaman.</p>`},
+  { id:'novel-bab-2', title:'Novel — Bab 2: Peta yang Hilang', date:'2025-08-10',
+    tags:['Novel','Progres','Bab 2'],
+    image:'https://images.unsplash.com/photo-1455390582262-044cdead277a?q=80&w=1200&auto=format&fit=crop',
+    excerpt:'Tokoh menemukan peta usang yang menuntun ke masa lalu ayahnya.',
+    body:`<p>Peta jadi pemicu babak dua.</p>`},
+  { id:'tips-outline', title:'Tips Outline yang Nggak Bikin Pusing', date:'2025-08-08',
+    tags:['Blog','Tips Menulis'],
+    image:'https://images.unsplash.com/photo-1524578271613-d550eacf6090?q=80&w=1200&auto=format&fit=crop',
+    excerpt:'Cara cepat bikin outline versi “kabel rapi”.',
+    body:`<p>Pakai pola 3 babak, tulis konflik per babak dalam 1 kalimat.</p>`},
+  { id:'novel-riset-lokasi', title:'Riset Lokasi: Catatan Lapangan', date:'2025-08-06',
+    tags:['Novel','Riset'],
+    image:'https://images.unsplash.com/photo-1456425712190-0dd8c2b00156?q=80&w=1200&auto=format&fit=crop',
+    excerpt:'Rute bus, suara pasar pagi, dan aroma hujan—semua dicatat.',
+    body:`<p>Merekam detail sensorik untuk adegan.</p>`},
+  { id:'esai-favorit', title:'Esai Favorit tentang Penokohan', date:'2025-08-04',
+    tags:['Blog','Opini'],
+    image:'https://images.unsplash.com/photo-1455390582262-044cdead277a?q=80&w=1200&auto=format&fit=crop',
+    excerpt:'Kumpulan esai yang bikin mikir ulang cara membangun karakter.',
+    body:`<p>Daftar esai dan ringkasannya.</p>`},
+  { id:'novel-bab-3', title:'Novel — Bab 3: Telepon Tengah Malam', date:'2025-08-02',
+    tags:['Novel','Progres','Bab 3'],
+    image:'https://images.unsplash.com/photo-1497250681960-ef046c08a56e?q=80&w=1200&auto=format&fit=crop',
+    excerpt:'Sebuah telepon mengubah keputusan tokoh.',
+    body:`<p>Twist pertama muncul.</p>`},
+  { id:'catatan-gaya', title:'Catatan Gaya: Metafora yang Hemat', date:'2025-07-30',
+    tags:['Blog','Catatan'],
+    image:'https://images.unsplash.com/photo-1526318472351-c75fcf070305?q=80&w=1200&auto=format&fit=crop',
+    excerpt:'Menjaga metafora tetap jernih dan tepat sasaran.',
+    body:`<p>Contoh sebelum–sesudah.</p>`},
+  { id:'review-buku', title:'Review Buku: Cara Menulis Dialog', date:'2025-07-28',
+    tags:['Blog','Review'],
+    image:'https://images.unsplash.com/photo-1544930834-45e1b225b0cc?q=80&w=1200&auto=format&fit=crop',
+    excerpt:'Catatan dari buku craft writing favorit.',
+    body:`<p>Tiga poin yang bisa langsung dipraktikkan.</p>`},
+  { id:'novel-bab-4', title:'Novel — Bab 4: Hujan di Peron', date:'2025-07-26',
+    tags:['Novel','Progres','Bab 4'],
+    image:'https://images.unsplash.com/photo-1444723121867-7a241cacace9?q=80&w=1200&auto=format&fit=crop',
+    excerpt:'Adegan peron jadi titik balik relasi.',
+    body:`<p>Adegan dialog singkat namun tajam.</p>`},
+];
+
+// ====== STATE & HELPERS ======================================================
+const $ = sel => document.querySelector(sel);
+const app = $('#app');
+const states = { home:{q:'',page:1}, blog:{q:'',page:1}, novel:{q:'',page:1} };
+
+function fmtDate(iso){
+  const d=new Date(iso);return d.toLocaleDateString('id-ID',{day:'2-digit',month:'long',year:'numeric'});
+}
+function cardHTML(p){
+  return `
+  <article class="card">
+    <a href="#/post/${p.id}">
+      <div class="thumb"><img src="${p.image}" alt="Thumbnail ${p.title}"></div>
+    </a>
+    <div class="body">
+      <div class="meta">${fmtDate(p.date)} • ${p.tags[0]||''}</div>
+      <a href="#/post/${p.id}"><div class="h3">${p.title}</div></a>
+      <div class="excerpt">${p.excerpt}</div>
+      <div class="tags">${p.tags.map(t=>`<span class="tag">#${t}</span>`).join('')}</div>
     </div>
-  </main>
+  </article>`;
+}
+function renderGrid(el, list){
+  el.innerHTML = list.map(cardHTML).join('') ||
+   `<div style="grid-column:1/-1;padding:26px;border:1px dashed var(--ring);border-radius:14px;text-align:center;color:var(--muted)">Tidak ada hasil.</div>`;
+}
+function searchFilter(arr, q){
+  q=(q||'').trim().toLowerCase(); if(!q) return arr;
+  return arr.filter(p=>{
+    const s=[p.title,p.excerpt,p.tags.join(' '),p.body.replace(/<[^>]+>/g,'')].join(' ').toLowerCase();
+    return s.includes(q);
+  });
+}
+function pageSize(){
+  const w=innerWidth; if(w<=640) return 8; if(w<=1024) return 8; return 12;
+}
+function renderPager(view, total){
+  const pager = $(`#pager-${view}`); if(!pager){return}
+  const size = pageSize(), S=states[view];
+  const maxPage = Math.max(1, Math.ceil(total/size));
+  if(S.page>maxPage) S.page=maxPage;
+  const start=(S.page-1)*size, end=Math.min(start+size,total);
+  if(total===0){pager.innerHTML='';return}
+  pager.innerHTML = `
+    <button class="btn outline" id="prev-${view}" ${S.page<=1?'disabled':''}>Sebelumnya</button>
+    <span class="info">Menampilkan ${start+1}–${end} dari ${total}</span>
+    <button class="btn outline" id="next-${view}" ${S.page>=maxPage?'disabled':''}>Berikutnya</button>`;
+  $(`#prev-${view}`)?.addEventListener('click',()=>{ if(S.page>1){S.page--; routeRender()}});
+  $(`#next-${view}`)?.addEventListener('click',()=>{ if(S.page<maxPage){S.page++; routeRender()}});
+}
+function paginateAndRender(view, filtered, gridId){
+  const size=pageSize(), S=states[view];
+  const start=(S.page-1)*size; const pageItems=filtered.slice(start,start+size);
+  renderGrid(document.getElementById(gridId), pageItems);
+  renderPager(view, filtered.length);
+}
+function setupSearch(view){
+  const input = $('#searchInput'); const S=states[view];
+  input.value = S.q;
+  input.oninput = e => { S.q = e.target.value; S.page=1; routeRender(); };
+}
 
-  <!-- Footer -->
-  <footer class="wrap">
-    © 2025 • Made with ❤️ by <a href="https://www.instagram.com/rafy.rayyan/" target="_blank" rel="noopener">Rafy Rayyan</a>.
-    Hak cipta dilindungi undang-undang. Mohon tidak menyalin atau mendistribusikan ulang tanpa izin.
-  </footer>
+// ====== VIEWS ================================================================
+function heroBlock(){
+  return `<section class="hero">
+    <div class="container">
+      <div class="wrap">
+        <div class="avatar"><img src="https://images.unsplash.com/photo-1607746882042-944635dfe10e?q=80&w=600&auto=format&fit=crop" alt="Rafy Rayyan"/></div>
+        <div>
+          <h1 class="hi">Halo, aku <span class="grad">Rafy Rayyan</span>.</h1>
+          <p>Ini adalah rumah digital untuk tugas akhir Bahasa Indonesia kelas 12 sekaligus blog pribadiku. Di sini aku mengarsipkan progres <em>novel</em> yang sedang kutulis, juga catatan, opini, dan eksperimen lain. Selamat mampir!</p>
+          <button class="btn" onclick="modal(true)">Berlangganan via Email</button>
+        </div>
+      </div>
+      <div class="searchbar">
+        <div class="search"><input id="searchInput" placeholder="Cari judul, tag, atau isi… (ketik untuk memfilter)"><span>/</span></div>
+      </div>
+    </div>
+  </section>`;
+}
+function listBlock(view){
+  return `<section class="container">
+    <div class="grid" id="grid-${view}"></div>
+    <div class="pager" id="pager-${view}"></div>
+  </section>`;
+}
+function aboutBlock(){
+  return `<section class="container" style="padding:24px 0 12px">
+    <article class="card" style="padding:20px">
+      <h1 style="margin:0 0 8px">Tentang Penulis</h1>
+      <p>Halo! Aku Rafy, siswa kelas 12 yang suka nulis cerita dan belajar hal kreatif. Blog ini kubuat untuk tugas akhir Bahasa Indonesia—sekaligus tempat curhat kreatif tentang proses menulis novelku.</p>
+      <ul>
+        <li>Minat: novel slice-of-life, dialog hidup, dan city-vibes.</li>
+        <li>Target: 1 bab per dua minggu + 1 artikel blog mingguan.</li>
+        <li>Kontak cepat: <a href="https://www.instagram.com/rafy.rayyan/" target="_blank" rel="noopener">@rafy.rayyan</a></li>
+      </ul>
+    </article>
+  </section>`;
+}
+function renderHome(){
+  app.innerHTML = heroBlock() + listBlock('home');
+  setupSearch('home');
+  const list = searchFilter(posts.slice().sort((a,b)=>b.date.localeCompare(a.date)), states.home.q);
+  paginateAndRender('home', list, 'grid-home');
+}
+function renderBlog(){
+  app.innerHTML = heroBlock() + `<div class="container" style="padding:6px 0"><h2>Blog</h2></div>` + listBlock('blog');
+  setupSearch('blog');
+  const base = posts.filter(p=>p.tags.includes('Blog')).sort((a,b)=>b.date.localeCompare(a.date));
+  paginateAndRender('blog', searchFilter(base, states.blog.q), 'grid-blog');
+}
+function renderNovel(){
+  app.innerHTML = heroBlock() + `<div class="container" style="padding:6px 0"><h2>Novel</h2></div>` + listBlock('novel');
+  setupSearch('novel');
+  const base = posts.filter(p=>p.tags.includes('Novel')).sort((a,b)=>b.date.localeCompare(a.date));
+  paginateAndRender('novel', searchFilter(base, states.novel.q), 'grid-novel');
+}
+function renderAbout(){
+  app.innerHTML = heroBlock() + aboutBlock();
+}
+function renderPost(id){
+  const p = posts.find(x=>x.id===id);
+  if(!p){ location.hash = '#/'; return; }
+  app.innerHTML = `
+    <section class="container article">
+      <h1>${p.title}</h1>
+      <div class="ameta">${fmtDate(p.date)} • ${p.tags.join(', ')}</div>
+      <div class="post-hero"><img src="${p.image}" alt="${p.title}"></div>
+      <article class="content">${p.body}</article>
+    </section>`;
+}
 
-  <!-- 4) App JS -->
-  <script>
-    // -----------------------
-    // Data contoh (edit sesukamu)
-    // -----------------------
-    const POSTS = [
-      {
-        slug: "bab-1-bayang-kota",
-        title: "Bab 1 — Bayang Kota",
-        type: "bab",
-        tags: ["bab","progres","novel"],
-        date: "2025-09-01",
-        minutes: 2,
-        excerpt: "Pengenalan tokoh utama dan konflik awal.",
-        html: `
-          <p>Ini paragraf pembuka yang menyiapkan suasana kota saat senja. Lampu-lampu mulai hidup, dan bayangan gedung merayap di aspal basah.</p>
-          <p>Tokoh utama berdiri di tepi trotoar, menatap persimpangan yang merubah nasibnya. Di situlah ia melihat tanda pertama—sebuah amplop ungu di bawah bangku halte.</p>
-          <p>Dan begitulah bab dimulai.</p>
-        `
-      },
-      {
-        slug: "catatan-proses-1-kenapa-tema-ini",
-        title: "Catatan Proses #1 — Kenapa Tema Ini?",
-        type: "catatan",
-        tags: ["catatan","progres"],
-        date: "2025-08-30",
-        minutes: 3,
-        excerpt: "Menjawab pertanyaan: kenapa milih tema ini, dan apa riset awalnya.",
-        html: `
-          <p>Aku milih tema ini karena dekat dengan keseharian: kota kecil, suara malam, dan rahasia orang-orangnya. Riset awalku berupa foto jalanan dan wawancara singkat.</p>
-          <p>Targetku: satu bab tiap pekan. Semoga konsisten!</p>
-        `
-      }
-    ];
+// ====== ROUTER & WIRING ======================================================
+function setActive(route){
+  document.querySelectorAll('[data-nav]').forEach(a=>a.classList.remove('active'));
+  const m = route.split('/')[1] || 'home';
+  const sel = m==='home'?'home':m;
+  document.querySelector(`[data-nav="${sel}"]`)?.classList.add('active');
+}
+function routeRender(){
+  const h = location.hash || '#/';
+  setActive(h);
+  if (h === '#/' || h === '#') return renderHome();
+  if (h.startsWith('#/blog')) return renderBlog();
+  if (h.startsWith('#/novel')) return renderNovel();
+  if (h.startsWith('#/about')) return renderAbout();
+  if (h.startsWith('#/post/')) return renderPost(h.split('/')[2]);
+  renderHome();
+}
+window.addEventListener('hashchange', routeRender);
+window.addEventListener('resize', ()=> routeRender());
+document.addEventListener('DOMContentLoaded', ()=>{
+  // stats di footer
+  $('#stat-post').textContent = posts.length;
+  $('#stat-tag').textContent  = new Set(posts.flatMap(p=>p.tags)).size;
+  // tema
+  const saved = localStorage.getItem('theme')||'dark';
+  document.documentElement.setAttribute('data-theme', saved);
+  routeRender();
+});
 
-    // -----------------------
-    // Utilities
-    // -----------------------
-    const $ = (sel, el=document) => el.querySelector(sel);
-    const $$ = (sel, el=document) => [...el.querySelectorAll(sel)];
-
-    const loader = $("#loader");
-    function showLoader(){ loader.classList.add("show"); }
-    function hideLoader(){ loader.classList.remove("show"); }
-
-    function formatDate(d){
-      const dt = new Date(d+"T00:00:00");
-      return dt.toLocaleDateString("id-ID", { day:"2-digit", month:"short", year:"numeric"});
-    }
-
-    // Build TOC (Daftar isi = semua bab)
-    function buildTOC(){
-      const toc = $("#toc");
-      const items = POSTS.filter(p=>p.type==="bab")
-        .map(p=>`<a href="#/post/${p.slug}">${p.title}</a>`)
-        .join("");
-      toc.innerHTML = items || `<span class="muted">Belum ada bab.</span>`;
-    }
-
-    // Stats line
-    function refreshStats(){
-      const postCount = POSTS.length;
-      const bab = POSTS.filter(p=>p.type==="bab").length;
-      const catatan = POSTS.filter(p=>p.type==="catatan").length;
-      $("#statLine").textContent = `${postCount} posting • ${bab} bab • ${catatan} catatan`;
-    }
-
-    // Card list
-    function renderList({q="", tag="*", sort="desc"}={}){
-      const wrap = $("#list");
-      wrap.classList.remove("in");
-      let data = [...POSTS];
-
-      if(q){
-        const qq = q.toLowerCase();
-        data = data.filter(p =>
-          p.title.toLowerCase().includes(qq) ||
-          p.tags.join(" ").toLowerCase().includes(qq) ||
-          (p.excerpt||"").toLowerCase().includes(qq)
-        );
-      }
-      if(tag && tag!=="*"){
-        data = data.filter(p => p.tags.includes(tag));
-      }
-      data.sort((a,b)=> sort==="desc"
-        ? new Date(b.date)-new Date(a.date)
-        : new Date(a.date)-new Date(b.date));
-
-      wrap.innerHTML = data.map(p => `
-        <article class="card">
-          <div class="meta">${formatDate(p.date)} • ${p.minutes} menit baca</div>
-          <a href="#/post/${p.slug}"><h3>${p.title}</h3></a>
-          <p style="color:var(--text-soft);margin:10px 0 14px">${p.excerpt||""}</p>
-          <div class="tags">
-            ${p.tags.map(t=>`<span class="t"># ${t}</span>`).join("")}
-          </div>
-        </article>
-      `).join("");
-
-      requestAnimationFrame(()=>wrap.classList.add("in"));
-    }
-
-    // Post page
-    function renderPost(slug){
-      const post = POSTS.find(p=>p.slug===slug);
-      const wrap = $("#list");
-      wrap.classList.remove("in");
-
-      if(!post){
-        wrap.innerHTML = `<div class="card">Konten tidak ditemukan.</div>`;
-        requestAnimationFrame(()=>wrap.classList.add("in"));
-        return;
-      }
-
-      wrap.innerHTML = `
-        <article class="card post">
-          <div class="lead">${formatDate(post.date)} • ${post.minutes} menit baca</div>
-          <h1>${post.title}</h1>
-          <div class="tags" style="margin-bottom:8px">
-            ${post.tags.map(t=>`<span class="t"># ${t}</span>`).join("")}
-          </div>
-          <div class="content">${post.html}</div>
-        </article>
-      `;
-      requestAnimationFrame(()=>wrap.classList.add("in"));
-    }
-
-    // -----------------------
-    // Router (hash-based)
-    // -----------------------
-    function route(){
-      // Pastikan theme selalu diterapkan saat pindah halaman (fix “post jadi putih/pecah”)
-      ensureTheme();
-
-      showLoader();
-      const hash = location.hash || "#/";
-      const [_, path, param] = hash.split("/"); // ["#", "", "post", "slug"] -> path=""; param="post" (opsional)
-      const page = (path||"").toLowerCase();
-
-      // kecilkan menu tag jika terbuka
-      $("#tagMenu").classList.remove("open");
-
-      setTimeout(()=>{
-        switch(page){
-          case "": // beranda
-          case "#":
-            renderList(currentFilter);
-            break;
-          case "blog":
-            renderList({...currentFilter, tag:"catatan"});
-            break;
-          case "novel":
-            renderList({...currentFilter, tag:"bab"});
-            break;
-          case "about":
-            $("#list").innerHTML = `
-              <article class="card">
-                <h3>Halo, aku Nama Kamu 👋</h3>
-                <p class="content">Aku siswa kelas 12 yang lagi nulis novel untuk tugas akhir Bahasa Indonesia. Di blog ini, aku upload progres, bab, dan catatan proses kreatif.</p>
-              </article>
-            `;
-            break;
-          case "post":
-            renderPost(param);
-            break;
-          default:
-            $("#list").innerHTML = `<div class="card">Halaman tidak ditemukan.</div>`;
-        }
-        hideLoader();
-      }, 220); // beri sedikit waktu utk animasi loader
-    }
-
-    window.addEventListener("hashchange", route);
-    document.addEventListener("DOMContentLoaded", () => {
-      buildTOC(); refreshStats(); route();
-    });
-
-    // -----------------------
-    // Search & Tags & Sort
-    // -----------------------
-    const currentFilter = { q:"", tag:"*", sort:"desc" };
-
-    $("#q").addEventListener("input", (e)=>{
-      currentFilter.q = e.target.value.trim();
-      if(location.hash.startsWith("#/post/")) location.hash="#/"; // balik ke list saat cari
-      renderList(currentFilter);
-    });
-
-    $("#sortBtn").addEventListener("click", ()=>{
-      currentFilter.sort = currentFilter.sort==="desc" ? "asc" : "desc";
-      renderList(currentFilter);
-    });
-
-    const tagBtn = $("#tagBtn");
-    const tagMenu = $("#tagMenu");
-    tagBtn.addEventListener("click", ()=>{
-      tagMenu.classList.toggle("open");
-    });
-    document.addEventListener("click", (e)=>{
-      if(!tagMenu.contains(e.target) && !tagBtn.contains(e.target)){
-        tagMenu.classList.remove("open");
-      }
-    });
-    $$("#tagMenu .item").forEach(it=>{
-      it.addEventListener("click", ()=>{
-        const tg = it.getAttribute("data-tag");
-        currentFilter.tag = tg;
-        tagMenu.classList.remove("open");
-        if(location.hash.startsWith("#/post/")) location.hash="#/";
-        renderList(currentFilter);
-      });
-    });
-
-    // -----------------------
-    // Theme toggle (selalu terapkan lebih dahulu sebelum render)
-    // -----------------------
-    function ensureTheme(){
-      const saved = localStorage.getItem("theme") || "dark";
-      document.documentElement.setAttribute("data-theme", saved);
-    }
-    $("#themeBtn").addEventListener("click", ()=>{
-      const cur = document.documentElement.getAttribute("data-theme");
-      const next = cur==="dark" ? "light" : "dark";
-      document.documentElement.setAttribute("data-theme", next);
-      try{ localStorage.setItem("theme", next); }catch(e){}
-    });
-  </script>
+// UI misc
+$('#themeBtn').addEventListener('click', ()=>{
+  const cur = document.documentElement.getAttribute('data-theme')==='light'?'dark':'light';
+  document.documentElement.setAttribute('data-theme', cur);
+  localStorage.setItem('theme', cur);
+});
+$('#toTop').addEventListener('click', ()=> scrollTo({top:0,behavior:'smooth'}));
+function modal(open){ const m=$('#subModal'); if(open){m.classList.add('open');}else{m.classList.remove('open');} }
+</script>
 </body>
 </html>
