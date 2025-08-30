@@ -22,6 +22,7 @@
       --shadow: 0 10px 30px rgba(0,0,0,.35);
       --maxw: 1200px;
       --nav-h: 72px;
+      --accent-grad: linear-gradient(135deg,var(--brand),var(--brand-2));
     }
     html[data-theme="light"]{
       --bg: #f7f8fc;       /* light */
@@ -38,7 +39,6 @@
       linear-gradient(180deg, var(--bg), var(--bg));
       color:var(--text);
       font-family:"Plus Jakarta Sans", system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
-      scroll-behavior:smooth;
     }
     a{color:inherit;text-decoration:none}
     img{max-width:100%;display:block}
@@ -53,12 +53,12 @@
     html[data-theme="light"] .nav{border-bottom:1px solid rgba(16,19,33,.08)}
     .nav-inner{display:flex;align-items:center;justify-content:space-between;gap:12px}
     .brand{display:flex;align-items:center;gap:12px;font-weight:800;letter-spacing:.2px;flex:0 0 auto}
-    .brand-badge{width:34px;height:34px;border-radius:10px;background:linear-gradient(135deg,var(--brand),var(--brand-2));display:grid;place-items:center;box-shadow: var(--shadow)}
+    .brand-badge{width:34px;height:34px;border-radius:10px;background:var(--accent-grad);display:grid;place-items:center;box-shadow: var(--shadow)}
     .brand-badge span{font-weight:800}
     .menu{display:flex;gap:8px;align-items:center;flex:1 1 auto;min-width:0;overflow:auto;scrollbar-width:none}
     .menu::-webkit-scrollbar{display:none}
-    .menu a{padding:10px 14px;border-radius:12px;color:var(--muted);white-space:nowrap}
-    .menu a.active, .menu a:hover{color:var(--text);background:rgba(255,255,255,.06)}
+    .menu a{padding:10px 14px;border-radius:12px;color:var(--muted);white-space:nowrap;transition:transform .18s ease, background .18s ease}
+    .menu a.active, .menu a:hover{color:var(--text);background:rgba(255,255,255,.06);transform:translateY(-1px)}
     html[data-theme="light"] .menu a.active, html[data-theme="light"] .menu a:hover{background:rgba(16,19,33,.06)}
     .right-actions{display:flex;gap:10px;align-items:center;flex:0 0 auto}
     .toggle{padding:9px 12px;border-radius:12px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.04);cursor:pointer}
@@ -77,8 +77,9 @@
     .hero h1{margin:0;font-family:"Playfair Display", serif;font-weight:600;font-size:42px;letter-spacing:.2px}
     .hero p{margin:10px 0 0;color:var(--muted);max-width:70ch;line-height:1.65}
     .hero-cta{margin-top:16px;display:flex;gap:10px;flex-wrap:wrap}
-    .btn{padding:10px 14px;border-radius:12px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.04);color:var(--text);cursor:pointer}
-    .btn.primary{background:linear-gradient(135deg,var(--brand),var(--brand-2));border:none}
+    .btn{padding:10px 14px;border-radius:12px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.04);color:var(--text);cursor:pointer;transition:transform .18s ease, box-shadow .18s ease, background .18s ease}
+    .btn:hover{transform:translateY(-1px); box-shadow:0 10px 24px rgba(0,0,0,.18)}
+    .btn.primary{background:var(--accent-grad);border:none}
 
     .toolbar{position:sticky; top:calc(var(--nav-h) - 1px); z-index:65; background:color-mix(in oklab, var(--bg) 85%, #000 15%);backdrop-filter: blur(8px);
       border-top:1px solid rgba(255,255,255,.06); border-bottom:1px solid rgba(255,255,255,.06)}
@@ -93,12 +94,12 @@
     .grid{display:grid;gap:18px;grid-template-columns:repeat(3, 1fr)}
     @media (max-width: 1024px){.grid{grid-template-columns:repeat(2,1fr)} .hero-wrap{grid-template-columns:140px 1fr;align-items:start}}
     @media (max-width: 640px){.grid{grid-template-columns:1fr} .hero{padding:36px 0 14px} .hero-wrap{grid-template-columns:1fr; text-align:center; gap:14px} .avatar{margin-inline:auto} .hero-cta{justify-content:center} .nav-inner{flex-wrap:nowrap}}
-    .card{background:var(--card);border:1px solid rgba(255,255,255,.08);border-radius:20px;overflow:hidden;transition:transform .2s ease, box-shadow .2s ease;display:flex;flex-direction:column;min-height:380px}
-    html[data-theme="light"] .card{border-color:rgba(16,19,33,.08)}
+    .card{background:var(--card);border:1px solid rgba(255,255,255,.08);border-radius:20px;overflow:hidden;transition:transform .22s ease, box-shadow .22s ease;display:flex;flex-direction:column;min-height:380px; opacity:0; transform:translateY(8px)}
     .card:hover{transform:translateY(-4px); box-shadow:0 16px 40px rgba(0,0,0,.2)}
-    .thumb{aspect-ratio:16/9; background:#0b0d13; overflow:hidden; position:relative}
+    .thumb{aspect-ratio:16/9; background:#0b0d13; overflow:hidden}
     html[data-theme="light"] .thumb{background:#e9ecf7}
-    .thumb img{width:100%;height:100%;object-fit:cover}
+    .thumb img{width:100%;height:100%;object-fit:cover; transition: transform .4s ease}
+    .card:hover .thumb img{transform:scale(1.03)}
     .card-body{padding:14px;display:flex;flex-direction:column;gap:6px;flex:1}
     .meta{display:flex;gap:10px;align-items:center;color:var(--muted);font-size:13px}
     .title{margin:6px 0 8px;font-weight:700;line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
@@ -143,68 +144,24 @@
     .quote{background:var(--card);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:14px;font-style:italic}
     .copy{margin-top:18px;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
 
-    /* PAGINATION */
-    .pager{display:flex;gap:8px;justify-content:center;margin-top:16px;flex-wrap:wrap}
-    .pager .btn{padding:8px 12px;border-radius:10px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.04)}
-    html[data-theme="light"] .pager .btn{border-color:rgba(16,19,33,.12);background:rgba(16,19,33,.04)}
-    .pager .btn[disabled]{opacity:.5;cursor:not-allowed}
-    .pager .btn.active{background:linear-gradient(135deg,var(--brand),var(--brand-2));border:none;color:#fff}
+    /* LOADER */
+    #pageLoader{position:fixed;inset:0;display:grid;place-items:center;background:radial-gradient(60vw 60vh at 50% -20%, rgba(139,92,246,.2), transparent 65%), var(--bg); z-index:120; transition:opacity .35s ease}
+    #pageLoader .dot{width:10px;height:10px;border-radius:50%;background:var(--text);margin:0 4px;animation:bounce .9s infinite ease-in-out}
+    #pageLoader .dot:nth-child(2){animation-delay:.15s}
+    #pageLoader .dot:nth-child(3){animation-delay:.3s}
+    @keyframes bounce{0%,80%,100%{transform:scale(0)}40%{transform:scale(1)}}
+    #pageLoader.hide{opacity:0;pointer-events:none}
 
-    /* MODAL */
-    .modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;z-index:120}
-    .modal:not(.hidden){display:flex}
-    .modal-backdrop{position:absolute;inset:0;background:rgba(0,0,0,.6);backdrop-filter:blur(3px)}
-    .modal-card{position:relative;z-index:1;width:min(520px,92vw);background:var(--bg-soft);border:1px solid rgba(255,255,255,.12);border-radius:16px;padding:18px}
-    .modal-card input{width:100%;padding:10px 12px;border-radius:10px;border:1px solid rgba(255,255,255,.12);background:transparent;color:var(--text)}
-    .modal-actions{display:flex;gap:8px;justify-content:flex-end;margin-top:10px}
-  
-    /* ANIMATIONS */
-    :root{ --ease: cubic-bezier(.22,1,.36,1); }
-    @keyframes spin{to{transform:rotate(360deg)}}
+    /* MUSIC FAB */
+    #musicFab{position:fixed; right:18px; bottom:18px; z-index:90; border-radius:999px; width:44px; height:44px; display:grid; place-items:center; background:var(--accent-grad); color:#0b1020; box-shadow:0 12px 26px rgba(0,0,0,.3); cursor:pointer}
+    #musicTip{position:fixed; left:50%; transform:translateX(-50%); bottom:74px; background:rgba(0,0,0,.6); color:#fff; padding:8px 12px; border-radius:10px; font-size:12px; z-index:91}
 
-    /* Ensure JS hide wins over inline display */
-    .loader.hidden{display:none !important}
-    @keyframes fadeSlideUp{from{opacity:0;transform:translateY(16px) scale(.98)}to{opacity:1;transform:none}}
-    @keyframes shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
-
-    .will-reveal{opacity:0;transform:translateY(16px) scale(.98)}
-    .reveal-in{opacity:1;transform:none;transition:opacity .7s var(--ease), transform .7s var(--ease)}
-
-    .card .thumb img{transition:transform .6s var(--ease)}
-    .card:hover .thumb img{transform:scale(1.06)}
-
-    .btn{transition:transform .2s var(--ease), box-shadow .2s var(--ease), background .2s var(--ease)}
-    .btn:hover{box-shadow:0 10px 24px rgba(0,0,0,.25); transform:translateY(-1px)}
-    .btn:active{transform:translateY(0) scale(.98)}
-
-    .search input{transition:border-color .2s ease, box-shadow .2s ease}
-    .search:focus-within{box-shadow:0 0 0 3px color-mix(in oklab, var(--ring) 40%, transparent)}
-
-    .nav{transition:background .3s var(--ease), box-shadow .3s var(--ease), transform .3s var(--ease)}
-    .nav.scrolled{box-shadow:0 12px 30px rgba(0,0,0,.35); background:color-mix(in oklab, var(--bg) 70%, #000 30%)}
-
-    .loader{position:fixed; inset:0; display:none; place-items:center; background:rgba(0,0,0,.35); backdrop-filter:blur(4px); z-index:140}
-    .loader.show{display:grid}
-    .loader .spinner{width:56px;height:56px;border-radius:50%;background:conic-gradient(from 0deg, var(--brand), var(--brand-2), var(--brand));mask:radial-gradient(farthest-side, transparent calc(50% - 6px), #000 0);animation:spin 1s linear infinite}
-
-    .thumb.skeleton::before{content:"";position:absolute;inset:0;background:linear-gradient(110deg, rgba(255,255,255,.06) 8%, rgba(255,255,255,.18) 18%, rgba(255,255,255,.06) 33%);background-size:200% 100%;animation:shimmer 1.2s linear infinite}
-
-    @media (prefers-reduced-motion: reduce){*{animation:none !important; transition:none !important}}
-  
-    /* Force-fixed position override for background music button */
-    .bgm-btn{position:fixed !important; right:max(16px, env(safe-area-inset-right)); bottom:max(16px, env(safe-area-inset-bottom)); z-index:200}
-  
-    /* === BGM Toast (one-time prompt when autoplay blocked) === */
-    .bgm-toast{position:fixed; right:max(70px, calc(env(safe-area-inset-right) + 70px)); bottom:max(22px, calc(env(safe-area-inset-bottom) + 22px)); z-index:201; background:color-mix(in oklab, var(--bg) 85%, #000 15%); color:var(--text); border:1px solid rgba(255,255,255,.12); padding:8px 12px; border-radius:12px; box-shadow: var(--shadow); font-size:14px; opacity:0; transform: translateY(6px); animation: toastIn .25s var(--ease) forwards}
-    html[data-theme="light"] .bgm-toast{border-color: rgba(16,19,33,.12); background: rgba(16,19,33,.92)}
-    @keyframes toastIn{to{opacity:1; transform:none}}
+    /* REVEAL on scroll */
+    .reveal{opacity:0; transform:translateY(10px); transition:opacity .5s ease, transform .5s ease}
+    .reveal.show{opacity:1; transform:none}
   </style>
 </head>
 <body>
-  <!-- Instant Loader at top for hard reload / direct URL -->
-  <div id="loader" class="loader" style="position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.45);backdrop-filter:blur(2px);z-index:120">
-    <div class="spinner" style="width:48px;height:48px;border-radius:50%;border:4px solid rgba(255,255,255,.25);border-top-color:var(--brand-2);animation:spin 1s linear infinite" aria-label="Memuat"></div>
-  </div>
   <!-- NAVBAR -->
   <nav class="nav">
     <div class="container nav-inner">
@@ -230,11 +187,11 @@
   <div id="view-home">
     <header class="hero" id="top">
       <div class="container hero-wrap">
-        <div class="avatar">
-          <img src="rafyprofile.jpg" alt="Foto profil Rafy Rayyan"/>
+        <div class="avatar reveal">
+          <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80&w=800&auto=format&fit=crop" alt="Foto profil Rafy Rayyan"/>
         </div>
-        <div>
-          <h1>Halo, aku <span style="background:linear-gradient(135deg,var(--brand),var(--brand-2));-webkit-background-clip:text;background-clip:text;color:transparent">Rafy Rayyan</span>.</h1>
+        <div class="reveal">
+          <h1>Halo, aku <span style="background:var(--accent-grad);-webkit-background-clip:text;background-clip:text;color:transparent">Rafy Rayyan</span>.</h1>
           <p>
             Ini adalah rumah digital untuk tugas akhir Bahasa Indonesia kelas 12 sekaligus blog pribadiku. Di sini aku mengarsipkan progres <em>novel</em> yang sedang kutulis, juga catatan, opini, dan eksperimen lain. Selamat mampir! ✨
           </p>
@@ -257,7 +214,6 @@
 
     <main class="section container" aria-live="polite">
       <div class="grid" id="grid-home"></div>
-      <div class="pager" id="pager-home"></div>
     </main>
   </div>
 
@@ -277,7 +233,6 @@
     </div>
     <main class="section container" aria-live="polite">
       <div class="grid" id="grid-blog"></div>
-      <div class="pager" id="pager-blog"></div>
     </main>
   </div>
 
@@ -297,7 +252,6 @@
     </div>
     <main class="section container" aria-live="polite">
       <div class="grid" id="grid-novel"></div>
-      <div class="pager" id="pager-novel"></div>
     </main>
   </div>
 
@@ -305,8 +259,8 @@
   <div id="view-about" class="hidden">
     <section class="about">
       <div class="container about-grid">
-        <div class="avatar"><img src="rafyaboutprofile.jpg" alt="Foto Rafy"></div>
-        <div>
+        <div class="avatar reveal"><img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80&w=800&auto=format&fit=crop" alt="Foto Rafy"></div>
+        <div class="reveal">
           <h1 style="font-family:'Playfair Display',serif;font-size:40px;margin:0 0 8px">Tentang Penulis</h1>
           <p style="color:var(--muted);line-height:1.8">Hai! Aku <strong>Rafy Rayyan</strong>, siswa kelas 12 SMAN 68 Jakarta. Aku suka menulis fiksi, ngoprek web, dan bikin proyek kreatif. Blog ini jadi arsip perjalanan nulis novel untuk tugas akhir Bahasa Indonesia—plus tempatku berbagi catatan, ide, dan hal-hal yang menurutku seru.</p>
           <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px">
@@ -318,7 +272,7 @@
     </section>
 
     <section class="container" style="margin-bottom:50px">
-      <div class="card" style="padding:18px">
+      <div class="card reveal" style="padding:18px">
         <h2 style="margin:0 0 8px">Ringkas</h2>
         <ul style="line-height:1.8;margin:0;padding-left:18px">
           <li>Sekolah: SMAN 68 Jakarta (Kelas 12)</li>
@@ -339,17 +293,12 @@
       </div>
     </header>
     <main class="container">
-      <article id="postBody"></article>
+      <article id="postBody" class="reveal"></article>
       <nav class="post-nav">
-        <a id="prevPost" class="btn" href="#">← Sebelumnya</a>
-        <a id="nextPost" class="btn" href="#">Berikutnya →</a>
+        <a id="prevPost" class="btn" href="#" style="visibility:hidden">← Sebelumnya</a>
+        <a id="nextPost" class="btn" href="#" style="visibility:hidden">Berikutnya →</a>
       </nav>
-      <section id="comments" style="margin:26px 0 60px">
-        <h2>Komentar</h2>
-        <div style="border:1px dashed rgba(255,255,255,.25);padding:16px;border-radius:12px;color:var(--muted)">
-          Ruang untuk sistem komentar (Giscus/Utterances/Firebase). Disiapkan agar tinggal pasang.
-        </div>
-      </section>
+      <section id="comments" style="margin:26px 0 60px"></section>
     </main>
   </div>
 
@@ -357,7 +306,7 @@
   <footer class="site-footer">
     <div class="container foot-grid">
       <div>
-        <div class="foot-brand">
+        <div class="foot-brand reveal">
           <div class="brand-badge" aria-hidden="true"></div>
           <div>
             <div style="font-weight:800">Rafy Rayyan</div>
@@ -368,14 +317,14 @@
       </div>
       <div>
         <div style="font-weight:700;margin-bottom:8px">Stat singkat</div>
-        <div class="stat">
+        <div class="stat reveal">
           <div class="box"><div style="font-size:28px;font-weight:800" id="statPosts">0</div><div style="font-size:12px;color:var(--muted)">Total Post</div></div>
           <div class="box"><div style="font-size:28px;font-weight:800" id="statTags">0</div><div style="font-size:12px;color:var(--muted)">Jumlah Tag</div></div>
         </div>
       </div>
       <div>
         <div style="font-weight:700;margin-bottom:8px">Catatan kecil</div>
-        <div class="quote">“Menulis itu merawat ingatan. Setiap paragraf adalah jejak yang tidak ingin hilang.”</div>
+        <div class="quote reveal">“Menulis itu merawat ingatan. Setiap paragraf adalah jejak yang tidak ingin hilang.”</div>
       </div>
     </div>
     <div class="container copy">
@@ -399,20 +348,40 @@
     </div>
   </div>
 
-  <script>
-  // ===== UTIL =====
+  <!-- MUSIC AUDIO + FAB -->
+  <audio id="bgm" src="assets/bgm.mp3" preload="none" loop></audio>
+  <button id="musicFab" title="Musik">🔈</button>
+  <div id="musicTip" class="hidden">Klik untuk menyalakan musik</div>
+
+  <!-- PAGE LOADER -->
+  <div id="pageLoader"><div style="display:flex"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div></div>
+
+  <!-- APP SCRIPT (MODULE) -->
+  <script type="module">
+  /* ============================ UTIL & THEME ============================ */
   const $ = (sel, el = document) => el.querySelector(sel);
   const $$ = (sel, el = document) => Array.from(el.querySelectorAll(sel));
   const root = document.documentElement;
-  const setTheme = (t)=>{ root.setAttribute('data-theme', t); localStorage.setItem('theme', t); const ic = $('#themeIcon'); if(ic){ ic.textContent = t==='light' ? '☀️' : '🌙'; ic.style.transition='transform .45s var(--ease)'; ic.style.transform = t==='light' ? 'rotate(-180deg) scale(1.1)' : 'rotate(0deg)'; } $('#themeToggle').setAttribute('aria-pressed', t==='dark' ? 'true':'false'); };
+  const setTheme = (t)=>{root.setAttribute('data-theme', t); localStorage.setItem('theme', t); $('#themeIcon').textContent = t==='light' ? '☀️' : '🌙'; $('#themeToggle').setAttribute('aria-pressed', t==='dark' ? 'true':'false');};
   const savedTheme = localStorage.getItem('theme') || (matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
   setTheme(savedTheme);
   $('#themeToggle').addEventListener('click', ()=> setTheme(root.getAttribute('data-theme')==='dark'?'light':'dark'));
 
+  // Loader helpers
+  const loader = $('#pageLoader');
+  const showLoader = ()=> loader.classList.remove('hide');
+  const hideLoader = ()=> loader.classList.add('hide');
+
+  // Reveal on scroll
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('show'); io.unobserve(e.target);} });
+  },{threshold:.15});
+  const mountReveals = (scope=document)=> $$('.reveal, .card', scope).forEach(el=> io.observe(el));
+
   const monthID = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
   const fmtDate = (iso) => { const d = new Date(iso + 'T00:00:00'); return `${d.getDate()} ${monthID[d.getMonth()]} ${d.getFullYear()}`; };
 
-  // ===== DATA (posts with body) =====
+  /* ============================ DATA ============================ */
   const posts = [
     { id:'novel-bab-1', title:'Novel — Bab 1: Pagi yang Menggantung', date:'2025-08-20',
       tags:['Novel','Progres','Bab 1'],
@@ -498,14 +467,13 @@
       body:`<p>Adegan dialog singkat namun tajam.</p>`},
   ];
 
-  // ===== STATE (query per view + page) =====
-  const states = { home:{q:'', page:1}, blog:{q:'', page:1}, novel:{q:'', page:1} };
+  /* ============================ STATE & RENDERERS ============================ */
+  const states = { home:{q:''}, blog:{q:''}, novel:{q:''} };
 
-  // ===== COMMON RENDERERS =====
   function cardHTML(p){
     return `
-      <a class="card-link" href="#/post/${encodeURIComponent(p.id)}" aria-label="Buka: ${p.title}">
-        <article class="card will-reveal">
+      <a class="card-link reveal" href="#/post/${encodeURIComponent(p.id)}" aria-label="Buka: ${p.title}">
+        <article class="card">
           <div class="thumb">${p.image?`<img src="${p.image}" alt="Thumbnail untuk: ${p.title}">`:''}</div>
           <div class="card-body">
             <div class="meta"><span>${fmtDate(p.date)}</span> • <span>${p.tags[0]}</span></div>
@@ -528,130 +496,21 @@
     }
     return res.sort((a,b)=> new Date(b.date)-new Date(a.date));
   }
-  function renderGrid(gridEl, list){
-    const fallback = `<div style="grid-column:1/-1;padding:26px;border:1px dashed rgba(255,255,255,.18);border-radius:14px;text-align:center;color:var(--muted)">Tidak ada hasil yang cocok.</div>`;
-    gridEl.innerHTML = list.length ? list.map(cardHTML).join('') : fallback;
-    // reveal on scroll
-    attachReveal(gridEl);
-    // skeleton shimmer until image loaded
-    $$('.thumb', gridEl).forEach(t=>{
-      t.classList.add('skeleton');
-      const img = t.querySelector('img');
-      if(img){
-        img.setAttribute('loading','lazy');
-        img.addEventListener('load', ()=> t.classList.remove('skeleton'), {once:true});
-        img.addEventListener('error', ()=> t.classList.remove('skeleton'), {once:true});
-      } else {
-        t.classList.remove('skeleton');
-      }
-    });
-  }
+  function renderGrid(gridEl, list){ gridEl.innerHTML = list.map(cardHTML).join('') || `<div style="grid-column:1/-1;padding:26px;border:1px dashed rgba(255,255,255,.18);border-radius:14px;text-align:center;color:var(--muted)">Tidak ada hasil yang cocok.</div>`; mountReveals(gridEl); }
 
-  // ===== WIRING SEARCH =====
   function setupSearch(view){
     const S = states[view];
     const input = document.getElementById(`search-${view}`);
     if(!input || input.dataset.inited){return;}
     input.dataset.inited='1';
     window.addEventListener('keydown', (e)=>{ if(document.getElementById(`view-${view}`).classList.contains('hidden')) return; if(e.key==='/' && document.activeElement!==input){ e.preventDefault(); input.focus(); } });
-    input.addEventListener('input', e=>{ S.q = e.target.value; S.page = 1; routeRender();
-  // animate hero on first view
-  attachReveal(document);
-  onScrollNav();
-  // theme icon micro-animation
-  try{ const i=$('#themeIcon'); i.style.transition='transform .45s var(--ease)'; }catch(_){} });
+    input.addEventListener('input', e=>{ S.q = e.target.value; routeRender(); });
   }
 
-  // ===== PAGINATION =====
-  const perPageForViewport = ()=> (innerWidth < 640 ? 8 : (innerWidth <= 1024 ? 8 : 12));
+  function renderHome(){ setupSearch('home'); const list = searchFilter(posts.slice(), states.home.q); renderGrid(document.getElementById('grid-home'), list); }
+  function renderBlog(){ setupSearch('blog'); const base = posts.filter(p=> p.tags.includes('Blog')); const list = searchFilter(base, states.blog.q); renderGrid(document.getElementById('grid-blog'), list); }
+  function renderNovel(){ setupSearch('novel'); const base = posts.filter(p=> p.tags.includes('Novel')); const list = searchFilter(base, states.novel.q); renderGrid(document.getElementById('grid-novel'), list); }
 
-  function renderPager(view, totalPages){
-    const wrap = document.getElementById(`pager-${view}`);
-    if(!wrap) return;
-    const cur = states[view].page;
-    if(totalPages <= 1){ wrap.innerHTML = ''; return; }
-
-    const nums = [];
-    const push = n => nums.push(`<button class="btn ${n===cur?'active':''}" data-p="${n}">${n}</button>`);
-    const addDots = ()=> nums.push(`<span style="padding:8px 6px;color:var(--muted)">…</span>`);
-
-    push(1);
-    if(cur > 3) addDots();
-    for(let n=Math.max(2,cur-1); n<=Math.min(totalPages-1,cur+1); n++) push(n);
-    if(cur < totalPages-2) addDots();
-    if(totalPages>1) push(totalPages);
-
-    wrap.innerHTML = `
-      <button class="btn" data-p="prev" ${cur===1?'disabled':''}>←</button>
-      ${nums.join('')}
-      <button class="btn" data-p="next" ${cur===totalPages?'disabled':''}>→</button>
-    `;
-
-    wrap.onclick = (e)=>{
-      const p = e.target.getAttribute('data-p');
-      if(!p) return;
-      if(p==='prev' && states[view].page>1) states[view].page--;
-      else if(p==='next' && states[view].page<totalPages) states[view].page++;
-      else if(/^\d+$/.test(p)) states[view].page = parseInt(p,10);
-      routeRender();
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    };
-  }
-
-  // ===== INTERACTIONS & ANIMATIONS =====
-  // nav elevate on scroll
-  function onScrollNav(){ document.querySelector('.nav')?.classList.toggle('scrolled', window.scrollY>4); }
-  window.addEventListener('scroll', onScrollNav);
-
-  // loader overlay
-  const showLoader = ()=> $('#page-loader')?.classList.add('show');
-  const hideLoader = ()=> $('#page-loader')?.classList.remove('show');
-
-  // intersection observer for reveal
-  const revealObs = new IntersectionObserver((entries)=>{
-    entries.forEach(en=>{ if(en.isIntersecting){ en.target.classList.add('reveal-in'); revealObs.unobserve(en.target); } });
-  }, {rootMargin:'0px 0px -10% 0px', threshold:0.1});
-  function attachReveal(scope){ $$('.will-reveal', scope||document).forEach(el=> revealObs.observe(el)); }
-  function prepareReveal(){
-    ['.hero .avatar', '.hero h1', '.hero p', '.hero .hero-cta', '.about .avatar', '.about .card', '.foot-grid > *'].forEach(sel=>{
-      $$(sel).forEach(el=>{ if(!el.classList.contains('will-reveal')) el.classList.add('will-reveal'); });
-    });
-    attachReveal(document);
-  }
-
-  // ===== RENDER PER ROUTE =====
-  function renderHome(){
-    setupSearch('home');
-    const filtered = searchFilter(posts.slice(), states.home.q);
-    const per = perPageForViewport();
-    const total = Math.max(1, Math.ceil(filtered.length / per));
-    states.home.page = Math.min(Math.max(1, states.home.page), total);
-    const start = (states.home.page-1)*per;
-    renderGrid(document.getElementById('grid-home'), filtered.slice(start, start+per));
-    renderPager('home', total);
-  }
-  function renderBlog(){
-    setupSearch('blog');
-    const base = posts.filter(p=> p.tags.includes('Blog'));
-    const filtered = searchFilter(base, states.blog.q);
-    const per = perPageForViewport();
-    const total = Math.max(1, Math.ceil(filtered.length / per));
-    states.blog.page = Math.min(Math.max(1, states.blog.page), total);
-    const start = (states.blog.page-1)*per;
-    renderGrid(document.getElementById('grid-blog'), filtered.slice(start, start+per));
-    renderPager('blog', total);
-  }
-  function renderNovel(){
-    setupSearch('novel');
-    const base = posts.filter(p=> p.tags.includes('Novel'));
-    const filtered = searchFilter(base, states.novel.q);
-    const per = perPageForViewport();
-    const total = Math.max(1, Math.ceil(filtered.length / per));
-    states.novel.page = Math.min(Math.max(1, states.novel.page), total);
-    const start = (states.novel.page-1)*per;
-    renderGrid(document.getElementById('grid-novel'), filtered.slice(start, start+per));
-    renderPager('novel', total);
-  }
   function renderPost(id){
     const idx = posts.findIndex(p=>p.id===id); const post = posts[idx] || posts[0];
     document.title = post.title + ' — Rafy Rayyan';
@@ -665,33 +524,24 @@
     const prevA = $('#prevPost'); const nextA = $('#nextPost');
     if(prev){ prevA.href = `#/post/${prev.id}`; prevA.textContent = '← ' + prev.title; prevA.style.visibility='visible'; } else prevA.style.visibility='hidden';
     if(next){ nextA.href = `#/post/${next.id}`; nextA.textContent = next.title + ' →'; nextA.style.visibility='visible'; } else nextA.style.visibility='hidden';
+    mountReveals($('#view-post'));
+    // Mount komentar + reaksi setelah body diisi
+    mountCommentsAndReactions();
   }
 
-  function setActive(h){
-    $$('.menu a').forEach(a=>{
-      const k=a.dataset.link;
-      const on = (k==='home' && (h==='#/'||h===''||h==='#')) || (k==='about'&&h.startsWith('#/about')) || (k==='blog'&&h.startsWith('#/blog')) || (k==='novel'&&h.startsWith('#/novel'));
-      a.classList.toggle('active', on);
-    });
-  }
-  function show(view){
-    $('#view-home').classList.toggle('hidden', view!=='home');
-    $('#view-about').classList.toggle('hidden', view!=='about');
-    $('#view-post').classList.toggle('hidden', view!=='post');
-    $('#view-blog').classList.toggle('hidden', view!=='blog');
-    $('#view-novel').classList.toggle('hidden', view!=='novel');
-    window.scrollTo({top:0, behavior:'auto'});
-  }
+  function setActive(h){ $$('.menu a').forEach(a=>{ const k=a.dataset.link; const on = (k==='home' && (h==='#/'||h===''||h==='#')) || (k==='about'&&h.startsWith('#/about')) || (k==='blog'&&h.startsWith('#/blog')) || (k==='novel'&&h.startsWith('#/novel')); a.classList.toggle('active', on); }); }
+  function show(view){ $('#view-home').classList.toggle('hidden', view!=='home'); $('#view-about').classList.toggle('hidden', view!=='about'); $('#view-post').classList.toggle('hidden', view!=='post'); $('#view-blog').classList.toggle('hidden', view!=='blog'); $('#view-novel').classList.toggle('hidden', view!=='novel'); window.scrollTo({top:0, behavior:'instant'}); }
   function routeRender(){
     const h = location.hash || '#/' ;
-    setActive(h);
-    showLoader();
-    const finish = ()=>{ prepareReveal(); setTimeout(hideLoader, 200); onScrollNav(); };
-    if(h.startsWith('#/post/')){ show('post'); renderPost(decodeURIComponent(h.replace('#/post/',''))); finish(); }
-    else if(h==='#/about'){ show('about'); finish(); }
-    else if(h==='#/blog'){ show('blog'); renderBlog(); finish(); }
-    else if(h==='#/novel'){ show('novel'); renderNovel(); finish(); }
-    else { show('home'); renderHome(); finish(); }
+    setActive(h); showLoader();
+    setTimeout(()=>{ // kasih rasa transisi
+      if(h.startsWith('#/post/')){ show('post'); renderPost(decodeURIComponent(h.replace('#/post/',''))); }
+      else if(h==='#/about'){ show('about'); }
+      else if(h==='#/blog'){ show('blog'); renderBlog(); }
+      else if(h==='#/novel'){ show('novel'); renderNovel(); }
+      else { show('home'); renderHome(); }
+      mountReveals(); hideLoader();
+    }, 220);
   }
   window.addEventListener('hashchange', routeRender);
 
@@ -710,141 +560,120 @@
     const valid = /[^@\s]+@[^@\s]+\.[^@\s]+/.test(email);
     const notice = $('#subNotice');
     if(!valid){ notice.textContent='Email tidak valid.'; notice.style.color='salmon'; return; }
-    const key='subscribers'; const arr = JSON.parse(localStorage.getItem(key)||'[]');
-    if(!arr.includes(email)) arr.push(email);
-    localStorage.setItem(key, JSON.stringify(arr));
+    const key='subscribers'; const arr = JSON.parse(localStorage.getItem(key)||'[]'); if(!arr.includes(email)) arr.push(email); localStorage.setItem(key, JSON.stringify(arr));
     notice.textContent='Berhasil! Email tersimpan di perangkat ini. Integrasi pengiriman bisa ditambahkan nanti.'; notice.style.color='var(--muted)';
     setTimeout(closeSub, 1000);
   });
   $('#subModal')?.addEventListener('click', (e)=>{ if(e.target.id==='subModal' || e.target.classList.contains('modal-backdrop')) closeSub(); });
 
-  // initial
-  routeRender();
-
   // back-to-top
   $('#toTop')?.addEventListener('click', ()=> window.scrollTo({top:0, behavior:'smooth'}));
 
-  // re-render on resize (for responsive per-page)
-  let rszT; 
-  window.addEventListener('resize', ()=>{ clearTimeout(rszT); rszT = setTimeout(()=> routeRender(), 120); });
-    // --- Boot splash loader on hard reload / direct URL ---
-  (function bootSplash(){
-    var l = document.getElementById('loader') || document.getElementById('page-loader');
-    if(!l) return;
-    var min = 550;
-    function splash(){
-      var start = performance.now();
-      l.classList.remove('hidden');
-      requestAnimationFrame(function(){
-        var wait = Math.max(0, min - (performance.now() - start));
-        setTimeout(function(){ l.classList.add('hidden'); }, wait);
+  /* ============================ MUSIC ============================ */
+  const audio = $('#bgm');
+  const musicFab = $('#musicFab'); const musicTip = $('#musicTip');
+  let isPlaying = false; let interacted = localStorage.getItem('bgm_interacted')==='1';
+  function updateFab(){ musicFab.textContent = isPlaying? '🔊' : '🔈'; }
+  async function playBgm(){ try{ await audio.play(); isPlaying=true; updateFab(); } catch(err){ /* autoplay blocked */ } }
+  function pauseBgm(){ audio.pause(); isPlaying=false; updateFab(); }
+  musicFab.addEventListener('click', ()=>{ interacted=true; localStorage.setItem('bgm_interacted','1'); isPlaying? pauseBgm() : playBgm(); musicTip.classList.add('hidden'); });
+
+  // First visit hint (reload/direct open)
+  window.addEventListener('load', ()=>{ if(!interacted){ musicTip.classList.remove('hidden'); setTimeout(()=>musicTip.classList.add('hidden'), 4000); } });
+  // Also start on first user gesture anywhere
+  document.addEventListener('pointerdown', ()=>{ if(!interacted){ interacted=true; localStorage.setItem('bgm_interacted','1'); playBgm(); musicTip.classList.add('hidden'); } }, {once:true});
+
+  /* ============================ FIREBASE (COMMENTS + REACTIONS) ============================ */
+  import { initializeApp } from 'https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js';
+  import { getFirestore, collection, doc, setDoc, addDoc, getDoc, deleteDoc, onSnapshot, serverTimestamp, query, orderBy } from 'https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js';
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyA0Nc3sCYCfhsX6y6Ft5SxEuZDBcfT0zHk",
+    authDomain: "rafyermadi-a4e98.firebaseapp.com",
+    projectId: "rafyermadi-a4e98",
+    storageBucket: "rafyermadi-a4e98.firebasestorage.app",
+    messagingSenderId: "529097759816",
+    appId: "1:529097759816:web:7c0081bf4b612b2dee4c7d"
+  };
+  const fbApp = initializeApp(firebaseConfig);
+  const db = getFirestore(fbApp);
+
+  const DEVICE_KEY = 'rr_device_id';
+  function getDeviceId(){ let id = localStorage.getItem(DEVICE_KEY); if(!id){ id = (crypto?.randomUUID?.() || (Date.now()+"-"+Math.random().toString(16).slice(2))); localStorage.setItem(DEVICE_KEY,id);} return id; }
+  function escapeHtml(s=""){return s.replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#039;"}[m]));}
+  function currentPostId(){ const h=location.hash||"#/"; return h.startsWith('#/post/')? decodeURIComponent(h.slice(7)) : null; }
+
+  async function mountCommentsAndReactions(){
+    const postId = currentPostId();
+    const wrap = document.getElementById('comments');
+    if(!postId || !wrap) return;
+
+    wrap.innerHTML = `
+      <h2 style="margin:10px 0 8px">Komentar</h2>
+      <form id="cForm" style="margin:10px 0 16px;display:grid;gap:8px">
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <input id="cName" placeholder="Nama" maxlength="40" required
+                 style="flex:0 0 180px;padding:10px;border-radius:10px;border:1px solid rgba(255,255,255,.12);background:transparent;color:inherit">
+          <input id="cAvatar" placeholder="URL foto (opsional)"
+                 style="flex:1;padding:10px;border-radius:10px;border:1px solid rgba(255,255,255,.12);background:transparent;color:inherit">
+        </div>
+        <textarea id="cText" rows="3" placeholder="Tulis komentar…" maxlength="800" required
+                  style="padding:10px;border-radius:10px;border:1px solid rgba(255,255,255,.12);background:transparent;color:inherit"></textarea>
+        <div style="display:flex;gap:8px;align-items:center">
+          <button class="btn primary">Kirim</button>
+          <span id="cInfo" style="color:var(--muted)"></span>
+        </div>
+      </form>
+
+      <h3 style="margin:6px 0 6px">Reaksi</h3>
+      <div id="reacts" style="display:flex;gap:8px;flex-wrap:wrap;margin:6px 0 12px">
+        ${["like","love","insight","wow"].map(t=>`<button type="button" class="btn" data-react="${t}">${t}</button>`).join("")}
+        <span id="rTotals" style="color:var(--muted)"></span>
+      </div>
+
+      <div id="clist" style="display:grid;gap:10px"></div>
+    `;
+
+    // Reactions
+    const deviceId = getDeviceId();
+    wrap.querySelectorAll('[data-react]').forEach(btn=>{
+      btn.addEventListener('click', async ()=>{
+        const type = btn.dataset.react; const ref = doc(db,'posts',postId,'reactions',deviceId); const snap = await getDoc(ref);
+        if(snap.exists() && snap.data().type===type){ await deleteDoc(ref); }
+        else { await setDoc(ref,{type, by:deviceId, at:serverTimestamp()}); }
       });
-    }
-    if (document.readyState === 'complete' || document.readyState === 'interactive') splash();
-    else document.addEventListener('DOMContentLoaded', splash, {once:true});
-  })();
-</script>
-  <div id="page-loader" class="loader" aria-hidden="true"><div class="spinner" role="status" aria-label="Memuat"></div></div>
-  <!-- BACKGROUND MUSIC -->
-  <audio id="bgm" loop preload="auto"></audio>
-  <button id="bgmToggle" class="bgm-btn" aria-pressed="false" title="Musik latar">
-    <span class="bgm-ico" aria-hidden="true">🔇</span>
-    <span class="visually-hidden">Toggle musik latar</span>
-  </button>
-  <script>
-  /* === Background Music === */
-  (function(){
-    const MUSIC_SRC = new URLSearchParams(location.search).get('music') || 'bgm.mp3';
-    const bgm = document.getElementById('bgm');
-    const bgmBtn = document.getElementById('bgmToggle');
-    if(!bgm || !bgmBtn) return;
-    const ico = bgmBtn.querySelector('.bgm-ico');
-    bgm.src = "kicirkicir.mp3"; bgm.loop = true; bgm.preload = 'auto';
-    try{ const vol = parseFloat(localStorage.getItem('bgmVol')||'0.7'); if(!Number.isNaN(vol)) bgm.volume = Math.min(1, Math.max(0, vol)); }catch(_){ }
-    function updateUI(){ const playing = !bgm.paused && !bgm.ended; bgmBtn.classList.toggle('playing', playing); bgmBtn.setAttribute('aria-pressed', playing? 'true':'false'); if(ico) ico.textContent = playing? '🔊':'🔇'; }
-    async function playIfAllowed(){ try{ await bgm.play(); localStorage.setItem('bgm','on'); } catch(e){ localStorage.setItem('bgm','off'); } finally{ updateUI(); } }
-    if(localStorage.getItem('bgm')==='on'){ playIfAllowed(); } else { updateUI(); }
-    bgmBtn.addEventListener('click', async ()=>{ if(bgm.paused){ await playIfAllowed(); } else { bgm.pause(); localStorage.setItem('bgm','off'); updateUI(); } });
-    document.addEventListener('pointerdown', function once(){ if(localStorage.getItem('bgm')==='on' && bgm.paused){ playIfAllowed(); } document.removeEventListener('pointerdown', once); }, {capture:false});
-    window.addEventListener('hashchange', ()=>{ if(localStorage.getItem('bgm')==='on' && bgm.paused){ playIfAllowed(); } });
-  })();
-  </script>
-  
-  <!-- BGM first-visit autoplay + hashchange intercept -->
-  <script>
-  (function(){
-    var bgm = document.getElementById('bgm');
-    var btn = document.getElementById('bgmToggle');
-    if(!bgm || !btn) { return; }
-    var FIRST='bgm_first_visit';
-    var PENDING='bgm_autoplay_pending';
-    function updateIco(){
-      var ico = btn.querySelector('.bgm-ico');
-      if(!ico) return;
-      var playing = !bgm.paused && !bgm.ended;
-      btn.classList.toggle('playing', playing);
-      btn.setAttribute('aria-pressed', playing? 'true':'false');
-      ico.textContent = playing? '🔊':'🔇';
-    }
-    // First visit in this tab => try autoplay once
-    if(!sessionStorage.getItem(FIRST)){
-      sessionStorage.setItem(FIRST,'1');
-      bgm.play().then(function(){ localStorage.setItem('bgm','on'); updateIco(); })
-        .catch(function(){ sessionStorage.setItem(PENDING,'1'); updateIco(); });
-      document.addEventListener('pointerdown', function once(){
-        if(sessionStorage.getItem(PENDING)==='1' && bgm.paused){
-          bgm.play().then(function(){ localStorage.setItem('bgm','on'); })
-            .catch(function(){})
-            .finally(function(){ updateIco(); sessionStorage.removeItem(PENDING); });
-        }
-        document.removeEventListener('pointerdown', once);
-      }, {capture:false});
-    }
-    // Intercept hashchange: call router, block other listeners so BGM tidak auto-play saat pindah halaman
-    if(!window.__bgm_intercept_installed){
-      window.__bgm_intercept_installed = true;
-      window.addEventListener('hashchange', function(e){
-        if (typeof routeRender === 'function') { try { routeRender(); } catch(_){} }
-        e.stopImmediatePropagation();
-        e.stopPropagation();
-      }, true);
-    }
-  })();
-  </script>
-  
-  <!-- Show BGM toast if autoplay blocked on first visit -->
-  <script>
-  (function(){
-    if(sessionStorage.getItem('bgm_autoplay_pending') !== '1') return;
-    var btn = document.getElementById('bgmToggle');
-    var bgm = document.getElementById('bgm');
-    if(!btn) return;
-    function showToast(){
-      if(document.getElementById('bgmToast')) return;
-      var t = document.createElement('div');
-      t.className = 'bgm-toast';
-      t.id = 'bgmToast';
-      t.textContent = 'Klik untuk nyalakan musik 🎵';
-      document.body.appendChild(t);
-      // auto-hide after 7s if user mengabaikan
-      setTimeout(function(){ if(t && t.parentNode){ t.parentNode.removeChild(t); } }, 7000);
-    }
-    function hideToast(){ var t = document.getElementById('bgmToast'); if(t && t.parentNode){ t.parentNode.removeChild(t); } }
-    showToast();
-    // Hapus toast ketika musik berhasil play atau user klik tombol
-    if(bgm){ bgm.addEventListener('play', hideToast, {once:true}); }
-    btn.addEventListener('click', hideToast, {once:true});
-    // Jika user melakukan interaksi pertama di halaman, coba play sekali lalu tutup toast
-    function onInteract(){
-      if(bgm && sessionStorage.getItem('bgm_autoplay_pending')==='1' && bgm.paused){
-        bgm.play().then(function(){ localStorage.setItem('bgm','on'); }).catch(function(){})
-          .finally(function(){ hideToast(); sessionStorage.removeItem('bgm_autoplay_pending'); document.removeEventListener('pointerdown', onInteract); });
-      } else {
-        hideToast(); document.removeEventListener('pointerdown', onInteract);
-      }
-    }
-    document.addEventListener('pointerdown', onInteract, {capture:false});
-  })();
+    });
+    onSnapshot(collection(db,'posts',postId,'reactions'), (qs)=>{
+      const c={like:0,love:0,insight:0,wow:0}; qs.forEach(d=>{ const t=d.data().type; if(t in c) c[t]++; });
+      wrap.querySelector('#rTotals').textContent = `👍 ${c.like}   ❤️ ${c.love}   💡 ${c.insight}   😮 ${c.wow}`;
+    });
+
+    // Submit komentar
+    wrap.querySelector('#cForm').addEventListener('submit', async (e)=>{
+      e.preventDefault(); const name=wrap.querySelector('#cName').value.trim(); const text=wrap.querySelector('#cText').value.trim(); const avatar=wrap.querySelector('#cAvatar').value.trim();
+      const payload={name,text,by:deviceId,at:serverTimestamp()}; if(avatar) payload.avatar=avatar; await addDoc(collection(db,'posts',postId,'comments'), payload); e.target.reset();
+      const info = wrap.querySelector('#cInfo'); info.textContent='Terkirim ✓'; setTimeout(()=>info.textContent='',1200);
+    });
+
+    // Realtime list
+    const qRef = query(collection(db,'posts',postId,'comments'), orderBy('at','desc'));
+    onSnapshot(qRef, (qs)=>{
+      const html=[]; qs.forEach(docu=>{ const c=docu.data(); const name=escapeHtml(c.name||'Anonim'); const text=escapeHtml(c.text||''); const ava=c.avatar? `<img src="${c.avatar}" alt="" style="width:28px;height:28px;border-radius:50%;object-fit:cover">` : `<div style="width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,.1);display:grid;place-items:center">👤</div>`; html.push(`
+        <div class="card" style="padding:10px;display:flex;gap:10px;align-items:flex-start">
+          ${ava}
+          <div>
+            <div style="font-weight:700">${name}</div>
+            <div style="color:var(--muted)">${text}</div>
+          </div>
+        </div>`); });
+      wrap.querySelector('#clist').innerHTML = html.join('') || `<div style="color:var(--muted)">Jadilah yang pertama berkomentar.</div>`; mountReveals(wrap);
+    });
+  }
+
+  // initial
+  routeRender();
+  mountReveals();
+  window.addEventListener('load', ()=> setTimeout(hideLoader, 350));
   </script>
 </body>
 </html>
