@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Rafy Rayyan — Blog & Novel</title>
-  <meta name="description" content="Blog & arsip progres novel oleh Rafy Rayyan. Komentar & reaksi dengan Firebase."/>
+  <meta name="description" content="Blog & arsip progres novel oleh Rafy Rayyan. Berbagi tulisan, ide, dan catatan proses."/>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&family=Playfair+Display:wght@600&display=swap" rel="stylesheet">
@@ -125,17 +125,7 @@
     article img{max-width:100%;height:auto;border-radius:12px;display:block;margin:10px auto}
     .post-nav{display:flex;justify-content:space-between;gap:10px;margin:22px 0}
 
-    /* REACTIONS & COMMENTS */
-    .reacts{display:flex;gap:10px;flex-wrap:wrap;margin:20px 0}
-    .react-btn{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:999px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.04);cursor:pointer}
-    .react-btn .count{min-width:18px;display:inline-grid;place-items:center;font-weight:700}
-    .comment-card{background:var(--card);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:14px}
-    #commentList{list-style:none;padding:0;margin:10px 0;display:flex;flex-direction:column;gap:10px}
-    .comment-item{padding:10px;border:1px solid rgba(255,255,255,.08);border-radius:12px;background:rgba(255,255,255,.03)}
-    #commentForm{display:grid;gap:10px;margin-top:10px}
-    #commentForm input, #commentForm textarea{padding:10px;border-radius:10px;border:1px solid rgba(255,255,255,.12);background:transparent;color:var(--text)}
-
-    /* FOOTER */
+    /* FOOTER — BIO STYLE */
     .site-footer{position:relative;border-top:1px solid rgba(255,255,255,.08);padding:50px 0 24px;color:var(--muted);overflow:hidden;background:
       radial-gradient(600px 200px at 10% -10%, rgba(139,92,246,.18), transparent 60%),
       radial-gradient(600px 200px at 110% 10%, rgba(34,211,238,.12), transparent 60%)}
@@ -152,17 +142,36 @@
     .quote{background:var(--card);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:14px;font-style:italic}
     .copy{margin-top:18px;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
 
-    /* LOADER OVERLAY (sederhana) */
-    #pageLoader{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.55);backdrop-filter: blur(2px);z-index:200}
-    #pageLoader.show{display:flex}
-    .spinner{width:48px;height:48px;border-radius:50%;border:4px solid rgba(255,255,255,.2);border-top-color:#fff;animation:spin 1s linear infinite}
-    @keyframes spin{to{transform:rotate(360deg)}}
+    /* MODAL */
+    .modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;z-index:120}
+    .modal:not(.hidden){display:flex}
+    .modal-backdrop{position:absolute;inset:0;background:rgba(0,0,0,.6);backdrop-filter:blur(3px)}
+    .modal-card{position:relative;z-index:1;width:min(520px,92vw);background:var(--bg-soft);border:1px solid rgba(255,255,255,.12);border-radius:16px;padding:18px}
+    .modal-card input{width:100%;padding:10px 12px;border-radius:10px;border:1px solid rgba(255,255,255,.12);background:transparent;color:var(--text)}
+    .modal-actions{display:flex;gap:8px;justify-content:flex-end;margin-top:10px}
+
+    /* REACTIONS + COMMENTS (mini style nyatu) */
+    .rx-wrap{display:flex;gap:10px;align-items:center;margin:18px 0 8px}
+    .rx-btn{padding:6px 10px;border-radius:12px;border:1px solid rgba(255,255,255,.12);
+            background:transparent;color:inherit;cursor:pointer;display:inline-flex;gap:6px;align-items:center}
+    html[data-theme="light"] .rx-btn{border-color:rgba(16,19,33,.12)}
+    .rx-btn b{font-weight:700;min-width:1.2em;text-align:right}
+    .rx-pop{transform:translateY(-2px) scale(1.05);transition:transform .15s ease}
+    .cmt-card{background:var(--card,rgba(255,255,255,.03));border:1px solid rgba(255,255,255,.08);
+              border-radius:14px;padding:10px 12px;margin:8px 0}
+    html[data-theme="light"] .cmt-card{border-color:rgba(16,19,33,.08)}
+    .cmt-meta{font-size:12px;color:var(--muted);margin-bottom:4px;display:flex;gap:8px;align-items:center}
+    .cmt-form{background:var(--card,rgba(255,255,255,.03));border:1px solid rgba(255,255,255,.08);
+              border-radius:14px;padding:10px;margin-top:10px}
+    .cmt-form input,.cmt-form textarea{width:100%;padding:10px 12px;border-radius:10px;
+      border:1px solid rgba(255,255,255,.12);background:transparent;color:inherit;outline:none;margin:6px 0}
+    html[data-theme="light"] .cmt-form input,html[data-theme="light"] .cmt-form textarea{border-color:rgba(16,19,33,.12)}
+    .cmt-actions{display:flex;gap:8px;justify-content:flex-end}
+    .btn-small{padding:8px 12px;border-radius:12px;border:1px solid rgba(255,255,255,.12);background:transparent;color:inherit;cursor:pointer}
+    .btn-primary{background:linear-gradient(135deg,var(--brand,#8b5cf6),var(--brand-2,#22d3ee));border:none;color:white}
   </style>
 </head>
 <body>
-  <!-- LOADER -->
-  <div id="pageLoader"><div class="spinner" aria-label="Memuat…"></div></div>
-
   <!-- NAVBAR -->
   <nav class="nav">
     <div class="container nav-inner">
@@ -295,34 +304,14 @@
     </header>
     <main class="container">
       <article id="postBody"></article>
-
-      <!-- REACTIONS -->
-      <section class="reacts" aria-label="Reaksi" id="reactBar">
-        <button class="react-btn" type="button" data-react="like">👍 <span class="count" data-react-count="like">0</span></button>
-        <button class="react-btn" type="button" data-react="love">❤️ <span class="count" data-react-count="love">0</span></button>
-        <button class="react-btn" type="button" data-react="wow">😮 <span class="count" data-react-count="wow">0</span></button>
-        <button class="react-btn" type="button" data-react="clap">👏 <span class="count" data-react-count="clap">0</span></button>
-      </section>
-
-      <!-- COMMENTS -->
-      <section class="comment-card" aria-label="Komentar">
-        <h2 style="margin:0 0 6px">Komentar</h2>
-        <div data-comment-status style="color:var(--muted);margin-bottom:8px">Komentar nonaktif (Firebase belum siap).</div>
-        <ul id="commentList"></ul>
-        <form id="commentForm">
-          <input name="name" placeholder="Nama (opsional)"/>
-          <textarea name="text" placeholder="Tulis komentar…" required rows="3"></textarea>
-          <div style="display:flex;gap:8px;justify-content:flex-end">
-            <button class="btn" type="reset">Bersihkan</button>
-            <button class="btn primary" type="submit">Kirim</button>
-          </div>
-        </form>
-      </section>
-
       <nav class="post-nav">
         <a id="prevPost" class="btn" href="#">← Sebelumnya</a>
         <a id="nextPost" class="btn" href="#">Berikutnya →</a>
       </nav>
+      <!-- Mount Reactions & Comments here -->
+      <div id="rx-mount"></div>
+      <div id="cmt-mount"></div>
+      <section id="comments" style="margin:26px 0 60px"></section>
     </main>
   </div>
 
@@ -358,13 +347,13 @@
   </footer>
 
   <!-- SUBSCRIBE MODAL -->
-  <div id="subModal" class="hidden" role="dialog" aria-modal="true" aria-labelledby="subTitle" style="position:fixed;inset:0;display:none;align-items:center;justify-content:center;z-index:120">
-    <div class="modal-backdrop" style="position:absolute;inset:0;background:rgba(0,0,0,.6);backdrop-filter:blur(3px)"></div>
-    <div class="modal-card" style="position:relative;z-index:1;width:min(520px,92vw);background:var(--bg-soft);border:1px solid rgba(255,255,255,.12);border-radius:16px;padding:18px">
+  <div id="subModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="subTitle">
+    <div class="modal-backdrop"></div>
+    <div class="modal-card">
       <h3 id="subTitle">Berlangganan via Email</h3>
       <p id="subNotice" style="color:var(--muted);margin-top:2px">Masukkan email untuk mendapat kabar saat ada tulisan baru.</p>
-      <input type="email" id="subEmail" placeholder="nama@contoh.com" autocomplete="email" style="width:100%;padding:10px 12px;border-radius:10px;border:1px solid rgba(255,255,255,.12);background:transparent;color:var(--text)"/>
-      <div class="modal-actions" style="display:flex;gap:8px;justify-content:flex-end;margin-top:10px">
+      <input type="email" id="subEmail" placeholder="nama@contoh.com" autocomplete="email" />
+      <div class="modal-actions">
         <button class="btn" id="subCancel">Batal</button>
         <button class="btn primary" id="subSave">Simpan</button>
       </div>
@@ -372,36 +361,9 @@
     </div>
   </div>
 
-  <!-- ===== Firebase (module) ===== -->
-  <script type="module" id="firebase-init">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
-    import { getFirestore, collection, doc, setDoc, addDoc, getDoc, onSnapshot, query, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
-
-    const firebaseConfig = {
-      apiKey: "AIzaSyA0Nc3sCYCfhsX6y6Ft5SxEuZDBcfT0zHk",
-      authDomain: "rafyermadi-a4e98.firebaseapp.com",
-      projectId: "rafyermadi-a4e98",
-      storageBucket: "rafyermadi-a4e98.firebasestorage.app",
-      messagingSenderId: "529097759816",
-      appId: "1:529097759816:web:7c0081bf4b612b2dee4c7d"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const db  = getFirestore(app);
-
-    // expose untuk script non-module
-    window.FB = {
-      app, db,
-      fs: { collection, doc, setDoc, addDoc, getDoc, onSnapshot, query, orderBy, serverTimestamp }
-    };
-
-    window.dispatchEvent(new Event("firebase-ready"));
-    console.log("Firebase ready");
-  </script>
-
-  <!-- ===== App script (non-module) ===== -->
-  <script>
-  // ===== UTIL =====
+  <!-- ================= APP + FIREBASE (SINGLE MODULE) ================= -->
+  <script type="module">
+  /* ===== UTIL DOM & THEME ===== */
   const $ = (sel, el = document) => el.querySelector(sel);
   const $$ = (sel, el = document) => Array.from(el.querySelectorAll(sel));
   const root = document.documentElement;
@@ -413,9 +375,7 @@
   const monthID = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
   const fmtDate = (iso) => { const d = new Date(iso + 'T00:00:00'); return `${d.getDate()} ${monthID[d.getMonth()]} ${d.getFullYear()}`; };
 
-  const Loader = { el: $('#pageLoader'), show(){this.el.classList.add('show')}, hide(){this.el.classList.remove('show')} };
-
-  // ===== DATA (posts with body) =====
+  /* ===== DATA (posts with body) ===== */
   const posts = [
     { id:'novel-bab-1', title:'Novel — Bab 1: Pagi yang Menggantung', date:'2025-08-20',
       tags:['Novel','Progres','Bab 1'],
@@ -501,10 +461,19 @@
       body:`<p>Adegan dialog singkat namun tajam.</p>`},
   ];
 
-  // ===== STATE (query per view) =====
-  const states = { home:{q:''}, blog:{q:''}, novel:{q:''} };
-
-  // ===== COMMON RENDERERS =====
+  /* ===== SEARCH & GRID ===== */
+  const norm = (s)=> (s||'').toLowerCase().replace(/<[^>]+>/g,' ');
+  function searchFilter(list, q){
+    const tokens = q.trim()? q.trim().toLowerCase().split(/\s+/):[];
+    let res = list;
+    if(tokens.length){
+      res = res.filter(p=>{
+        const hay = norm(p.title+' '+p.excerpt+' '+p.tags.join(' ')+' '+p.body);
+        return tokens.every(t=> hay.includes(t));
+      });
+    }
+    return res.sort((a,b)=> new Date(b.date)-new Date(a.date));
+  }
   function cardHTML(p){
     return `
       <a class="card-link" href="#/post/${encodeURIComponent(p.id)}" aria-label="Buka: ${p.title}">
@@ -519,21 +488,10 @@
         </article>
       </a>`;
   }
-  const norm = (s)=> (s||'').toLowerCase().replace(/<[^>]+>/g,' ');
-  function searchFilter(list, q){
-    const tokens = q.trim()? q.trim().toLowerCase().split(/\s+/):[];
-    let res = list;
-    if(tokens.length){
-      res = res.filter(p=>{
-        const hay = norm(p.title+' '+p.excerpt+' '+p.tags.join(' ')+' '+p.body);
-        return tokens.every(t=> hay.includes(t));
-      });
-    }
-    return res.sort((a,b)=> new Date(b.date)-new Date(a.date));
-  }
   function renderGrid(gridEl, list){ gridEl.innerHTML = list.map(cardHTML).join('') || `<div style="grid-column:1/-1;padding:26px;border:1px dashed rgba(255,255,255,.18);border-radius:14px;text-align:center;color:var(--muted)">Tidak ada hasil yang cocok.</div>`; }
 
-  // ===== WIRING SEARCH =====
+  /* ===== VIEW RENDERERS ===== */
+  const states = { home:{q:''}, blog:{q:''}, novel:{q:''} };
   function setupSearch(view){
     const S = states[view];
     const input = document.getElementById(`search-${view}`);
@@ -542,8 +500,23 @@
     window.addEventListener('keydown', (e)=>{ if(document.getElementById(`view-${view}`).classList.contains('hidden')) return; if(e.key==='/' && document.activeElement!==input){ e.preventDefault(); input.focus(); } });
     input.addEventListener('input', e=>{ S.q = e.target.value; routeRender(); });
   }
-
-  // ===== POST HELPERS =====
+  function renderHome(){
+    setupSearch('home');
+    const list = searchFilter(posts.slice(), states.home.q);
+    renderGrid(document.getElementById('grid-home'), list);
+  }
+  function renderBlog(){
+    setupSearch('blog');
+    const base = posts.filter(p=> p.tags.includes('Blog'));
+    const list = searchFilter(base, states.blog.q);
+    renderGrid(document.getElementById('grid-blog'), list);
+  }
+  function renderNovel(){
+    setupSearch('novel');
+    const base = posts.filter(p=> p.tags.includes('Novel'));
+    const list = searchFilter(base, states.novel.q);
+    renderGrid(document.getElementById('grid-novel'), list);
+  }
   function renderPost(id){
     const idx = posts.findIndex(p=>p.id===id); const post = posts[idx] || posts[0];
     document.title = post.title + ' — Rafy Rayyan';
@@ -553,14 +526,14 @@
     if(post.image){ hero.classList.remove('hidden'); const img = hero.firstElementChild; img.src = post.image; img.alt = 'Gambar: ' + post.title; }
     else { hero.classList.add('hidden'); }
     $('#postBody').innerHTML = post.body;
+
     const prev = posts[idx-1]||null; const next = posts[idx+1]||null;
     const prevA = $('#prevPost'); const nextA = $('#nextPost');
     if(prev){ prevA.href = `#/post/${prev.id}`; prevA.textContent = '← ' + prev.title; prevA.style.visibility='visible'; } else prevA.style.visibility='hidden';
     if(next){ nextA.href = `#/post/${next.id}`; nextA.textContent = next.title + ' →'; nextA.style.visibility='visible'; } else nextA.style.visibility='hidden';
 
-    // Hook reactions & comments (tunggu firebase kalau perlu)
-    const startHooks = ()=>{ if(window.setupReactions) window.setupReactions(post.id); if(window.setupComments) window.setupComments(post.id); };
-    if(window.FB?.db) startHooks(); else window.addEventListener('firebase-ready', startHooks, { once:true });
+    // beri tahu modul Firebase untuk mount cepat
+    if(window.afterPostRendered) window.afterPostRendered(post.id);
   }
 
   function setActive(h){
@@ -581,7 +554,7 @@
   function routeRender(){
     const h = location.hash || '#/' ;
     setActive(h);
-    if(h.startsWith('#/post/')){ show('post'); Loader.show(); setTimeout(()=>{ renderPost(decodeURIComponent(h.replace('#/post/',''))); Loader.hide(); }, 100); }
+    if(h.startsWith('#/post/')){ show('post'); renderPost(decodeURIComponent(h.replace('#/post/',''))); }
     else if(h==='#/about'){ show('about'); }
     else if(h==='#/blog'){ show('blog'); renderBlog(); }
     else if(h==='#/novel'){ show('novel'); renderNovel(); }
@@ -589,17 +562,13 @@
   }
   window.addEventListener('hashchange', routeRender);
 
-  function renderHome(){ setupSearch('home'); const list = searchFilter(posts.slice(), states.home.q); renderGrid(document.getElementById('grid-home'), list); }
-  function renderBlog(){ setupSearch('blog'); const base = posts.filter(p=> p.tags.includes('Blog')); const list = searchFilter(base, states.blog.q); renderGrid(document.getElementById('grid-blog'), list); }
-  function renderNovel(){ setupSearch('novel'); const base = posts.filter(p=> p.tags.includes('Novel')); const list = searchFilter(base, states.novel.q); renderGrid(document.getElementById('grid-novel'), list); }
-
   // footer stats
   $('#statPosts').textContent = posts.length;
   $('#statTags').textContent = new Set(posts.flatMap(p=>p.tags)).size;
 
   // Subscribe modal logic
-  function openSub(){ const m=$('#subModal'); if(m){ m.style.display='flex'; $('#subEmail')?.focus(); document.body.style.overflow='hidden'; }}
-  function closeSub(){ const m=$('#subModal'); if(m){ m.style.display='none'; document.body.style.overflow=''; }}
+  function openSub(){ const m=$('#subModal'); if(m){ m.classList.remove('hidden'); $('#subEmail')?.focus(); document.body.style.overflow='hidden'; }}
+  function closeSub(){ $('#subModal')?.classList.add('hidden'); document.body.style.overflow=''; }
   $('#openSub')?.addEventListener('click', openSub);
   $('#closeSub')?.addEventListener('click', closeSub);
   $('#subCancel')?.addEventListener('click', closeSub);
@@ -608,101 +577,173 @@
     const valid = /[^@\s]+@[^@\s]+\.[^@\s]+/.test(email);
     const notice = $('#subNotice');
     if(!valid){ notice.textContent='Email tidak valid.'; notice.style.color='salmon'; return; }
-    const key='subscribers'; const arr = JSON.parse(localStorage.getItem(key)||'[]'); if(!arr.includes(email)) arr.push(email); localStorage.setItem(key, JSON.stringify(arr));
-    notice.textContent='Berhasil! Email tersimpan di perangkat ini. Integrasi pengiriman bisa ditambahkan nanti.'; notice.style.color='var(--muted)'; setTimeout(closeSub, 900);
+    const key='subscribers'; const arr = JSON.parse(localStorage.getItem(key)||'[]');
+    if(!arr.includes(email)) arr.push(email);
+    localStorage.setItem(key, JSON.stringify(arr));
+    notice.textContent='Berhasil! Email tersimpan di perangkat ini. Integrasi pengiriman bisa ditambahkan nanti.'; notice.style.color='var(--muted)';
+    setTimeout(closeSub, 1000);
   });
   $('#subModal')?.addEventListener('click', (e)=>{ if(e.target.id==='subModal' || e.target.classList.contains('modal-backdrop')) closeSub(); });
 
-  // initial
-  routeRender();
   // back-to-top
   $('#toTop')?.addEventListener('click', ()=> window.scrollTo({top:0, behavior:'smooth'}));
-  </script>
 
-  <!-- ===== Reactions & Comments (global functions) ===== -->
-  <script>
-  (function(){
-    // util
-    const esc = (s='') => s.replace(/[&<>"']/g, m=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[m]));
-    const getDeviceId = () => { let id = localStorage.getItem('deviceId'); if(!id){ id = (self.crypto?.randomUUID?.() || (Date.now()+Math.random()).toString(36)); localStorage.setItem('deviceId', id); } return id; };
+  // initial
+  routeRender();
 
-    // --- REACTIONS
-    window.setupReactions = function(postId){
-      if(!window.FB?.db){ console.warn('FB not ready (reactions)'); return; }
-      const { db, fs } = window.FB;
-      const col = fs.collection(db, 'posts', postId, 'reactions');
-      const deviceId = getDeviceId();
+  /* =================== FIREBASE (REACTIONS + COMMENTS) =================== */
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+  import {
+    getFirestore, doc, setDoc, collection, onSnapshot, serverTimestamp, increment,
+    addDoc, query, orderBy, limit
+  } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
 
-      const btns = document.querySelectorAll('[data-react]');
-      if(!btns.length) return;
-      const allKeys = Array.from(new Set(Array.from(btns).map(b=>b.dataset.react)));
-      const myDoc = fs.doc(col, deviceId);
+  const firebaseConfig = {
+    apiKey: "AIzaSyA0Nc3sCYCfhsX6y6Ft5SxEuZDBcfT0zHk",
+    authDomain: "rafyermadi-a4e98.firebaseapp.com",
+    projectId: "rafyermadi-a4e98",
+    storageBucket: "rafyermadi-a4e98.firebasestorage.app",
+    messagingSenderId: "529097759816",
+    appId: "1:529097759816:web:7c0081bf4b612b2dee4c7d"
+  };
+  const fbApp = initializeApp(firebaseConfig);
+  const db = getFirestore(fbApp);
 
-      btns.forEach(btn=>{
-        btn.addEventListener('click', async () => {
-          try{
-            const key = btn.dataset.react;
-            const snap = await fs.getDoc(myDoc);
-            const curData = snap.exists() ? snap.data() : {};
-            const next = {}; allKeys.forEach(k => next[k] = (k===key) ? !curData[k] : false ); next.updatedAt = fs.serverTimestamp();
-            await fs.setDoc(myDoc, next, { merge:true });
-          }catch(e){ console.error('react fail', e); }
-        });
-      });
-
-      // realtime aggregate
-      fs.onSnapshot(col, qs => {
-        const total = Object.fromEntries(allKeys.map(k=>[k,0]));
-        qs.forEach(d=>{ const data = d.data(); allKeys.forEach(k => { if(data[k]) total[k]++; }); });
-        allKeys.forEach(k=>{ const el = document.querySelector(`[data-react-count="${k}"]`); if(el) el.textContent = total[k]; });
-      });
-    };
-
-    // --- COMMENTS
-    window.setupComments = function(postId){
-      if(!window.FB?.db){ console.warn('FB not ready (comments)'); return; }
-      const form = document.getElementById('commentForm');
-      const list = document.getElementById('commentList');
-      const status = document.querySelector('[data-comment-status]');
-      if(!form || !list) return;
-      if(status) status.classList.add('hidden');
-
-      const { db, fs } = window.FB;
-      const col = fs.collection(db, 'posts', postId, 'comments');
-      const q = fs.query(col, fs.orderBy('createdAt', 'asc'));
-
-      fs.onSnapshot(q, snap=>{
-        list.innerHTML = '';
-        snap.forEach(doc=>{
-          const d = doc.data();
-          const li = document.createElement('li');
-          li.className = 'comment-item';
-          li.innerHTML = `<strong>${esc(d.name||'Anon')}</strong><span style="opacity:.6"> — </span>${esc(d.text||'')}`;
-          list.appendChild(li);
-        });
-      });
-
-      form.addEventListener('submit', async (e)=>{
-        e.preventDefault();
-        const name = (form.querySelector('[name="name"]')?.value||'').trim() || 'Anon';
-        const text = (form.querySelector('[name="text"]')?.value||'').trim();
-        if(!text) return;
-        try{
-          await fs.addDoc(col, { name, text, createdAt: fs.serverTimestamp() });
-          form.reset();
-        }catch(err){ console.error('add comment fail', err); }
-      });
-    };
-
-    // Jika firebase baru siap setelah render
-    window.addEventListener('firebase-ready', ()=>{
-      if(location.hash.startsWith('#/post/')){
-        const id = decodeURIComponent(location.hash.replace('#/post/',''));
-        window.setupReactions(id);
-        window.setupComments(id);
-      }
+  const REACT_KEYS = [
+    {k:'like', emoji:'👍', title:'Suka'},
+    {k:'love', emoji:'❤️', title:'Love'},
+    {k:'fire', emoji:'🔥', title:'Keren'},
+    {k:'clap', emoji:'👏', title:'Tepuk tangan'},
+    {k:'wow',  emoji:'😯', title:'Wow'}
+  ];
+  function getDeviceId(){
+    let id = localStorage.getItem('deviceId');
+    if(!id){ id = 'dev-'+Math.random().toString(36).slice(2)+Date.now().toString(36); localStorage.setItem('deviceId', id); }
+    return id;
+  }
+  function el(tag, attrs={}, ...children){
+    const n = document.createElement(tag);
+    Object.entries(attrs).forEach(([k,v])=>{
+      if(k==='class') n.className = v;
+      else if(k==='style') n.style.cssText = v;
+      else if(k.startsWith('on') && typeof v==='function') n.addEventListener(k.substring(2), v);
+      else n.setAttribute(k, v);
     });
-  })();
+    children.flat().forEach(c=> n.append(c instanceof Node ? c : document.createTextNode(c)));
+    return n;
+  }
+  function fmtTS(ts){ try{ const d = ts?.toDate?.() ?? new Date();
+    return d.toLocaleString('id-ID',{dateStyle:'medium', timeStyle:'short'});}catch{ return ''; } }
+
+  async function sendReaction(postId, type){
+    const deviceId = getDeviceId();
+    const ref = doc(db, 'posts', postId, 'reactions', deviceId);
+    await setDoc(ref, {
+      device: deviceId,
+      [type]: increment(1),
+      updatedAt: serverTimestamp()
+    }, { merge: true });
+  }
+  function mountReactions(postId, mount){
+    mount.innerHTML = '';
+    const bar = el('div', {class:'rx-wrap', 'data-rx':postId});
+    REACT_KEYS.forEach(({k,emoji,title})=>{
+      const btn = el('button', {class:'rx-btn', title, 'data-react':k},
+        emoji,' ',el('b', {'data-count':k}, '0')
+      );
+      btn.addEventListener('click', async ()=>{
+        try{
+          await sendReaction(postId, k);
+          btn.classList.add('rx-pop');
+          setTimeout(()=>btn.classList.remove('rx-pop'), 160);
+        }catch(e){
+          console.error('react fail', e);
+          alert('Gagal menyimpan reaction. Coba lagi ya.');
+        }
+      });
+      bar.append(btn);
+    });
+    mount.append(bar);
+
+    // live aggregate
+    const col = collection(db, 'posts', postId, 'reactions');
+    onSnapshot(col, snap=>{
+      const sum = {like:0,love:0,fire:0,clap:0,wow:0};
+      snap.forEach(d=>{
+        const x=d.data();
+        Object.keys(sum).forEach(k=> sum[k] += Number(x[k]||0));
+      });
+      Object.keys(sum).forEach(k=>{
+        const node = bar.querySelector(`[data-count="${k}"]`);
+        if(node) node.textContent = sum[k];
+      });
+    });
+  }
+
+  function mountComments(postId, mount){
+    mount.innerHTML = '';
+    const title = el('div',{style:'font-weight:700;margin:6px 0 4px'},'Komentar');
+    const list  = el('div', {'data-cmt-list':''});
+    const form  = el('form', {class:'cmt-form', onsubmit: async (e)=>{
+      e.preventDefault();
+      const fd = new FormData(form);
+      const name = (fd.get('name')||'').toString().trim().slice(0,100);
+      const text = (fd.get('text')||'').toString().trim().slice(0,2000);
+      const avatarUrl = (fd.get('avatar')||'').toString().trim().slice(0,500);
+      if(!text){ alert('Komentar masih kosong.'); return; }
+      try{
+        await addDoc(collection(db,'posts',postId,'comments'),{
+          name, text, avatarUrl: avatarUrl||null, createdAt: serverTimestamp()
+        });
+        localStorage.setItem('cmtName', name);
+        form.reset();
+      }catch(err){
+        console.error('add comment fail', err);
+        alert('Gagal mengirim komentar.');
+      }
+    }});
+    const inpName = el('input',{name:'name', placeholder:'Nama (opsional)'}); inpName.value = localStorage.getItem('cmtName')||'';
+    const inpAvatar = el('input',{name:'avatar', placeholder:'URL foto profil (opsional)'});
+    const ta = el('textarea',{name:'text', rows:'4', placeholder:'Tulis komentar…'});
+    const actions = el('div',{class:'cmt-actions'},
+      el('button',{type:'reset', class:'btn-small'},'Bersihkan'),
+      el('button',{type:'submit', class:'btn-small btn-primary'},'Kirim')
+    );
+    form.append(inpName, inpAvatar, ta, actions);
+
+    mount.append(title, list, form);
+
+    // live stream list
+    const q = query(collection(db,'posts',postId,'comments'), orderBy('createdAt','asc'), limit(200));
+    onSnapshot(q, snap=>{
+      list.innerHTML = '';
+      if(snap.empty){ list.append(el('div',{class:'cmt-card',style:'opacity:.7'},'Belum ada komentar.')); return; }
+      snap.forEach(d=>{
+        const x=d.data();
+        list.append(
+          el('div',{class:'cmt-card'},
+            el('div',{class:'cmt-meta'},
+              x.avatarUrl? el('img',{src:x.avatarUrl,alt:'',style:'width:22px;height:22px;border-radius:999px;object-fit:cover'}):'',
+              el('span',{}, x.name||'Anonim'),
+              el('span',{}, '• ' + fmtTS(x.createdAt))
+            ),
+            el('div',{}, x.text||'')
+          )
+        );
+      });
+    });
+  }
+
+  // Auto-mount saat buka halaman post
+  window.afterPostRendered = (postId)=>{
+    const container = $('#postBody')?.parentElement || document.querySelector('main .container') || document.body;
+    const mountRx = $('#rx-mount') || container.appendChild(el('div',{id:'rx-mount'}));
+    const mountCm = $('#cmt-mount') || container.appendChild(el('div',{id:'cmt-mount'}));
+    mountReactions(postId, mountRx);
+    mountComments(postId, mountCm);
+  };
+
+  console.log('Firebase ready');
   </script>
 </body>
 </html>
