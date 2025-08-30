@@ -15,16 +15,13 @@
       --card: #181c2e;
       --text: #e6e8ef;
       --muted: #96a0b5;
-      --brand: #8b5cf6;     /* violet-500 */
-      --brand-2: #22d3ee;   /* cyan-400 */
-      --ring: #3b82f6;      /* blue-500 */
+      --brand: #8b5cf6; /* violet-500 */
+      --brand-2: #22d3ee; /* cyan-400 */
+      --ring: #3b82f6; /* blue-500 */
       --radius: 16px;
       --shadow: 0 10px 30px rgba(0,0,0,.35);
       --maxw: 1200px;
       --nav-h: 72px;
-      /* motion */
-      --ease: cubic-bezier(.2,.6,.2,1);
-      --dur-1: .18s; --dur-2: .35s; --dur-3: .6s;
     }
     html[data-theme="light"]{
       --bg: #f7f8fc;       /* light */
@@ -52,33 +49,25 @@
       backdrop-filter: blur(8px);
       background: color-mix(in oklab, var(--bg) 80%, #000 20%);
       border-bottom: 1px solid rgba(255,255,255,.06);
-      transition: background var(--dur-2) var(--ease), border-color var(--dur-2) var(--ease);
     }
     html[data-theme="light"] .nav{border-bottom:1px solid rgba(16,19,33,.08)}
     .nav-inner{display:flex;align-items:center;justify-content:space-between;gap:12px}
     .brand{display:flex;align-items:center;gap:12px;font-weight:800;letter-spacing:.2px;flex:0 0 auto}
-    .brand-badge{width:34px;height:34px;border-radius:10px;background:linear-gradient(135deg,var(--brand),var(--brand-2));display:grid;place-items:center;box-shadow: var(--shadow);transition: transform var(--dur-2) var(--ease)}
-    .brand:hover .brand-badge{transform: rotate(8deg) scale(1.05)}
+    .brand-badge{width:34px;height:34px;border-radius:10px;background:linear-gradient(135deg,var(--brand),var(--brand-2));display:grid;place-items:center;box-shadow: var(--shadow)}
     .brand-badge span{font-weight:800}
     .menu{display:flex;gap:8px;align-items:center;flex:1 1 auto;min-width:0;overflow:auto;scrollbar-width:none}
     .menu::-webkit-scrollbar{display:none}
-    .menu a{padding:10px 14px;border-radius:12px;color:var(--muted);white-space:nowrap;transition: background var(--dur-1) var(--ease), color var(--dur-1) var(--ease), transform var(--dur-1) var(--ease)}
+    .menu a{padding:10px 14px;border-radius:12px;color:var(--muted);white-space:nowrap}
     .menu a.active, .menu a:hover{color:var(--text);background:rgba(255,255,255,.06)}
     html[data-theme="light"] .menu a.active, html[data-theme="light"] .menu a:hover{background:rgba(16,19,33,.06)}
     .right-actions{display:flex;gap:10px;align-items:center;flex:0 0 auto}
-    .toggle{padding:9px 12px;border-radius:12px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.04);cursor:pointer;transition: transform var(--dur-1) var(--ease)}
-    .toggle:hover{transform: translateY(-1px)}
+    .toggle{padding:9px 12px;border-radius:12px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.04);cursor:pointer}
     html[data-theme="light"] .toggle{border-color:rgba(16,19,33,.12);background:rgba(16,19,33,.04)}
 
     /* SHARED */
     .section{padding:28px 0 80px}
     .hidden{display:none !important}
     .visually-hidden{position:absolute !important; height:1px; width:1px; overflow:hidden; clip:rect(1px,1px,1px,1px); white-space:nowrap;}
-
-    /* Animation helpers */
-    .reveal{opacity:0; transform: translateY(14px) scale(.98); filter:saturate(.9); will-change:opacity,transform; transition: opacity var(--dur-3) var(--ease), transform var(--dur-3) var(--ease), filter var(--dur-3) var(--ease)}
-    .reveal.reveal-in{opacity:1; transform:none; filter:none}
-    @media (prefers-reduced-motion: reduce){ *{animation:none !important; transition:none !important;} html,body{scroll-behavior:auto} }
 
     /* HOME (HERO + TOOLBAR + GRID) */
     .hero{padding:60px 0 32px}
@@ -88,16 +77,14 @@
     .hero h1{margin:0;font-family:"Playfair Display", serif;font-weight:600;font-size:42px;letter-spacing:.2px}
     .hero p{margin:10px 0 0;color:var(--muted);max-width:70ch;line-height:1.65}
     .hero-cta{margin-top:16px;display:flex;gap:10px;flex-wrap:wrap}
-    .btn{padding:10px 14px;border-radius:12px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.04);color:var(--text);cursor:pointer;transition: transform var(--dur-1) var(--ease), box-shadow var(--dur-2) var(--ease), background var(--dur-1) var(--ease)}
+    .btn{padding:10px 14px;border-radius:12px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.04);color:var(--text);cursor:pointer}
     .btn.primary{background:linear-gradient(135deg,var(--brand),var(--brand-2));border:none}
-    .btn:hover{transform:translateY(-2px); box-shadow:0 10px 24px rgba(0,0,0,.25)}
 
     .toolbar{position:sticky; top:calc(var(--nav-h) - 1px); z-index:65; background:color-mix(in oklab, var(--bg) 85%, #000 15%);backdrop-filter: blur(8px);
       border-top:1px solid rgba(255,255,255,.06); border-bottom:1px solid rgba(255,255,255,.06)}
     html[data-theme="light"] .toolbar{border-color:rgba(16,19,33,.08)}
     .toolbar-inner{display:flex;gap:10px;align-items:center;padding:12px 0}
-    .search{flex:1;display:flex;align-items:center;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:14px;overflow:hidden;transition: box-shadow var(--dur-2) var(--ease), border-color var(--dur-2) var(--ease)}
-    .search:focus-within{box-shadow:0 0 0 3px color-mix(in oklab, var(--ring) 70%, transparent); border-color: color-mix(in oklab, var(--ring) 50%, transparent)}
+    .search{flex:1;display:flex;align-items:center;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:14px;overflow:hidden}
     html[data-theme="light"] .search{background:rgba(16,19,33,.04);border-color:rgba(16,19,33,.12)}
     .search input{flex:1;padding:12px 14px;background:transparent;border:none;outline:none;color:var(--text)}
     .search .kbd{padding:0 10px;color:var(--muted);border-left:1px solid rgba(255,255,255,.08)}
@@ -106,13 +93,12 @@
     .grid{display:grid;gap:18px;grid-template-columns:repeat(3, 1fr)}
     @media (max-width: 1024px){.grid{grid-template-columns:repeat(2,1fr)} .hero-wrap{grid-template-columns:140px 1fr;align-items:start}}
     @media (max-width: 640px){.grid{grid-template-columns:1fr} .hero{padding:36px 0 14px} .hero-wrap{grid-template-columns:1fr; text-align:center; gap:14px} .avatar{margin-inline:auto} .hero-cta{justify-content:center} .nav-inner{flex-wrap:nowrap}}
-    .card{background:var(--card);border:1px solid rgba(255,255,255,.08);border-radius:20px;overflow:hidden;transition:transform var(--dur-2) var(--ease), box-shadow var(--dur-2) var(--ease), border-color var(--dur-2) var(--ease);display:flex;flex-direction:column;min-height:380px}
+    .card{background:var(--card);border:1px solid rgba(255,255,255,.08);border-radius:20px;overflow:hidden;transition:transform .2s ease, box-shadow .2s ease;display:flex;flex-direction:column;min-height:380px}
     html[data-theme="light"] .card{border-color:rgba(16,19,33,.08)}
-    .card:hover{transform:translateY(-6px); box-shadow:0 16px 40px rgba(0,0,0,.25); border-color:rgba(255,255,255,.18)}
+    .card:hover{transform:translateY(-4px); box-shadow:0 16px 40px rgba(0,0,0,.2)}
     .thumb{aspect-ratio:16/9; background:#0b0d13; overflow:hidden}
     html[data-theme="light"] .thumb{background:#e9ecf7}
-    .thumb img{width:100%;height:100%;object-fit:cover; transition: transform var(--dur-3) var(--ease)}
-    .card:hover .thumb img{transform: scale(1.045)}
+    .thumb img{width:100%;height:100%;object-fit:cover}
     .card-body{padding:14px;display:flex;flex-direction:column;gap:6px;flex:1}
     .meta{display:flex;gap:10px;align-items:center;color:var(--muted);font-size:13px}
     .title{margin:6px 0 8px;font-weight:700;line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
@@ -137,8 +123,7 @@
     article h2{font-size:24px;margin-top:28px}
     article p{margin:12px 0}
     article blockquote{margin:16px 0;padding:8px 14px;border-left:3px solid var(--brand);background:rgba(255,255,255,.05);border-radius:8px}
-    article img{max-width:100%;height:auto;border-radius:12px;display:block;margin:10px auto; transition: transform var(--dur-3) var(--ease)}
-    article img:hover{transform: scale(1.02)}
+    article img{max-width:100%;height:auto;border-radius:12px;display:block;margin:10px auto}
     .post-nav{display:flex;justify-content:space-between;gap:10px;margin:22px 0}
 
     /* FOOTER — BIO STYLE */
@@ -151,9 +136,8 @@
     .foot-brand{display:flex;gap:12px;align-items:center}
     .foot-brand .desc{color:var(--muted);max-width:60ch;line-height:1.7}
     .foot-social{display:flex;gap:10px;margin-top:10px}
-    .iconbtn{display:inline-grid;place-items:center;width:36px;height:36px;border-radius:10px;border:1px solid rgba(255,255,255,.12);transition:transform var(--dur-1) var(--ease)}
+    .iconbtn{display:inline-grid;place-items:center;width:36px;height:36px;border-radius:10px;border:1px solid rgba(255,255,255,.12)}
     html[data-theme="light"] .iconbtn{border-color:rgba(16,19,33,.12)}
-    .iconbtn:hover{transform:translateY(-2px)}
     .stat{display:grid;grid-template-columns:1fr 1fr;gap:10px}
     .stat .box{background:var(--card);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:12px;text-align:center}
     .quote{background:var(--card);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:14px;font-style:italic}
@@ -166,30 +150,16 @@
     .pager .btn[disabled]{opacity:.5;cursor:not-allowed}
     .pager .btn.active{background:linear-gradient(135deg,var(--brand),var(--brand-2));border:none;color:#fff}
 
-    /* LOADER */
-    .loader{position:fixed;inset:0;display:none;place-items:center;z-index:120}
-    .loader.show{display:grid}
-    .loader .back{position:absolute;inset:0;background:rgba(0,0,0,.45);backdrop-filter: blur(2px)}
-    .spinner{position:relative;width:64px;height:64px;border-radius:999px;border:4px solid rgba(255,255,255,.22);border-top-color:transparent;animation:spin 1s linear infinite}
-    .spinner::after{content:"";position:absolute;inset:8px;border-radius:999px;border:4px solid transparent;border-top-color:color-mix(in oklab, var(--brand) 60%, var(--brand-2));animation:spin 1.4s linear infinite reverse}
-    @keyframes spin{to{transform:rotate(1turn)}}
-
     /* MODAL */
     .modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;z-index:120}
     .modal:not(.hidden){display:flex}
     .modal-backdrop{position:absolute;inset:0;background:rgba(0,0,0,.6);backdrop-filter:blur(3px)}
-    .modal-card{position:relative;z-index:1;width:min(520px,92vw);background:var(--bg-soft);border:1px solid rgba(255,255,255,.12);border-radius:16px;padding:18px;box-shadow: var(--shadow)}
+    .modal-card{position:relative;z-index:1;width:min(520px,92vw);background:var(--bg-soft);border:1px solid rgba(255,255,255,.12);border-radius:16px;padding:18px}
     .modal-card input{width:100%;padding:10px 12px;border-radius:10px;border:1px solid rgba(255,255,255,.12);background:transparent;color:var(--text)}
     .modal-actions{display:flex;gap:8px;justify-content:flex-end;margin-top:10px}
   </style>
 </head>
 <body>
-  <!-- LOADER -->
-  <div class="loader" id="loader" aria-hidden="true">
-    <div class="back"></div>
-    <div class="spinner" role="status" aria-label="Memuat"></div>
-  </div>
-
   <!-- NAVBAR -->
   <nav class="nav">
     <div class="container nav-inner">
@@ -213,7 +183,7 @@
 
   <!-- ===== HOME VIEW ===== -->
   <div id="view-home">
-    <header class="hero reveal" id="top">
+    <header class="hero" id="top">
       <div class="container hero-wrap">
         <div class="avatar">
           <img src="rafyprofile.jpg" alt="Foto profil Rafy Rayyan"/>
@@ -248,7 +218,7 @@
 
   <!-- ===== BLOG VIEW ===== -->
   <div id="view-blog" class="hidden">
-    <section class="about reveal" style="padding:40px 0 10px">
+    <section class="about" style="padding:40px 0 10px">
       <div class="container"><h1 style="font-family:'Playfair Display',serif;margin:0">Blog</h1><p style="color:var(--muted)">Tulisan-tulisan selain progres novel.</p></div>
     </section>
     <div class="toolbar" aria-label="Pencarian">
@@ -268,7 +238,7 @@
 
   <!-- ===== NOVEL VIEW ===== -->
   <div id="view-novel" class="hidden">
-    <section class="about reveal" style="padding:40px 0 10px">
+    <section class="about" style="padding:40px 0 10px">
       <div class="container"><h1 style="font-family:'Playfair Display',serif;margin:0">Novel</h1><p style="color:var(--muted)">Kumpulan bab, outline, dan catatan riset novel.</p></div>
     </section>
     <div class="toolbar" aria-label="Pencarian">
@@ -288,7 +258,7 @@
 
   <!-- ===== ABOUT VIEW ===== -->
   <div id="view-about" class="hidden">
-    <section class="about reveal">
+    <section class="about">
       <div class="container about-grid">
         <div class="avatar"><img src="rafyaboutprofile.jpg" alt="Foto Rafy"></div>
         <div>
@@ -303,7 +273,7 @@
     </section>
 
     <section class="container" style="margin-bottom:50px">
-      <div class="card reveal" style="padding:18px">
+      <div class="card" style="padding:18px">
         <h2 style="margin:0 0 8px">Ringkas</h2>
         <ul style="line-height:1.8;margin:0;padding-left:18px">
           <li>Sekolah: SMAN 68 Jakarta (Kelas 12)</li>
@@ -316,14 +286,14 @@
 
   <!-- ===== POST VIEW ===== -->
   <div id="view-post" class="hidden">
-    <header class="post reveal">
+    <header class="post">
       <div class="container">
         <h1 id="postTitle" class="post-title">Judul</h1>
         <div id="postMeta" class="post-meta">Tanggal • Tag</div>
         <div id="postHero" class="post-hero hidden"><img alt=""></div>
       </div>
     </header>
-    <main class="container reveal">
+    <main class="container">
       <article id="postBody"></article>
       <nav class="post-nav">
         <a id="prevPost" class="btn" href="#">← Sebelumnya</a>
@@ -339,7 +309,7 @@
   </div>
 
   <!-- FOOTER (bio + stats + quote) -->
-  <footer class="site-footer reveal">
+  <footer class="site-footer">
     <div class="container foot-grid">
       <div>
         <div class="foot-brand">
@@ -372,7 +342,7 @@
   <!-- SUBSCRIBE MODAL -->
   <div id="subModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="subTitle">
     <div class="modal-backdrop"></div>
-    <div class="modal-card reveal">
+    <div class="modal-card">
       <h3 id="subTitle">Berlangganan via Email</h3>
       <p id="subNotice" style="color:var(--muted);margin-top:2px">Masukkan email untuk mendapat kabar saat ada tulisan baru.</p>
       <input type="email" id="subEmail" placeholder="nama@contoh.com" autocomplete="email" />
@@ -398,7 +368,7 @@
   const fmtDate = (iso) => { const d = new Date(iso + 'T00:00:00'); return `${d.getDate()} ${monthID[d.getMonth()]} ${d.getFullYear()}`; };
 
   // ===== DATA (posts with body) =====
-  const posts = [/* ——— data sama persis dengan punyamu ——— */ 
+  const posts = [
     { id:'novel-bab-1', title:'Novel — Bab 1: Pagi yang Menggantung', date:'2025-08-20',
       tags:['Novel','Progres','Bab 1'],
       image:'https://images.unsplash.com/photo-1507842217343-583bb7270b66?q=80&w=1200&auto=format&fit=crop',
@@ -406,6 +376,7 @@
       body:`<p>Pagi di Jakarta selalu terdengar sama: klakson, pedagang roti, dan radio tetangga yang tak pernah tepat frekuensi. Aku berjalan menembus lorong kos yang sempit sambil menghitung napas.</p>
       <p>Di halaman, ada sandal yang ditinggalkan tergesa. "Pertanda baik atau buruk?" batinku. Telepon bergetar—pesan dari Ibu, hanya satu kata: <em>Pulang.</em></p>
       <h2>Set up konflik</h2><p>Bab ini memperkenalkan dua hal: hilangnya figur jangkar dan kota yang ikut menelan suara.</p>`},
+
     { id:'catatan-riset', title:'Catatan Riset: Menentukan Setting & Perspektif', date:'2025-08-18',
       tags:['Novel','Catatan','Riset'],
       image:'https://images.unsplash.com/photo-1519681393784-d120267933ba?q=80&w=1200&auto=format&fit=crop',
@@ -413,57 +384,68 @@
       body:`<p>Aku membandingkan POV orang pertama vs orang ketiga terbatas. Pilihan jatuh ke orang pertama untuk menangkap kegelisahan tokoh secara dekat.</p>
       <blockquote>Satu kota bisa menjadi tokoh, jika kita memberinya napas.</blockquote>
       <p>Referensi: <em>Norwegian Wood</em>, <em>Lelaki Harimau</em>, dan esai dialog.</p>`},
+
     { id:'teknik-dialog', title:'Teknik Dialog: Biar Ngobrolnya Hidup', date:'2025-08-16',
       tags:['Tips Menulis','Workshop','Blog'],
       image:'https://images.unsplash.com/photo-1515516969-d4008cc6241a?q=80&w=1200&auto=format&fit=crop',
       excerpt:'Beberapa trik sederhana untuk bikin dialog terasa alami tanpa “ceramah”.',
       body:`<p>Trik cepat: kurangi penjelasan setelah dialog, biarkan respon lawan bicara memikul makna.</p>
         <ul><li>Gunakan jeda seperlunya.</li><li>Gesture kecil menandai emosi.</li><li>Seimbangkan “kataku, katanya” dengan aksi.</li></ul>`},
+
     { id:'novel-outline', title:'Outline Kasar: Alur Besar Novel', date:'2025-08-14',
       tags:['Novel','Outline','Progres'],
       image:'https://images.unsplash.com/photo-1491841550275-ad7854e35ca6?q=80&w=1200&auto=format&fit=crop',
       excerpt:'Kerangka 3 babak + benang merah konflik utama dan subplot keluarga.',
       body:`<p>Struktur 3 babak: pengenalan — eskalasi — resolusi. Subplot keluarga menempel pada pilihan kuliah tokoh.</p>`},
+
     { id:'random-thoughts', title:'Random Thoughts: Nulis di Tengah Deadline', date:'2025-08-12',
       tags:['Blog','Opini','Produktivitas'],
       image:'https://images.unsplash.com/photo-1516542076529-1ea3854896e1?q=80&w=1200&auto=format&fit=crop',
       excerpt:'Cara bagiku menjaga ritme nulis tanpa ngorbanin sekolah.',
       body:`<p>Strategi: nulis 25 menit, rehat 5 menit—ulang 3 kali. Satu sesi ≈ 1 halaman.</p>`},
+
     { id:'novel-bab-2', title:'Novel — Bab 2: Peta yang Hilang', date:'2025-08-10',
       tags:['Novel','Progres','Bab 2'],
       image:'https://images.unsplash.com/photo-1455390582262-044cdead277a?q=80&w=1200&auto=format&fit=crop',
       excerpt:'Tokoh menemukan peta usang yang menuntun ke masa lalu ayahnya.',
       body:`<p>Peta jadi pemicu babak dua.</p>`},
+
     { id:'tips-outline', title:'Tips Outline yang Nggak Bikin Pusing', date:'2025-08-08',
       tags:['Blog','Tips Menulis'],
       image:'https://images.unsplash.com/photo-1524578271613-d550eacf6090?q=80&w=1200&auto=format&fit=crop',
       excerpt:'Cara cepat bikin outline versi “kabel rapi”.',
       body:`<p>Pakai pola 3 babak, tulis konflik per babak dalam 1 kalimat.</p>`},
+
     { id:'novel-riset-lokasi', title:'Riset Lokasi: Catatan Lapangan', date:'2025-08-06',
       tags:['Novel','Riset'],
       image:'https://images.unsplash.com/photo-1456425712190-0dd8c2b00156?q=80&w=1200&auto=format&fit=crop',
       excerpt:'Rute bus, suara pasar pagi, dan aroma hujan—semua dicatat.',
       body:`<p>Merekam detail sensorik untuk adegan.</p>`},
+
     { id:'esai-favorit', title:'Esai Favorit tentang Penokohan', date:'2025-08-04',
       tags:['Blog','Opini'],
       image:'https://images.unsplash.com/photo-1455390582262-044cdead277a?q=80&w=1200&auto=format&fit=crop',
       excerpt:'Kumpulan esai yang bikin mikir ulang cara membangun karakter.',
       body:`<p>Daftar esai dan ringkasannya.</p>`},
+
     { id:'novel-bab-3', title:'Novel — Bab 3: Telepon Tengah Malam', date:'2025-08-02',
       tags:['Novel','Progres','Bab 3'],
       image:'https://images.unsplash.com/photo-1497250681960-ef046c08a56e?q=80&w=1200&auto=format&fit=crop',
       excerpt:'Sebuah telepon mengubah keputusan tokoh.',
       body:`<p>Twist pertama muncul.</p>`},
+
     { id:'catatan-gaya', title:'Catatan Gaya: Metafora yang Hemat', date:'2025-07-30',
       tags:['Blog','Catatan'],
       image:'https://images.unsplash.com/photo-1526318472351-c75fcf070305?q=80&w=1200&auto=format&fit=crop',
       excerpt:'Menjaga metafora tetap jernih dan tepat sasaran.',
       body:`<p>Contoh sebelum–sesudah.</p>`},
+
     { id:'review-buku', title:'Review Buku: Cara Menulis Dialog', date:'2025-07-28',
       tags:['Blog','Review'],
       image:'https://images.unsplash.com/photo-1544930834-45e1b225b0cc?q=80&w=1200&auto=format&fit=crop',
       excerpt:'Catatan dari buku craft writing favorit.',
       body:`<p>Tiga poin yang bisa langsung dipraktikkan.</p>`},
+
     { id:'novel-bab-4', title:'Novel — Bab 4: Hujan di Peron', date:'2025-07-26',
       tags:['Novel','Progres','Bab 4'],
       image:'https://images.unsplash.com/photo-1444723121867-7a241cacace9?q=80&w=1200&auto=format&fit=crop',
@@ -477,7 +459,7 @@
   // ===== COMMON RENDERERS =====
   function cardHTML(p){
     return `
-      <a class="card-link reveal" href="#/post/${encodeURIComponent(p.id)}" aria-label="Buka: ${p.title}">
+      <a class="card-link" href="#/post/${encodeURIComponent(p.id)}" aria-label="Buka: ${p.title}">
         <article class="card">
           <div class="thumb">${p.image?`<img src="${p.image}" alt="Thumbnail untuk: ${p.title}">`:''}</div>
           <div class="card-body">
@@ -501,10 +483,7 @@
     }
     return res.sort((a,b)=> new Date(b.date)-new Date(a.date));
   }
-  function renderGrid(gridEl, list){
-    gridEl.innerHTML = list.map(cardHTML).join('') || `<div style="grid-column:1/-1;padding:26px;border:1px dashed rgba(255,255,255,.18);border-radius:14px;text-align:center;color:var(--muted)">Tidak ada hasil yang cocok.</div>`;
-    observeReveals();
-  }
+  function renderGrid(gridEl, list){ gridEl.innerHTML = list.map(cardHTML).join('') || `<div style="grid-column:1/-1;padding:26px;border:1px dashed rgba(255,255,255,.18);border-radius:14px;text-align:center;color:var(--muted)">Tidak ada hasil yang cocok.</div>`; }
 
   // ===== WIRING SEARCH =====
   function setupSearch(view){
@@ -595,10 +574,9 @@
     else { hero.classList.add('hidden'); }
     $('#postBody').innerHTML = post.body;
     const prev = posts[idx-1]||null; const next = posts[idx+1]||null;
-    const prevA = $('#prevPost'); const nextA = $('#nextPost']);
+    const prevA = $('#prevPost'); const nextA = $('#nextPost');
     if(prev){ prevA.href = `#/post/${prev.id}`; prevA.textContent = '← ' + prev.title; prevA.style.visibility='visible'; } else prevA.style.visibility='hidden';
     if(next){ nextA.href = `#/post/${next.id}`; nextA.textContent = next.title + ' →'; nextA.style.visibility='visible'; } else nextA.style.visibility='hidden';
-    observeReveals();
   }
 
   function setActive(h){
@@ -625,20 +603,7 @@
     else if(h==='#/novel'){ show('novel'); renderNovel(); }
     else { show('home'); renderHome(); }
   }
-
-  // Loader helpers
-  const loader = $('#loader');
-  const showLoader = (on=true)=>{ if(!loader) return; loader.classList.toggle('show', !!on); };
-
-  // Scroll reveal
-  let io;
-  function observeReveals(){
-    if(io){ $$('.reveal').forEach(el=> io.observe(el)); return; }
-    io = new IntersectionObserver((entries)=>{
-      for(const ent of entries){ if(ent.isIntersecting){ ent.target.classList.add('reveal-in'); io.unobserve(ent.target);} }
-    }, {root:null, rootMargin:'0px 0px -10% 0px', threshold:0.15});
-    $$('.reveal').forEach(el=> io.observe(el));
-  }
+  window.addEventListener('hashchange', routeRender);
 
   // footer stats
   $('#statPosts').textContent = posts.length;
@@ -664,19 +629,13 @@
   $('#subModal')?.addEventListener('click', (e)=>{ if(e.target.id==='subModal' || e.target.classList.contains('modal-backdrop')) closeSub(); });
 
   // initial
-  function handleHashChange(){ showLoader(true); requestAnimationFrame(()=>{ routeRender(); setTimeout(()=> showLoader(false), 240); }); }
-  window.addEventListener('hashchange', handleHashChange);
-
-  showLoader(true);
   routeRender();
-  observeReveals();
-  setTimeout(()=> showLoader(false), 320);
 
   // back-to-top
   $('#toTop')?.addEventListener('click', ()=> window.scrollTo({top:0, behavior:'smooth'}));
 
   // re-render on resize (for responsive per-page)
-  let rszT;
+  let rszT; 
   window.addEventListener('resize', ()=>{ clearTimeout(rszT); rszT = setTimeout(()=> routeRender(), 120); });
   </script>
 </body>
