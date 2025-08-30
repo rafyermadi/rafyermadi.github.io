@@ -764,6 +764,47 @@
     window.addEventListener('hashchange', ()=>{ if(localStorage.getItem('bgm')==='on' && bgm.paused){ playIfAllowed(); } });
   })();
   </script>
+  
+  <!-- BGM first-visit autoplay + hashchange intercept -->
+  <script>
+  (function(){
+    var bgm = document.getElementById('bgm');
+    var btn = document.getElementById('bgmToggle');
+    if(!bgm || !btn) { return; }
+    var FIRST='bgm_first_visit';
+    var PENDING='bgm_autoplay_pending';
+    function updateIco(){
+      var ico = btn.querySelector('.bgm-ico');
+      if(!ico) return;
+      var playing = !bgm.paused && !bgm.ended;
+      btn.classList.toggle('playing', playing);
+      btn.setAttribute('aria-pressed', playing? 'true':'false');
+      ico.textContent = playing? '🔊':'🔇';
+    }
+    // First visit in this tab => try autoplay once
+    if(!sessionStorage.getItem(FIRST)){
+      sessionStorage.setItem(FIRST,'1');
+      bgm.play().then(function(){ localStorage.setItem('bgm','on'); updateIco(); })
+        .catch(function(){ sessionStorage.setItem(PENDING,'1'); updateIco(); });
+      document.addEventListener('pointerdown', function once(){
+        if(sessionStorage.getItem(PENDING)==='1' && bgm.paused){
+          bgm.play().then(function(){ localStorage.setItem('bgm','on'); })
+            .catch(function(){})
+            .finally(function(){ updateIco(); sessionStorage.removeItem(PENDING); });
+        }
+        document.removeEventListener('pointerdown', once);
+      }, {capture:false});
+    }
+    // Intercept hashchange: call router, block other listeners so BGM tidak auto-play saat pindah halaman
+    if(!window.__bgm_intercept_installed){
+      window.__bgm_intercept_installed = true;
+      window.addEventListener('hashchange', function(e){
+        if (typeof routeRender === 'function') { try { routeRender(); } catch(_){} }
+        e.stopImmediatePropagation();
+        e.stopPropagation();
+      }, true);
+    }
+  })();
+  </script>
 </body>
 </html>
-
