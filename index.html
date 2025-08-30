@@ -126,23 +126,18 @@
     article img{max-width:100%;height:auto;border-radius:12px;display:block;margin:10px auto}
     .post-nav{display:flex;justify-content:space-between;gap:10px;margin:22px 0}
 
-    /* REACTIONS */
-    .react-row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:8px 0 14px}
-    .react{display:inline-flex;align-items:center;gap:8px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.04);padding:6px 10px;border-radius:999px;cursor:pointer;user-select:none}
-    .react span.count{min-width:1.3em;text-align:center;font-weight:700;color:#cbd5e1}
-    .react.on{background:linear-gradient(135deg,var(--brand),var(--brand-2));border:none;color:#fff}
-    html[data-theme="light"] .react{border-color:rgba(16,19,33,.12);background:rgba(16,19,33,.04)}
+    /* REACTION ROW */
+    .react-row{display:flex;gap:10px;align-items:center;margin:14px 0}
+    .react-btn{display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border-radius:999px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.04);font-size:14px;cursor:pointer;user-select:none}
+    .react-btn.active{outline:2px solid color-mix(in oklab, var(--brand) 60%, transparent)}
 
     /* COMMENTS */
-    #comments{margin:26px 0 60px}
-    .cform{display:grid;gap:8px;margin:12px 0;padding:14px;border:1px solid rgba(255,255,255,.12);border-radius:14px;background:rgba(255,255,255,.03)}
-    .cform .row{display:grid;gap:8px;grid-template-columns:1fr 1fr}
-    .cform input,.cform textarea{padding:10px 12px;border-radius:10px;background:transparent;border:1px solid rgba(255,255,255,.12);color:var(--text)}
-    .cform .actions{display:flex;gap:8px;justify-content:flex-end}
-    .clist{display:flex;flex-direction:column;gap:10px;margin:12px 0}
-    .comment{background:var(--card);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:10px}
-    .comment .meta{display:flex;gap:10px;align-items:center;color:var(--muted);font-size:12px;margin-bottom:6px}
-    .avatar-s{width:28px;height:28px;border-radius:999px;object-fit:cover;background:#111}
+    #cform{display:grid;gap:8px;background:var(--card);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:12px}
+    #cform input, #cform textarea{width:100%;padding:10px 12px;border-radius:10px;border:1px solid rgba(255,255,255,.12);background:transparent;color:var(--text);font:inherit}
+    #cform textarea{min-height:90px;resize:vertical}
+    #clist{display:flex;flex-direction:column;gap:10px;margin:12px 0}
+    .comment.card{background:var(--card);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:10px}
+    .comment .meta{font-size:12px;color:var(--muted)}
 
     /* FOOTER — BIO STYLE */
     .site-footer{position:relative;border-top:1px solid rgba(255,255,255,.08);padding:50px 0 24px;color:var(--muted);overflow:hidden;background:
@@ -180,7 +175,6 @@
     :root{ --ease: cubic-bezier(.22,1,.36,1); }
     @keyframes spin{to{transform:rotate(360deg)}}
 
-    /* Ensure JS hide wins over inline display */
     .loader.hidden{display:none !important}
     @keyframes fadeSlideUp{from{opacity:0;transform:translateY(16px) scale(.98)}to{opacity:1;transform:none}}
     @keyframes shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
@@ -219,10 +213,11 @@
   </style>
 </head>
 <body>
-  <!-- Instant Loader at top for hard reload / direct URL -->
+  <!-- Instant Loader -->
   <div id="loader" class="loader" style="position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.45);backdrop-filter:blur(2px);z-index:120">
     <div class="spinner" style="width:48px;height:48px;border-radius:50%;border:4px solid rgba(255,255,255,.25);border-top-color:var(--brand-2);animation:spin 1s linear infinite" aria-label="Memuat"></div>
   </div>
+
   <!-- NAVBAR -->
   <nav class="nav">
     <div class="container nav-inner">
@@ -359,7 +354,7 @@
     <main class="container">
       <article id="postBody"></article>
 
-      <!-- REACTION ROW -->
+      <!-- REACTIONS -->
       <div class="react-row" id="reactRow" aria-label="Reaksi pembaca"></div>
 
       <nav class="post-nav">
@@ -367,21 +362,19 @@
         <a id="nextPost" class="btn" href="#">Berikutnya →</a>
       </nav>
 
-      <!-- Komentar -->
+      <!-- COMMENTS (form di atas, list terbaru di atas) -->
       <section id="comments" style="margin:26px 0 60px">
         <h2>Komentar</h2>
-        <div id="cform" class="cform">
-          <div class="row">
-            <input id="cname" placeholder="Nama (opsional)" autocomplete="name" />
-            <input id="cavatar" placeholder="URL foto profil (opsional)" autocomplete="off" />
+        <form id="cform" autocomplete="off">
+          <input id="cname" type="text" placeholder="Nama (opsional)" maxlength="80"/>
+          <input id="cavatar" type="url" placeholder="URL foto profil (opsional)"/>
+          <textarea id="ctext" placeholder="Tulis komentar…" maxlength="2000" required></textarea>
+          <div style="display:flex;gap:8px;justify-content:flex-end">
+            <button type="reset" class="btn">Bersihkan</button>
+            <button type="submit" class="btn primary">Kirim</button>
           </div>
-          <textarea id="ctext" rows="3" placeholder="Tulis komentar…"></textarea>
-          <div class="actions">
-            <button class="btn" id="cclear" type="button">Bersihkan</button>
-            <button class="btn primary" id="csend" type="button">Kirim</button>
-          </div>
-        </div>
-        <div id="clist" class="clist"></div>
+        </form>
+        <div id="clist"></div>
       </section>
     </main>
   </div>
@@ -432,6 +425,7 @@
     </div>
   </div>
 
+  <!-- CORE JS (router, ui, posts) -->
   <script>
   // ===== UTIL =====
   const $ = (sel, el = document) => el.querySelector(sel);
@@ -587,12 +581,7 @@
     if(!input || input.dataset.inited){return;}
     input.dataset.inited='1';
     window.addEventListener('keydown', (e)=>{ if(document.getElementById(`view-${view}`).classList.contains('hidden')) return; if(e.key==='/' && document.activeElement!==input){ e.preventDefault(); input.focus(); } });
-    input.addEventListener('input', e=>{ S.q = e.target.value; S.page = 1; routeRender();
-  // animate hero on first view
-  attachReveal(document);
-  onScrollNav();
-  // theme icon micro-animation
-  try{ const i=$('#themeIcon'); i.style.transition='transform .45s var(--ease)'; }catch(_){} });
+    input.addEventListener('input', e=>{ S.q = e.target.value; S.page = 1; routeRender(); });
   }
 
   // ===== PAGINATION =====
@@ -632,15 +621,12 @@
   }
 
   // ===== INTERACTIONS & ANIMATIONS =====
-  // nav elevate on scroll
   function onScrollNav(){ document.querySelector('.nav')?.classList.toggle('scrolled', window.scrollY>4); }
   window.addEventListener('scroll', onScrollNav);
 
-  // loader overlay
   const showLoader = ()=> $('#page-loader')?.classList.add('show');
   const hideLoader = ()=> $('#page-loader')?.classList.remove('show');
 
-  // intersection observer for reveal
   const revealObs = new IntersectionObserver((entries)=>{
     entries.forEach(en=>{ if(en.isIntersecting){ en.target.classList.add('reveal-in'); revealObs.unobserve(en.target); } });
   }, {rootMargin:'0px 0px -10% 0px', threshold:0.1});
@@ -652,7 +638,6 @@
     attachReveal(document);
   }
 
-  // ===== RENDER PER ROUTE =====
   function renderHome(){
     setupSearch('home');
     const filtered = searchFilter(posts.slice(), states.home.q);
@@ -685,30 +670,6 @@
     renderGrid(document.getElementById('grid-novel'), filtered.slice(start, start+per));
     renderPager('novel', total);
   }
-  function renderPost(id){
-    const idx = posts.findIndex(p=>p.id===id); const post = posts[idx] || posts[0];
-    document.title = post.title + ' — Rafy Rayyan';
-    $('#postTitle').textContent = post.title;
-    $('#postMeta').textContent = fmtDate(post.date) + ' • ' + post.tags.join(', ');
-    const hero = $('#postHero');
-    if(post.image){ hero.classList.remove('hidden'); const img = hero.firstElementChild; img.src = post.image; img.alt = 'Gambar: ' + post.title; }
-    else { hero.classList.add('hidden'); }
-    $('#postBody').innerHTML = post.body;
-    const prev = posts[idx-1]||null; const next = posts[idx+1]||null;
-    const prevA = $('#prevPost'); const nextA = $('#nextPost');
-    if(prev){ prevA.href = `#/post/${prev.id}`; prevA.textContent = '← ' + prev.title; prevA.style.visibility='visible'; } else prevA.style.visibility='hidden';
-    if(next){ nextA.href = `#/post/${next.id}`; nextA.textContent = next.title + ' →'; nextA.style.visibility='visible'; } else nextA.style.visibility='hidden';
-
-    // Build reaction buttons (UI only; data via Firebase in module below)
-    const row = $('#reactRow');
-    row.innerHTML = [
-      ['like','👍'],['love','❤️'],['fire','🔥'],['clap','👏'],['wow','😯']
-    ].map(([k,emo])=>`<button class="react" data-key="${k}" aria-pressed="false">${emo} <span class="count" id="r_${k}">0</span></button>`).join(' ');
-
-    // Hook Firebase (if ready)
-    if(window.setupReactions) window.setupReactions(post.id);
-    if(window.setupComments) window.setupComments(post.id);
-  }
 
   function setActive(h){
     $$('.menu a').forEach(a=>{
@@ -725,11 +686,34 @@
     $('#view-novel').classList.toggle('hidden', view!=='novel');
     window.scrollTo({top:0, behavior:'auto'});
   }
+  
+  // Placeholder: will be replaced after Firebase init
+  window.setupReactionsAndComments = () => {};
+
+  function renderPost(id){
+    const idx = posts.findIndex(p=>p.id===id); const post = posts[idx] || posts[0];
+    document.title = post.title + ' — Rafy Rayyan';
+    $('#postTitle').textContent = post.title;
+    $('#postMeta').textContent = fmtDate(post.date) + ' • ' + post.tags.join(', ');
+    const hero = $('#postHero');
+    if(post.image){ hero.classList.remove('hidden'); const img = hero.firstElementChild; img.src = post.image; img.alt = 'Gambar: ' + post.title; }
+    else { hero.classList.add('hidden'); }
+    $('#postBody').innerHTML = post.body;
+    const prev = posts[idx-1]||null; const next = posts[idx+1]||null;
+    const prevA = $('#prevPost'); const nextA = $('#nextPost');
+    if(prev){ prevA.href = `#/post/${prev.id}`; prevA.textContent = '← ' + prev.title; prevA.style.visibility='visible'; } else prevA.style.visibility='hidden';
+    if(next){ nextA.href = `#/post/${next.id}`; nextA.textContent = next.title + ' →'; nextA.style.visibility='visible'; } else nextA.style.visibility='hidden';
+
+    // Setup reactions & comments for this post (after Firebase ready)
+    if (typeof window.setupReactionsAndComments === 'function') {
+      window.setupReactionsAndComments(post.id);
+    }
+  }
+
   function routeRender(){
     const h = location.hash || '#/' ;
     setActive(h);
-    showLoader();
-    const finish = ()=>{ prepareReveal(); setTimeout(hideLoader, 200); onScrollNav(); };
+    const finish = ()=>{ prepareReveal(); onScrollNav(); };
     if(h.startsWith('#/post/')){ show('post'); renderPost(decodeURIComponent(h.replace('#/post/',''))); finish(); }
     else if(h==='#/about'){ show('about'); finish(); }
     else if(h==='#/blog'){ show('blog'); renderBlog(); finish(); }
@@ -770,7 +754,8 @@
   // re-render on resize (for responsive per-page)
   let rszT; 
   window.addEventListener('resize', ()=>{ clearTimeout(rszT); rszT = setTimeout(()=> routeRender(), 120); });
-    // --- Boot splash loader on hard reload / direct URL ---
+
+  // Boot splash hide
   (function bootSplash(){
     var l = document.getElementById('loader') || document.getElementById('page-loader');
     if(!l) return;
@@ -786,8 +771,10 @@
     if (document.readyState === 'complete' || document.readyState === 'interactive') splash();
     else document.addEventListener('DOMContentLoaded', splash, {once:true});
   })();
-</script>
+  </script>
+
   <div id="page-loader" class="loader" aria-hidden="true"><div class="spinner" role="status" aria-label="Memuat"></div></div>
+
   <!-- BACKGROUND MUSIC -->
   <audio id="bgm" loop preload="auto"></audio>
   <button id="bgmToggle" class="bgm-btn" aria-pressed="false" title="Musik latar">
@@ -812,7 +799,7 @@
     window.addEventListener('hashchange', ()=>{ if(localStorage.getItem('bgm')==='on' && bgm.paused){ playIfAllowed(); } });
   })();
   </script>
-  
+
   <!-- BGM first-visit autoplay + hashchange intercept -->
   <script>
   (function(){
@@ -829,7 +816,6 @@
       btn.setAttribute('aria-pressed', playing? 'true':'false');
       ico.textContent = playing? '🔊':'🔇';
     }
-    // First visit in this tab => try autoplay once
     if(!sessionStorage.getItem(FIRST)){
       sessionStorage.setItem(FIRST,'1');
       bgm.play().then(function(){ localStorage.setItem('bgm','on'); updateIco(); })
@@ -838,12 +824,11 @@
         if(sessionStorage.getItem(PENDING)==='1' && bgm.paused){
           bgm.play().then(function(){ localStorage.setItem('bgm','on'); })
             .catch(function(){})
-            .finally(function(){ updateIco(); sessionStorage.removeItem(PENDING); document.removeEventListener('pointerdown', once); });
+            .finally(function(){ updateIco(); sessionStorage.removeItem(PENDING); });
         }
         document.removeEventListener('pointerdown', once);
       }, {capture:false});
     }
-    // Intercept hashchange: call router, block other listeners so BGM tidak auto-play saat pindah halaman
     if(!window.__bgm_intercept_installed){
       window.__bgm_intercept_installed = true;
       window.addEventListener('hashchange', function(e){
@@ -854,7 +839,7 @@
     }
   })();
   </script>
-  
+
   <!-- Show BGM toast if autoplay blocked on first visit -->
   <script>
   (function(){
@@ -887,10 +872,10 @@
   })();
   </script>
 
-  <!-- ===== FIREBASE (REACTION + COMMENTS) ===== -->
+  <!-- FIREBASE (module) + Reactions & Comments logic -->
   <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
-    import { getFirestore, doc, setDoc, getDoc, serverTimestamp, collection, addDoc, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
+    import { getFirestore, doc, getDoc, setDoc, deleteDoc, collection, addDoc, serverTimestamp, onSnapshot, query, orderBy, limit, getDocs } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
 
     // === Your Firebase config ===
     const firebaseConfig = {
@@ -902,123 +887,156 @@
       appId: "1:529097759816:web:7c0081bf4b612b2dee4c7d"
     };
 
-    // init
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
-    window.firebaseReady = true;
+    console.log('Firebase ready');
 
-    function deviceId(){
+    // === helpers ===
+    function getDeviceId(){
       let id = localStorage.getItem('deviceId');
-      if(!id){ id = (crypto.randomUUID? crypto.randomUUID(): Math.random().toString(36).slice(2)); localStorage.setItem('deviceId', id); }
+      if(!id){
+        id = (crypto && crypto.randomUUID) ? crypto.randomUUID() : 'dev_' + Math.random().toString(36).slice(2);
+        localStorage.setItem('deviceId', id);
+      }
       return id;
     }
 
-    // ======== REACTIONS ========
-    const EMO = ['like','love','fire','clap','wow'];
-    function refReact(postId){ return doc(db, `posts/${postId}/reactions/${deviceId()}`); }
+    const EMOJIS = [
+      {key:'like', label:'👍'},
+      {key:'love', label:'❤️'},
+      {key:'fire', label:'🔥'},
+      {key:'clap', label:'👏'},
+      {key:'wow',  label:'😯'},
+    ];
 
-    function setBtnState(mine){
-      EMO.forEach(k=>{
-        const b = document.querySelector(`button.react[data-key="${k}"]`);
-        if(!b) return;
-        const on = !!(mine && mine[k]);
-        b.classList.toggle('on', on);
-        b.setAttribute('aria-pressed', on? 'true':'false');
+    // Expose to router: init for current post
+    window.setupReactionsAndComments = function(postId){
+      setupReactions(postId);
+      setupComments(postId);
+    }
+
+    // ====== REACTIONS ======
+    function renderReactRow(container, counts, myFlags){
+      container.innerHTML = '';
+      EMOJIS.forEach(({key,label})=>{
+        const btn = document.createElement('button');
+        btn.className = 'react-btn' + (myFlags[key] ? ' active' : '');
+        btn.dataset.key = key;
+        btn.innerHTML = `${label} <span class="cnt">${counts[key]||0}</span>`;
+        container.appendChild(btn);
       });
     }
 
-    async function toggle(postId, key){
-      const ref = refReact(postId);
-      try{
-        const snap = await getDoc(ref);
-        const cur = (snap.exists() && snap.data()[key]) === true;
-        await setDoc(ref, { [key]: !cur, updatedAt: serverTimestamp() }, { merge: true });
-      }catch(err){
-        alert('Gagal menyimpan reaction.'); console.error(err);
-      }
-    }
+    function setupReactions(postId){
+      const wrap = document.getElementById('reactRow');
+      if(!wrap) return;
+      const deviceId = getDeviceId();
+      const myRef = doc(db, `posts/${postId}/reactions/${deviceId}`);
 
-    function liveCounts(postId){
-      const col = collection(db, `posts/${postId}/reactions`);
-      return onSnapshot(col, (qs)=>{
-        const agg = {like:0,love:0,fire:0,clap:0,wow:0};
-        let mine = null;
-        qs.forEach(d=>{
-          const v=d.data();
-          EMO.forEach(k=>{ if(v[k]) agg[k]++; });
-          if(d.id===deviceId()) mine=v;
+      // local state
+      let myFlags = {like:false,love:false,fire:false,clap:false,wow:false};
+
+      // Listen my doc (to set active state)
+      onSnapshot(myRef, (snap)=>{
+        if(snap.exists()){
+          const d = snap.data();
+          myFlags = {
+            like: !!d.like, love: !!d.love, fire: !!d.fire, clap: !!d.clap, wow: !!d.wow
+          };
+        }else{
+          myFlags = {like:false,love:false,fire:false,clap:false,wow:false};
+        }
+      });
+
+      // Listen all docs to aggregate counts
+      const listRef = collection(db, `posts/${postId}/reactions`);
+      onSnapshot(listRef, (snap)=>{
+        const counts = {like:0,love:0,fire:0,clap:0,wow:0};
+        snap.forEach(docu=>{
+          const d = docu.data();
+          if(d.like) counts.like++;
+          if(d.love) counts.love++;
+          if(d.fire) counts.fire++;
+          if(d.clap) counts.clap++;
+          if(d.wow) counts.wow++;
         });
-        EMO.forEach(k=>{ const el = document.getElementById('r_'+k); if(el) el.textContent = agg[k]||0; });
-        setBtnState(mine||{});
+        renderReactRow(wrap, counts, myFlags);
       });
-    }
 
-    // expose to global so renderPost() can call
-    window.setupReactions = function(postId){
-      const row = document.getElementById('reactRow');
-      if(!row) return;
       // click handler (toggle)
-      row.onclick = (e)=>{
-        const btn = e.target.closest('button.react');
-        if(!btn) return;
-        const key = btn.getAttribute('data-key');
-        if(!EMO.includes(key)) return;
-        toggle(postId, key);
-      };
-      // live counts
-      if(window.__unsubReact) window.__unsubReact();
-      window.__unsubReact = liveCounts(postId);
-    }
-
-    // ======== COMMENTS ======== (form di atas, list terbaru di atas)
-    window.setupComments = function(postId){
-      const list = document.getElementById('clist');
-      const nameI = document.getElementById('cname');
-      const avI   = document.getElementById('cavatar');
-      const textI = document.getElementById('ctext');
-      const sendB = document.getElementById('csend');
-      const clrB  = document.getElementById('cclear');
-      if(!list || !nameI || !textI || !sendB) return;
-
-      clrB?.addEventListener('click', ()=>{ textI.value=''; });
-      sendB.onclick = async ()=>{
-        const text = (textI.value||'').trim();
-        if(!text) return;
+      wrap.onclick = async (e)=>{
+        const key = e.target.closest('button')?.dataset.key;
+        if(!key) return;
         try{
-          await addDoc(collection(db, `posts/${postId}/comments`), {
-            name: (nameI.value||'').trim(),
-            avatar: (avI.value||'').trim(),
-            text,
-            createdAt: serverTimestamp(),
-            deviceId: deviceId(),
-          });
-          textI.value='';
-        }catch(err){ console.error(err); alert('Gagal mengirim komentar'); }
-      };
+          // toggle value
+          const next = !myFlags[key];
+          myFlags[key] = next; // optimistic
 
-      if(window.__unsubCmt) window.__unsubCmt();
-      const qy = query(collection(db, `posts/${postId}/comments`), orderBy('createdAt','desc'));
-      window.__unsubCmt = onSnapshot(qy, (qs)=>{
-        const html = [];
-        qs.forEach(d=>{
-          const v=d.data();
-          const t = (v.text||'').replace(/</g,'&lt;');
-          const nm = (v.name||'').replace(/</g,'&lt;') || 'Anonim';
-          const at = v.createdAt?.toDate ? v.createdAt.toDate() : null;
-          const time = at? at.toLocaleString('id-ID',{ dateStyle:'medium', timeStyle:'short'}) : '';
-          html.push(`
-            <div class="comment">
-              <div class="meta">
-                ${v.avatar? `<img class="avatar-s" src="${v.avatar}" alt=""/>` : `<span class="avatar-s" style="display:inline-block"></span>`}
-                <strong>${nm}</strong>
-                <span>• ${time}</span>
-              </div>
-              <div class="body">${t}</div>
-            </div>`);
-        });
-        list.innerHTML = html.join('');
-      });
+          // === PATCH: include deviceId on setDoc (WAJIB untuk lolos rules) ===
+          await setDoc(
+            myRef,
+            { deviceId, [key]: next, updatedAt: serverTimestamp() },
+            { merge: true }
+          );
+
+          // Optional: hapus jika semua false
+          const allOff = !myFlags.like && !myFlags.love && !myFlags.fire && !myFlags.clap && !myFlags.wow;
+          if(allOff){
+            await deleteDoc(myRef);
+          }
+        }catch(err){
+          console.error(err);
+          alert('Gagal menyimpan reaction.');
+        }
+      };
     }
+
+    // ====== COMMENTS ======
+    function setupComments(postId){
+      const form = document.getElementById('cform');
+      const list = document.getElementById('clist');
+      if(!form || !list) return;
+
+      // load latest first
+      const qRef = query(collection(db, `posts/${postId}/comments`), orderBy('createdAt', 'desc'), limit(100));
+      onSnapshot(qRef, (snap)=>{
+        list.innerHTML = '';
+        snap.forEach(docu=>{
+          const d = docu.data();
+          const card = document.createElement('div');
+          card.className = 'comment card';
+          const name = (d.name||'anon');
+          const time = d.createdAt?.toDate ? d.createdAt.toDate() : new Date();
+          const when = time.toLocaleString('id-ID', { day:'2-digit', month:'short', year:'numeric', hour:'2-digit', minute:'2-digit' });
+          card.innerHTML = `
+            <div class="meta"><strong>${name}</strong> • ${when}</div>
+            <div style="margin-top:6px">${(d.text||'').replace(/</g,'&lt;')}</div>
+          `;
+          list.appendChild(card);
+        });
+      });
+
+      form.onsubmit = async (e)=>{
+        e.preventDefault();
+        try{
+          const name = document.getElementById('cname').value.trim();
+          const avatar = document.getElementById('cavatar').value.trim() || null;
+          const text = document.getElementById('ctext').value.trim();
+          if(!text) return;
+          await addDoc(collection(db, `posts/${postId}/comments`), {
+            name: name || 'anon',
+            avatar,
+            text,
+            createdAt: serverTimestamp()
+          });
+          form.reset();
+        }catch(err){
+          console.error(err);
+          alert('Gagal mengirim komentar.');
+        }
+      };
+    }
+
   </script>
 </body>
 </html>
