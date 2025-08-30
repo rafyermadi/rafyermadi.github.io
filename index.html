@@ -22,6 +22,7 @@
       --shadow: 0 10px 30px rgba(0,0,0,.35);
       --maxw: 1200px;
       --nav-h: 72px;
+      --ease: cubic-bezier(.22,1,.36,1);
     }
     html[data-theme="light"]{
       --bg: #f7f8fc;       /* light */
@@ -49,6 +50,7 @@
       backdrop-filter: blur(8px);
       background: color-mix(in oklab, var(--bg) 80%, #000 20%);
       border-bottom: 1px solid rgba(255,255,255,.06);
+      transition:background .3s var(--ease), box-shadow .3s var(--ease), transform .3s var(--ease)
     }
     html[data-theme="light"] .nav{border-bottom:1px solid rgba(16,19,33,.08)}
     .nav-inner{display:flex;align-items:center;justify-content:space-between;gap:12px}
@@ -77,8 +79,10 @@
     .hero h1{margin:0;font-family:"Playfair Display", serif;font-weight:600;font-size:42px;letter-spacing:.2px}
     .hero p{margin:10px 0 0;color:var(--muted);max-width:70ch;line-height:1.65}
     .hero-cta{margin-top:16px;display:flex;gap:10px;flex-wrap:wrap}
-    .btn{padding:10px 14px;border-radius:12px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.04);color:var(--text);cursor:pointer}
+    .btn{padding:10px 14px;border-radius:12px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.04);color:var(--text);cursor:pointer;transition:transform .2s var(--ease), box-shadow .2s var(--ease), background .2s var(--ease)}
     .btn.primary{background:linear-gradient(135deg,var(--brand),var(--brand-2));border:none}
+    .btn:hover{box-shadow:0 10px 24px rgba(0,0,0,.25); transform:translateY(-1px)}
+    .btn:active{transform:translateY(0) scale(.98)}
 
     .toolbar{position:sticky; top:calc(var(--nav-h) - 1px); z-index:65; background:color-mix(in oklab, var(--bg) 85%, #000 15%);backdrop-filter: blur(8px);
       border-top:1px solid rgba(255,255,255,.06); border-bottom:1px solid rgba(255,255,255,.06)}
@@ -86,7 +90,7 @@
     .toolbar-inner{display:flex;gap:10px;align-items:center;padding:12px 0}
     .search{flex:1;display:flex;align-items:center;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:14px;overflow:hidden}
     html[data-theme="light"] .search{background:rgba(16,19,33,.04);border-color:rgba(16,19,33,.12)}
-    .search input{flex:1;padding:12px 14px;background:transparent;border:none;outline:none;color:var(--text)}
+    .search input{flex:1;padding:12px 14px;background:transparent;border:none;outline:none;color:var(--text);transition:border-color .2s ease, box-shadow .2s ease}
     .search .kbd{padding:0 10px;color:var(--muted);border-left:1px solid rgba(255,255,255,.08)}
     html[data-theme="light"] .search .kbd{border-left-color:rgba(16,19,33,.1)}
 
@@ -98,7 +102,8 @@
     .card:hover{transform:translateY(-4px); box-shadow:0 16px 40px rgba(0,0,0,.2)}
     .thumb{aspect-ratio:16/9; background:#0b0d13; overflow:hidden; position:relative}
     html[data-theme="light"] .thumb{background:#e9ecf7}
-    .thumb img{width:100%;height:100%;object-fit:cover}
+    .thumb img{width:100%;height:100%;object-fit:cover;transition:transform .6s var(--ease)}
+    .card:hover .thumb img{transform:scale(1.06)}
     .card-body{padding:14px;display:flex;flex-direction:column;gap:6px;flex:1}
     .meta{display:flex;gap:10px;align-items:center;color:var(--muted);font-size:13px}
     .title{margin:6px 0 8px;font-weight:700;line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
@@ -125,12 +130,6 @@
     article blockquote{margin:16px 0;padding:8px 14px;border-left:3px solid var(--brand);background:rgba(255,255,255,.05);border-radius:8px}
     article img{max-width:100%;height:auto;border-radius:12px;display:block;margin:10px auto}
     .post-nav{display:flex;justify-content:space-between;gap:10px;margin:22px 0}
-
-    /* REACTIONS */
-    .react-row{display:flex;gap:10px;align-items:center;margin:8px 0 18px}
-    .rx-btn{display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border-radius:999px;background:var(--card);border:1px solid rgba(255,255,255,.12);cursor:pointer;font-size:14px}
-    .rx-btn .rx-c{min-width:16px;text-align:center;color:var(--muted)}
-    .rx-btn.active{outline:2px solid color-mix(in oklab, var(--brand) 50%, transparent)}
 
     /* FOOTER — BIO STYLE */
     .site-footer{position:relative;border-top:1px solid rgba(255,255,255,.08);padding:50px 0 24px;color:var(--muted);overflow:hidden;background:
@@ -163,54 +162,54 @@
     .modal-card{position:relative;z-index:1;width:min(520px,92vw);background:var(--bg-soft);border:1px solid rgba(255,255,255,.12);border-radius:16px;padding:18px}
     .modal-card input{width:100%;padding:10px 12px;border-radius:10px;border:1px solid rgba(255,255,255,.12);background:transparent;color:var(--text)}
     .modal-actions{display:flex;gap:8px;justify-content:flex-end;margin-top:10px}
-  
-    /* ANIMATIONS */
-    :root{ --ease: cubic-bezier(.22,1,.36,1); }
-    @keyframes spin{to{transform:rotate(360deg)}}
 
-    /* Ensure JS hide wins over inline display */
-    .loader.hidden{display:none !important}
-    @keyframes fadeSlideUp{from{opacity:0;transform:translateY(16px) scale(.98)}to{opacity:1;transform:none}}
-    @keyframes shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
-
-    .will-reveal{opacity:0;transform:translateY(16px) scale(.98)}
-    .reveal-in{opacity:1;transform:none;transition:opacity .7s var(--ease), transform .7s var(--ease)}
-
-    .card .thumb img{transition:transform .6s var(--ease)}
-    .card:hover .thumb img{transform:scale(1.06)}
-
-    .btn{transition:transform .2s var(--ease), box-shadow .2s var(--ease), background .2s var(--ease)}
-    .btn:hover{box-shadow:0 10px 24px rgba(0,0,0,.25); transform:translateY(-1px)}
-    .btn:active{transform:translateY(0) scale(.98)}
-
-    .search input{transition:border-color .2s ease, box-shadow .2s ease}
-    .search:focus-within{box-shadow:0 0 0 3px color-mix(in oklab, var(--ring) 40%, transparent)}
-
-    .nav{transition:background .3s var(--ease), box-shadow .3s var(--ease), transform .3s var(--ease)}
-    .nav.scrolled{box-shadow:0 12px 30px rgba(0,0,0,.35); background:color-mix(in oklab, var(--bg) 70%, #000 30%)}
-
+    /* ANIMATIONS & skeleton */
     .loader{position:fixed; inset:0; display:none; place-items:center; background:rgba(0,0,0,.35); backdrop-filter:blur(4px); z-index:140}
     .loader.show{display:grid}
     .loader .spinner{width:56px;height:56px;border-radius:50%;background:conic-gradient(from 0deg, var(--brand), var(--brand-2), var(--brand));mask:radial-gradient(farthest-side, transparent calc(50% - 6px), #000 0);animation:spin 1s linear infinite}
-
+    @keyframes spin{to{transform:rotate(360deg)}}
+    @keyframes shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
     .thumb.skeleton::before{content:"";position:absolute;inset:0;background:linear-gradient(110deg, rgba(255,255,255,.06) 8%, rgba(255,255,255,.18) 18%, rgba(255,255,255,.06) 33%);background-size:200% 100%;animation:shimmer 1.2s linear infinite}
+    .will-reveal{opacity:0;transform:translateY(16px) scale(.98)}
+    .reveal-in{opacity:1;transform:none;transition:opacity .7s var(--ease), transform .7s var(--ease)}
+    .nav.scrolled{box-shadow:0 12px 30px rgba(0,0,0,.35); background:color-mix(in oklab, var(--bg) 70%, #000 30%)}
 
-    @media (prefers-reduced-motion: reduce){*{animation:none !important; transition:none !important}}
-  
-    /* Force-fixed position override for background music button */
+    /* BGM button */
     .bgm-btn{position:fixed !important; right:max(16px, env(safe-area-inset-right)); bottom:max(16px, env(safe-area-inset-bottom)); z-index:200}
-  
-    /* === BGM Toast (one-time prompt when autoplay blocked) === */
     .bgm-toast{position:fixed; right:max(70px, calc(env(safe-area-inset-right) + 70px)); bottom:max(22px, calc(env(safe-area-inset-bottom) + 22px)); z-index:201; background:color-mix(in oklab, var(--bg) 85%, #000 15%); color:var(--text); border:1px solid rgba(255,255,255,.12); padding:8px 12px; border-radius:12px; box-shadow: var(--shadow); font-size:14px; opacity:0; transform: translateY(6px); animation: toastIn .25s var(--ease) forwards}
     html[data-theme="light"] .bgm-toast{border-color: rgba(16,19,33,.12); background: rgba(16,19,33,.92)}
     @keyframes toastIn{to{opacity:1; transform:none}}
+
+    /* ===== Reaction row ===== */
+    .react-row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:8px 0 14px}
+    .react{display:inline-flex;gap:6px;align-items:center; padding:6px 10px; border-radius:999px; background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.12); cursor:pointer; user-select:none}
+    .react .cnt{min-width:14px;text-align:center;font-weight:600;font-size:12px;opacity:.9}
+    .react.on{outline:2px solid color-mix(in oklab, var(--brand) 55%, transparent)}
+
+    /* ===== Komentar override (kartu kecil + form di atas) ===== */
+    #comments .card{min-height:auto; padding:12px; border-radius:12px}
+    #comments .c-form{display:grid; gap:8px}
+    #comments .c-row{display:flex; gap:8px; flex-wrap:wrap}
+    #comments .c-form input,
+    #comments .c-form textarea{width:100%; padding:10px 12px; border-radius:10px; border:1px solid rgba(255,255,255,.12); background:transparent; color:var(--text); outline:none}
+    html[data-theme="light"] #comments .c-form input,
+    html[data-theme="light"] #comments .c-form textarea{border-color:rgba(16,19,33,.12)}
+    #comments .c-actions{display:flex; gap:8px; justify-content:flex-end}
+    #comments .c-item{display:grid; grid-template-columns:32px 1fr; gap:10px}
+    #comments .c-dot{width:32px; height:32px; border-radius:999px; background:rgba(255,255,255,.08); display:grid; place-items:center; font-size:12px; color:var(--muted)}
+    #comments .c-meta{font-size:12px; color:var(--muted)}
+    #comments .c-name{font-weight:600; margin-right:6px}
+    #comments .c-body{white-space:pre-wrap}
+
+    @media (prefers-reduced-motion: reduce){*{animation:none !important; transition:none !important}}
   </style>
 </head>
 <body>
-  <!-- Instant Loader at top for hard reload / direct URL -->
+  <!-- Instant Loader -->
   <div id="loader" class="loader" style="position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.45);backdrop-filter:blur(2px);z-index:120">
     <div class="spinner" style="width:48px;height:48px;border-radius:50%;border:4px solid rgba(255,255,255,.25);border-top-color:var(--brand-2);animation:spin 1s linear infinite" aria-label="Memuat"></div>
   </div>
+
   <!-- NAVBAR -->
   <nav class="nav">
     <div class="container nav-inner">
@@ -241,9 +240,7 @@
         </div>
         <div>
           <h1>Halo, aku <span style="background:linear-gradient(135deg,var(--brand),var(--brand-2));-webkit-background-clip:text;background-clip:text;color:transparent">Rafy Rayyan</span>.</h1>
-          <p>
-            Ini adalah rumah digital untuk tugas akhir Bahasa Indonesia kelas 12 sekaligus blog pribadiku. Di sini aku mengarsipkan progres <em>novel</em> yang sedang kutulis, juga catatan, opini, dan eksperimen lain. Selamat mampir! ✨
-          </p>
+          <p>Ini adalah rumah digital untuk tugas akhir Bahasa Indonesia kelas 12 sekaligus blog pribadiku. Di sini aku mengarsipkan progres <em>novel</em> yang sedang kutulis, juga catatan, opini, dan eksperimen lain. Selamat mampir! ✨</p>
           <div class="hero-cta">
             <button class="btn primary" id="openSub">Berlangganan via Email</button>
           </div>
@@ -348,28 +345,34 @@
       <article id="postBody"></article>
 
       <!-- REACTION ROW -->
-      <div class="react-row" id="reactRow" aria-label="Reaksi pembaca"></div>
+      <div class="react-row" id="reactRow" aria-label="Reaksi pembaca">
+        <button class="react" data-key="like" title="Suka">👍 <span class="cnt">0</span></button>
+        <button class="react" data-key="love" title="Love">❤️ <span class="cnt">0</span></button>
+        <button class="react" data-key="fire" title="Keren">🔥 <span class="cnt">0</span></button>
+        <button class="react" data-key="clap" title="Tepuk tangan">👏 <span class="cnt">0</span></button>
+        <button class="react" data-key="wow" title="Wow">😯 <span class="cnt">0</span></button>
+      </div>
 
       <nav class="post-nav">
         <a id="prevPost" class="btn" href="#">← Sebelumnya</a>
         <a id="nextPost" class="btn" href="#">Berikutnya →</a>
       </nav>
 
-      <!-- Komentar -->
+      <!-- KOMENTAR: form di atas, daftar terbaru di atas -->
       <section id="comments" style="margin:26px 0 60px">
-        <h2>Komentar</h2>
-        <div id="cList" style="display:flex;flex-direction:column;gap:10px;margin:12px 0"></div>
-        <div class="card" style="padding:12px">
-          <div style="display:grid;gap:8px">
-            <input id="cName" placeholder="Nama (opsional)" />
-            <input id="cAvatar" placeholder="URL foto profil (opsional)" />
-            <textarea id="cText" rows="3" placeholder="Tulis komentar…" style="resize:vertical;border-radius:10px;border:1px solid rgba(255,255,255,.12);background:transparent;color:var(--text);padding:10px"></textarea>
-            <div style="display:flex;gap:8px;justify-content:flex-end">
-              <button class="btn" id="cClear">Bersihkan</button>
-              <button class="btn primary" id="cSend">Kirim</button>
-            </div>
+        <h2 style="margin:0 0 10px">Komentar</h2>
+        <div id="cform" class="card c-form" aria-label="Form komentar">
+          <div class="c-row">
+            <input id="cname" placeholder="Nama (opsional)" autocomplete="name" />
+            <input id="cavatar" placeholder="URL foto profil (opsional)" autocomplete="url" />
+          </div>
+          <textarea id="ctext" rows="3" placeholder="Tulis komentar…"></textarea>
+          <div class="c-actions">
+            <button id="cClear" class="btn" type="button">Bersihkan</button>
+            <button id="cSend" class="btn primary" type="button">Kirim</button>
           </div>
         </div>
+        <div id="clist" style="display:flex; flex-direction:column; gap:10px; margin:12px 0"></div>
       </section>
     </main>
   </div>
@@ -420,430 +423,10 @@
     </div>
   </div>
 
-  <!-- BACKGROUND MUSIC -->
-  <div id="page-loader" class="loader" aria-hidden="true"><div class="spinner" role="status" aria-label="Memuat"></div></div>
-  <audio id="bgm" loop preload="auto"></audio>
-  <button id="bgmToggle" class="bgm-btn" aria-pressed="false" title="Musik latar">
-    <span class="bgm-ico" aria-hidden="true">🔇</span>
-    <span class="visually-hidden">Toggle musik latar</span>
-  </button>
-
-  <!-- === SELURUH LOGIKA DALAM 1 MODULE (termasuk Firebase) === -->
+  <!-- Firebase (module): expose db + helpers ke window -->
   <script type="module">
-    /* =================== THEME =================== */
-    const $ = (sel, el = document) => el.querySelector(sel);
-    const $$ = (sel, el = document) => Array.from(el.querySelectorAll(sel));
-    const root = document.documentElement;
-    const setTheme = (t)=>{ root.setAttribute('data-theme', t); localStorage.setItem('theme', t); const ic = $('#themeIcon'); if(ic){ ic.textContent = t==='light' ? '☀️' : '🌙'; ic.style.transition='transform .45s var(--ease)'; ic.style.transform = t==='light' ? 'rotate(-180deg) scale(1.1)' : 'rotate(0deg)'; } $('#themeToggle').setAttribute('aria-pressed', t==='dark' ? 'true':'false'); };
-    const savedTheme = localStorage.getItem('theme') || (matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
-    setTheme(savedTheme);
-    $('#themeToggle').addEventListener('click', ()=> setTheme(root.getAttribute('data-theme')==='dark'?'light':'dark'));
-
-    const monthID = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
-    const fmtDate = (iso) => { const d = new Date(iso + 'T00:00:00'); return `${d.getDate()} ${monthID[d.getMonth()]} ${d.getFullYear()}`; };
-
-    /* =================== DATA POSTS =================== */
-    const posts = [
-      { id:'novel-bab-1', title:'Novel — Bab 1: Pagi yang Menggantung', date:'2025-08-20',
-        tags:['Novel','Progres','Bab 1'],
-        image:'https://images.unsplash.com/photo-1507842217343-583bb7270b66?q=80&w=1200&auto=format&fit=crop',
-        excerpt:'Awal cerita—sebuah pagi di Jakarta, ketika segalanya terasa biasa saja, sampai tidak lagi…',
-        body:`<p>Pagi di Jakarta selalu terdengar sama: klakson, pedagang roti, dan radio tetangga yang tak pernah tepat frekuensi. Aku berjalan menembus lorong kos yang sempit sambil menghitung napas.</p>
-        <p>Di halaman, ada sandal yang ditinggalkan tergesa. "Pertanda baik atau buruk?" batinku. Telepon bergetar—pesan dari Ibu, hanya satu kata: <em>Pulang.</em></p>
-        <h2>Set up konflik</h2><p>Bab ini memperkenalkan dua hal: hilangnya figur jangkar dan kota yang ikut menelan suara.</p>`},
-
-      { id:'catatan-riset', title:'Catatan Riset: Menentukan Setting & Perspektif', date:'2025-08-18',
-        tags:['Novel','Catatan','Riset'],
-        image:'https://images.unsplash.com/photo-1519681393784-d120267933ba?q=80&w=1200&auto=format&fit=crop',
-        excerpt:'Kenapa memilih sudut pandang orang pertama? Plus daftar referensi yang kupakai.',
-        body:`<p>Aku membandingkan POV orang pertama vs orang ketiga terbatas. Pilihan jatuh ke orang pertama untuk menangkap kegelisahan tokoh secara dekat.</p>
-        <blockquote>Satu kota bisa menjadi tokoh, jika kita memberinya napas.</blockquote>
-        <p>Referensi: <em>Norwegian Wood</em>, <em>Lelaki Harimau</em>, dan esai dialog.</p>`},
-
-      { id:'teknik-dialog', title:'Teknik Dialog: Biar Ngobrolnya Hidup', date:'2025-08-16',
-        tags:['Tips Menulis','Workshop','Blog'],
-        image:'https://images.unsplash.com/photo-1515516969-d4008cc6241a?q=80&w=1200&auto=format&fit=crop',
-        excerpt:'Beberapa trik sederhana untuk bikin dialog terasa alami tanpa “ceramah”.',
-        body:`<p>Trik cepat: kurangi penjelasan setelah dialog, biarkan respon lawan bicara memikul makna.</p>
-          <ul><li>Gunakan jeda seperlunya.</li><li>Gesture kecil menandai emosi.</li><li>Seimbangkan “kataku, katanya” dengan aksi.</li></ul>`},
-
-      { id:'novel-outline', title:'Outline Kasar: Alur Besar Novel', date:'2025-08-14',
-        tags:['Novel','Outline','Progres'],
-        image:'https://images.unsplash.com/photo-1491841550275-ad7854e35ca6?q=80&w=1200&auto=format&fit=crop',
-        excerpt:'Kerangka 3 babak + benang merah konflik utama dan subplot keluarga.',
-        body:`<p>Struktur 3 babak: pengenalan — eskalasi — resolusi. Subplot keluarga menempel pada pilihan kuliah tokoh.</p>`},
-
-      { id:'random-thoughts', title:'Random Thoughts: Nulis di Tengah Deadline', date:'2025-08-12',
-        tags:['Blog','Opini','Produktivitas'],
-        image:'https://images.unsplash.com/photo-1516542076529-1ea3854896e1?q=80&w=1200&auto=format&fit=crop',
-        excerpt:'Cara bagiku menjaga ritme nulis tanpa ngorbanin sekolah.',
-        body:`<p>Strategi: nulis 25 menit, rehat 5 menit—ulang 3 kali. Satu sesi ≈ 1 halaman.</p>`},
-
-      { id:'novel-bab-2', title:'Novel — Bab 2: Peta yang Hilang', date:'2025-08-10',
-        tags:['Novel','Progres','Bab 2'],
-        image:'https://images.unsplash.com/photo-1455390582262-044cdead277a?q=80&w=1200&auto=format&fit=crop',
-        excerpt:'Tokoh menemukan peta usang yang menuntun ke masa lalu ayahnya.',
-        body:`<p>Peta jadi pemicu babak dua.</p>`},
-
-      { id:'tips-outline', title:'Tips Outline yang Nggak Bikin Pusing', date:'2025-08-08',
-        tags:['Blog','Tips Menulis'],
-        image:'https://images.unsplash.com/photo-1524578271613-d550eacf6090?q=80&w=1200&auto=format&fit=crop',
-        excerpt:'Cara cepat bikin outline versi “kabel rapi”.',
-        body:`<p>Pakai pola 3 babak, tulis konflik per babak dalam 1 kalimat.</p>`},
-
-      { id:'novel-riset-lokasi', title:'Riset Lokasi: Catatan Lapangan', date:'2025-08-06',
-        tags:['Novel','Riset'],
-        image:'https://images.unsplash.com/photo-1456425712190-0dd8c2b00156?q=80&w=1200&auto=format&fit=crop',
-        excerpt:'Rute bus, suara pasar pagi, dan aroma hujan—semua dicatat.',
-        body:`<p>Merekam detail sensorik untuk adegan.</p>`},
-
-      { id:'esai-favorit', title:'Esai Favorit tentang Penokohan', date:'2025-08-04',
-        tags:['Blog','Opini'],
-        image:'https://images.unsplash.com/photo-1455390582262-044cdead277a?q=80&w=1200&auto=format&fit=crop',
-        excerpt:'Kumpulan esai yang bikin mikir ulang cara membangun karakter.',
-        body:`<p>Daftar esai dan ringkasannya.</p>`},
-
-      { id:'novel-bab-3', title:'Novel — Bab 3: Telepon Tengah Malam', date:'2025-08-02',
-        tags:['Novel','Progres','Bab 3'],
-        image:'https://images.unsplash.com/photo-1497250681960-ef046c08a56e?q=80&w=1200&auto=format&fit=crop',
-        excerpt:'Sebuah telepon mengubah keputusan tokoh.',
-        body:`<p>Twist pertama muncul.</p>`},
-
-      { id:'catatan-gaya', title:'Catatan Gaya: Metafora yang Hemat', date:'2025-07-30',
-        tags:['Blog','Catatan'],
-        image:'https://images.unsplash.com/photo-1526318472351-c75fcf070305?q=80&w=1200&auto=format&fit=crop',
-        excerpt:'Menjaga metafora tetap jernih dan tepat sasaran.',
-        body:`<p>Contoh sebelum–sesudah.</p>`},
-
-      { id:'review-buku', title:'Review Buku: Cara Menulis Dialog', date:'2025-07-28',
-        tags:['Blog','Review'],
-        image:'https://images.unsplash.com/photo-1544930834-45e1b225b0cc?q=80&w=1200&auto=format&fit=crop',
-        excerpt:'Catatan dari buku craft writing favorit.',
-        body:`<p>Tiga poin yang bisa langsung dipraktikkan.</p>`},
-
-      { id:'novel-bab-4', title:'Novel — Bab 4: Hujan di Peron', date:'2025-07-26',
-        tags:['Novel','Progres','Bab 4'],
-        image:'https://images.unsplash.com/photo-1444723121867-7a241cacace9?q=80&w=1200&auto=format&fit=crop',
-        excerpt:'Adegan peron jadi titik balik relasi.',
-        body:`<p>Adegan dialog singkat namun tajam.</p>`},
-    ];
-
-    const states = { home:{q:'', page:1}, blog:{q:'', page:1}, novel:{q:'', page:1} };
-
-    function cardHTML(p){
-      return `
-        <a class="card-link" href="#/post/${encodeURIComponent(p.id)}" aria-label="Buka: ${p.title}">
-          <article class="card will-reveal">
-            <div class="thumb">${p.image?`<img src="${p.image}" alt="Thumbnail untuk: ${p.title}">`:''}</div>
-            <div class="card-body">
-              <div class="meta"><span>${fmtDate(p.date)}</span> • <span>${p.tags[0]}</span></div>
-              <h3 class="title">${p.title}</h3>
-              <p>${p.excerpt}</p>
-              <div class="tags">${p.tags.map(t => `<span class="tag">#${t}</span>`).join('')}</div>
-            </div>
-          </article>
-        </a>`;
-    }
-    const norm = (s)=> (s||'').toLowerCase().replace(/<[^>]+>/g,' ');
-    function searchFilter(list, q){
-      const tokens = q.trim()? q.trim().toLowerCase().split(/\s+/):[];
-      let res = list;
-      if(tokens.length){
-        res = res.filter(p=>{
-          const hay = norm(p.title+' '+p.excerpt+' '+p.tags.join(' ')+' '+p.body);
-          return tokens.every(t=> hay.includes(t));
-        });
-      }
-      return res.sort((a,b)=> new Date(b.date)-new Date(a.date));
-    }
-    function renderGrid(gridEl, list){
-      const fallback = `<div style="grid-column:1/-1;padding:26px;border:1px dashed rgba(255,255,255,.18);border-radius:14px;text-align:center;color:var(--muted)">Tidak ada hasil yang cocok.</div>`;
-      gridEl.innerHTML = list.length ? list.map(cardHTML).join('') : fallback;
-      attachReveal(gridEl);
-      $$('.thumb', gridEl).forEach(t=>{
-        t.classList.add('skeleton');
-        const img = t.querySelector('img');
-        if(img){
-          img.setAttribute('loading','lazy');
-          img.addEventListener('load', ()=> t.classList.remove('skeleton'), {once:true});
-          img.addEventListener('error', ()=> t.classList.remove('skeleton'), {once:true});
-        } else { t.classList.remove('skeleton'); }
-      });
-    }
-
-    function setupSearch(view){
-      const S = states[view];
-      const input = document.getElementById(`search-${view}`);
-      if(!input || input.dataset.inited){return;}
-      input.dataset.inited='1';
-      window.addEventListener('keydown', (e)=>{ if(document.getElementById(`view-${view}`).classList.contains('hidden')) return; if(e.key==='/' && document.activeElement!==input){ e.preventDefault(); input.focus(); } });
-      input.addEventListener('input', e=>{ S.q = e.target.value; S.page = 1; routeRender(); });
-    }
-
-    const perPageForViewport = ()=> (innerWidth < 640 ? 8 : (innerWidth <= 1024 ? 8 : 12));
-
-    function renderPager(view, totalPages){
-      const wrap = document.getElementById(`pager-${view}`);
-      if(!wrap) return;
-      const cur = states[view].page;
-      if(totalPages <= 1){ wrap.innerHTML = ''; return; }
-
-      const nums = [];
-      const push = n => nums.push(`<button class="btn ${n===cur?'active':''}" data-p="${n}">${n}</button>`);
-      const addDots = ()=> nums.push(`<span style="padding:8px 6px;color:var(--muted)">…</span>`);
-
-      push(1);
-      if(cur > 3) addDots();
-      for(let n=Math.max(2,cur-1); n<=Math.min(totalPages-1,cur+1); n++) push(n);
-      if(cur < totalPages-2) addDots();
-      if(totalPages>1) push(totalPages);
-
-      wrap.innerHTML = `
-        <button class="btn" data-p="prev" ${cur===1?'disabled':''}>←</button>
-        ${nums.join('')}
-        <button class="btn" data-p="next" ${cur===totalPages?'disabled':''}>→</button>
-      `;
-
-      wrap.onclick = (e)=>{
-        const p = e.target.getAttribute('data-p');
-        if(!p) return;
-        if(p==='prev' && states[view].page>1) states[view].page--;
-        else if(p==='next' && states[view].page<totalPages) states[view].page++;
-        else if(/^\d+$/.test(p)) states[view].page = parseInt(p,10);
-        routeRender();
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      };
-    }
-
-    function onScrollNav(){ document.querySelector('.nav')?.classList.toggle('scrolled', window.scrollY>4); }
-    window.addEventListener('scroll', onScrollNav);
-
-    const showLoader = ()=> $('#page-loader')?.classList.add('show');
-    const hideLoader = ()=> $('#page-loader')?.classList.remove('show');
-
-    const revealObs = new IntersectionObserver((entries)=>{
-      entries.forEach(en=>{ if(en.isIntersecting){ en.target.classList.add('reveal-in'); revealObs.unobserve(en.target); } });
-    }, {rootMargin:'0px 0px -10% 0px', threshold:0.1});
-    function attachReveal(scope){ $$('.will-reveal', scope||document).forEach(el=> revealObs.observe(el)); }
-    function prepareReveal(){
-      ['.hero .avatar', '.hero h1', '.hero p', '.hero .hero-cta', '.about .avatar', '.about .card', '.foot-grid > *'].forEach(sel=>{
-        $$(sel).forEach(el=>{ if(!el.classList.contains('will-reveal')) el.classList.add('will-reveal'); });
-      });
-      attachReveal(document);
-    }
-
-    function renderHome(){
-      setupSearch('home');
-      const filtered = searchFilter(posts.slice(), states.home.q);
-      const per = perPageForViewport();
-      const total = Math.max(1, Math.ceil(filtered.length / per));
-      states.home.page = Math.min(Math.max(1, states.home.page), total);
-      const start = (states.home.page-1)*per;
-      renderGrid(document.getElementById('grid-home'), filtered.slice(start, start+per));
-      renderPager('home', total);
-    }
-    function renderBlog(){
-      setupSearch('blog');
-      const base = posts.filter(p=> p.tags.includes('Blog'));
-      const filtered = searchFilter(base, states.blog.q);
-      const per = perPageForViewport();
-      const total = Math.max(1, Math.ceil(filtered.length / per));
-      states.blog.page = Math.min(Math.max(1, states.blog.page), total);
-      const start = (states.blog.page-1)*per;
-      renderGrid(document.getElementById('grid-blog'), filtered.slice(start, start+per));
-      renderPager('blog', total);
-    }
-    function renderNovel(){
-      setupSearch('novel');
-      const base = posts.filter(p=> p.tags.includes('Novel'));
-      const filtered = searchFilter(base, states.novel.q);
-      const per = perPageForViewport();
-      const total = Math.max(1, Math.ceil(filtered.length / per));
-      states.novel.page = Math.min(Math.max(1, states.novel.page), total);
-      const start = (states.novel.page-1)*per;
-      renderGrid(document.getElementById('grid-novel'), filtered.slice(start, start+per));
-      renderPager('novel', total);
-    }
-
-    function renderPost(id){
-      const idx = posts.findIndex(p=>p.id===id); const post = posts[idx] || posts[0];
-      document.title = post.title + ' — Rafy Rayyan';
-      $('#postTitle').textContent = post.title;
-      $('#postMeta').textContent = fmtDate(post.date) + ' • ' + post.tags.join(', ');
-      const hero = $('#postHero');
-      if(post.image){ hero.classList.remove('hidden'); const img = hero.firstElementChild; img.src = post.image; img.alt = 'Gambar: ' + post.title; }
-      else { hero.classList.add('hidden'); }
-      $('#postBody').innerHTML = post.body;
-      const prev = posts[idx-1]||null; const next = posts[idx+1]||null;
-      const prevA = $('#prevPost'); const nextA = $('#nextPost');
-      if(prev){ prevA.href = `#/post/${prev.id}`; prevA.textContent = '← ' + prev.title; prevA.style.visibility='visible'; } else prevA.style.visibility='hidden';
-      if(next){ nextA.href = `#/post/${next.id}`; nextA.textContent = next.title + ' →'; nextA.style.visibility='visible'; } else nextA.style.visibility='hidden';
-
-      // Setup reactions & comments for this post
-      setupReactions(post.id);
-      setupComments(post.id);
-    }
-
-    function setActive(h){
-      $$('.menu a').forEach(a=>{
-        const k=a.dataset.link;
-        const on = (k==='home' && (h==='#/'||h===''||h==='#')) || (k==='about'&&h.startsWith('#/about')) || (k==='blog'&&h.startsWith('#/blog')) || (k==='novel'&&h.startsWith('#/novel'));
-        a.classList.toggle('active', on);
-      });
-    }
-    function show(view){
-      $('#view-home').classList.toggle('hidden', view!=='home');
-      $('#view-about').classList.toggle('hidden', view!=='about');
-      $('#view-post').classList.toggle('hidden', view!=='post');
-      $('#view-blog').classList.toggle('hidden', view!=='blog');
-      $('#view-novel').classList.toggle('hidden', view!=='novel');
-      window.scrollTo({top:0, behavior:'auto'});
-    }
-    function routeRender(){
-      const h = location.hash || '#/' ;
-      setActive(h);
-      showLoader();
-      const finish = ()=>{ prepareReveal(); setTimeout(hideLoader, 200); onScrollNav(); };
-      if(h.startsWith('#/post/')){ show('post'); renderPost(decodeURIComponent(h.replace('#/post/',''))); finish(); }
-      else if(h==='#/about'){ show('about'); finish(); }
-      else if(h==='#/blog'){ show('blog'); renderBlog(); finish(); }
-      else if(h==='#/novel'){ show('novel'); renderNovel(); finish(); }
-      else { show('home'); renderHome(); finish(); }
-    }
-    window.addEventListener('hashchange', routeRender);
-
-    $('#statPosts').textContent = posts.length;
-    $('#statTags').textContent = new Set(posts.flatMap(p=>p.tags)).size;
-
-    function openSub(){ const m=$('#subModal'); if(m){ m.classList.remove('hidden'); $('#subEmail')?.focus(); document.body.style.overflow='hidden'; }}
-    function closeSub(){ $('#subModal')?.classList.add('hidden'); document.body.style.overflow=''; }
-    $('#openSub')?.addEventListener('click', openSub);
-    $('#closeSub')?.addEventListener('click', closeSub);
-    $('#subCancel')?.addEventListener('click', closeSub);
-    $('#subSave')?.addEventListener('click', ()=>{
-      const email = ($('#subEmail')?.value||'').trim();
-      const valid = /[^@\s]+@[^@\s]+\.[^@\s]+/.test(email);
-      const notice = $('#subNotice');
-      if(!valid){ notice.textContent='Email tidak valid.'; notice.style.color='salmon'; return; }
-      const key='subscribers'; const arr = JSON.parse(localStorage.getItem(key)||'[]');
-      if(!arr.includes(email)) arr.push(email);
-      localStorage.setItem(key, JSON.stringify(arr));
-      notice.textContent='Berhasil! Email tersimpan di perangkat ini. Integrasi pengiriman bisa ditambahkan nanti.'; notice.style.color='var(--muted)';
-      setTimeout(closeSub, 1000);
-    });
-    $('#subModal')?.addEventListener('click', (e)=>{ if(e.target.id==='subModal' || e.target.classList.contains('modal-backdrop')) closeSub(); });
-
-    // back-to-top
-    $('#toTop')?.addEventListener('click', ()=> window.scrollTo({top:0, behavior:'smooth'}));
-
-    // re-render on resize
-    let rszT; 
-    window.addEventListener('resize', ()=>{ clearTimeout(rszT); rszT = setTimeout(()=> routeRender(), 120); });
-
-    (function bootSplash(){
-      var l = document.getElementById('loader') || document.getElementById('page-loader');
-      if(!l) return;
-      var min = 550;
-      function splash(){
-        var start = performance.now();
-        l.classList.remove('hidden');
-        requestAnimationFrame(function(){
-          var wait = Math.max(0, min - (performance.now() - start));
-          setTimeout(function(){ l.classList.add('hidden'); }, wait);
-        });
-      }
-      if (document.readyState === 'complete' || document.readyState === 'interactive') splash();
-      else document.addEventListener('DOMContentLoaded', splash, {once:true});
-    })();
-
-    /* =================== BGM =================== */
-    (function(){
-      const MUSIC_SRC = new URLSearchParams(location.search).get('music') || 'bgm.mp3';
-      const bgm = document.getElementById('bgm');
-      const bgmBtn = document.getElementById('bgmToggle');
-      if(!bgm || !bgmBtn) return;
-      const ico = bgmBtn.querySelector('.bgm-ico');
-      bgm.src = MUSIC_SRC; bgm.loop = true; bgm.preload = 'auto';
-      try{ const vol = parseFloat(localStorage.getItem('bgmVol')||'0.7'); if(!Number.isNaN(vol)) bgm.volume = Math.min(1, Math.max(0, vol)); }catch(_){ }
-      function updateUI(){ const playing = !bgm.paused && !bgm.ended; bgmBtn.classList.toggle('playing', playing); bgmBtn.setAttribute('aria-pressed', playing? 'true':'false'); if(ico) ico.textContent = playing? '🔊':'🔇'; }
-      async function playIfAllowed(){ try{ await bgm.play(); localStorage.setItem('bgm','on'); } catch(e){ localStorage.setItem('bgm','off'); } finally{ updateUI(); } }
-      if(localStorage.getItem('bgm')==='on'){ playIfAllowed(); } else { updateUI(); }
-      bgmBtn.addEventListener('click', async ()=>{ if(bgm.paused){ await playIfAllowed(); } else { bgm.pause(); localStorage.setItem('bgm','off'); updateUI(); } });
-      document.addEventListener('pointerdown', function once(){ if(localStorage.getItem('bgm')==='on' && bgm.paused){ playIfAllowed(); } document.removeEventListener('pointerdown', once); }, {capture:false});
-      window.addEventListener('hashchange', ()=>{ if(localStorage.getItem('bgm')==='on' && bgm.paused){ playIfAllowed(); } });
-    })();
-
-    (function(){
-      var bgm = document.getElementById('bgm');
-      var btn = document.getElementById('bgmToggle');
-      if(!bgm || !btn) { return; }
-      var FIRST='bgm_first_visit';
-      var PENDING='bgm_autoplay_pending';
-      function updateIco(){
-        var ico = btn.querySelector('.bgm-ico');
-        if(!ico) return;
-        var playing = !bgm.paused && !bgm.ended;
-        btn.classList.toggle('playing', playing);
-        btn.setAttribute('aria-pressed', playing? 'true':'false');
-        ico.textContent = playing? '🔊':'🔇';
-      }
-      if(!sessionStorage.getItem(FIRST)){
-        sessionStorage.setItem(FIRST,'1');
-        bgm.play().then(function(){ localStorage.setItem('bgm','on'); updateIco(); })
-          .catch(function(){ sessionStorage.setItem(PENDING,'1'); updateIco(); });
-        document.addEventListener('pointerdown', function once(){
-          if(sessionStorage.getItem(PENDING)==='1' && bgm.paused){
-            bgm.play().then(function(){ localStorage.setItem('bgm','on'); })
-              .catch(function(){})
-              .finally(function(){ updateIco(); sessionStorage.removeItem(PENDING); document.removeEventListener('pointerdown', once); });
-          } else {
-            updateIco(); document.removeEventListener('pointerdown', once);
-          }
-        }, {capture:false});
-      }
-      if(!window.__bgm_intercept_installed){
-        window.__bgm_intercept_installed = true;
-        window.addEventListener('hashchange', function(e){
-          if (typeof routeRender === 'function') { try { routeRender(); } catch(_){} }
-          e.stopImmediatePropagation();
-          e.stopPropagation();
-        }, true);
-      }
-    })();
-
-    (function(){
-      if(sessionStorage.getItem('bgm_autoplay_pending') !== '1') return;
-      var btn = document.getElementById('bgmToggle');
-      var bgm = document.getElementById('bgm');
-      if(!btn) return;
-      function showToast(){
-        if(document.getElementById('bgmToast')) return;
-        var t = document.createElement('div');
-        t.className = 'bgm-toast';
-        t.id = 'bgmToast';
-        t.textContent = 'Klik untuk nyalakan musik 🎵';
-        document.body.appendChild(t);
-        setTimeout(function(){ if(t && t.parentNode){ t.parentNode.removeChild(t); } }, 7000);
-      }
-      function hideToast(){ var t = document.getElementById('bgmToast'); if(t && t.parentNode){ t.parentNode.removeChild(t); } }
-      showToast();
-      if(bgm){ bgm.addEventListener('play', hideToast, {once:true}); }
-      btn.addEventListener('click', hideToast, {once:true});
-      function onInteract(){
-        if(bgm && sessionStorage.getItem('bgm_autoplay_pending')==='1' && bgm.paused){
-          bgm.play().then(function(){ localStorage.setItem('bgm','on'); }).catch(function(){})
-            .finally(function(){ hideToast(); sessionStorage.removeItem('bgm_autoplay_pending'); document.removeEventListener('pointerdown', onInteract); });
-        } else {
-          hideToast(); document.removeEventListener('pointerdown', onInteract);
-        }
-      }
-      document.addEventListener('pointerdown', onInteract, {capture:false});
-    })();
-
-    /* =================== FIREBASE (COMMENTS + REACTIONS) =================== */
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
-    import { getFirestore, collection, doc, addDoc, setDoc, deleteDoc, onSnapshot, getDocs, serverTimestamp, query, orderBy } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
-
+    import { getFirestore, collection, addDoc, serverTimestamp, onSnapshot, query, orderBy, doc, setDoc, getDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
     const firebaseConfig = {
       apiKey: "AIzaSyA0Nc3sCYCfhsX6y6Ft5SxEuZDBcfT0zHk",
       authDomain: "rafyermadi-a4e98.firebaseapp.com",
@@ -854,129 +437,522 @@
     };
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
+    // expose ke window
+    window.db = db;
+    window.firebaseFirestore = { collection, addDoc, serverTimestamp, onSnapshot, query, orderBy, doc, setDoc, getDoc, deleteDoc };
     console.log('Firebase ready');
-
-    // Device id (persist di localStorage)
-    function getDeviceId(){
-      let id = localStorage.getItem('deviceId');
-      if(!id){
-        if (crypto?.randomUUID) id = crypto.randomUUID();
-        else id = 'dev-' + Math.random().toString(36).slice(2) + Date.now().toString(36);
-        localStorage.setItem('deviceId', id);
-      }
-      return id;
-    }
-
-    // ======== Reactions ========
-    const EMOJIS = ['👍','❤️','🔥','👏','😯'];
-    let unsubReact = null;
-    function renderReactRow(container, counts, activeFlags){
-      container.innerHTML = EMOJIS.map((e,i)=>{
-        const c = counts[e]||0; const on = !!activeFlags[e];
-        return `<button class="rx-btn ${on?'active':''}" data-k="${e}" title="${e}"><span class="rx-e">${e}</span> <span class="rx-c">${c}</span></button>`;
-      }).join('');
-    }
-
-    function setupReactions(postId){
-      const wrap = $('#reactRow');
-      if(!wrap) return;
-      const deviceId = getDeviceId();
-      let myDoc = {}; // cache flags milik device ini
-
-      // Listener menghitung total
-      if (unsubReact) { try{unsubReact();}catch(_){}}; 
-      const col = collection(db, `posts/${postId}/reactions`);
-      unsubReact = onSnapshot(col, (snap)=>{
-        const counts = { '👍':0,'❤️':0,'🔥':0,'👏':0,'😯':0 };
-        myDoc = {};
-        snap.forEach(d=>{
-          const data = d.data();
-          EMOJIS.forEach(k=>{ if(data[k]) counts[k]++; });
-          if(d.id === deviceId){ EMOJIS.forEach(k=> myDoc[k] = !!data[k]); }
-        });
-        renderReactRow(wrap, counts, myDoc);
-      });
-
-      // Click handler
-      wrap.onclick = async (e)=>{
-        const btn = e.target.closest('.rx-btn'); if(!btn) return;
-        const key = btn.getAttribute('data-k');
-        const ref = doc(db, `posts/${postId}/reactions/${deviceId}`);
-        const newVal = !myDoc[key];
-        // bentuk data set
-        const payload = { [key]: newVal, updatedAt: serverTimestamp() };
-        try{
-          // jika setelah toggle semua off -> hapus dokumen
-          const temp = { ...myDoc, [key]: newVal };
-          const allOff = EMOJIS.every(k => !temp[k]);
-          if(allOff){ await deleteDoc(ref); }
-          else { await setDoc(ref, payload, { merge:true }); }
-        }catch(err){
-          alert('Gagal menyimpan reaction.');
-          console.error(err);
-        }
-      };
-    }
-
-    // ======== Comments ========
-    let unsubC = null;
-    function setupComments(postId){
-      const list = $('#cList');
-      const nameI = $('#cName');
-      const avatarI = $('#cAvatar');
-      const textI = $('#cText');
-      const clearB = $('#cClear');
-      const sendB = $('#cSend');
-      if(!list || !textI) return;
-      if(unsubC){ try{unsubC();}catch(_){}}
-
-      const qRef = query(collection(db, `posts/${postId}/comments`), orderBy('createdAt','desc'));
-      unsubC = onSnapshot(qRef, (snap)=>{
-        list.innerHTML = '';
-        snap.forEach(d=>{
-          const v = d.data();
-          const t = document.createElement('div');
-          t.className = 'card';
-          t.style.padding = '10px';
-          const date = v.createdAt?.toDate ? v.createdAt.toDate() : new Date();
-          const when = date.toLocaleString('id-ID', { day:'2-digit', month:'short', year:'numeric', hour:'2-digit', minute:'2-digit' });
-          t.innerHTML = `
-            <div style="display:flex;gap:10px;align-items:flex-start">
-              <div style="width:34px;height:34px;border-radius:50%;overflow:hidden;background:#111;border:1px solid rgba(255,255,255,.1)">
-                ${v.avatar ? `<img src="${v.avatar}" alt="${v.name||'Anon'}" style="width:100%;height:100%;object-fit:cover">` : ''}
-              </div>
-              <div style="flex:1">
-                <div style="font-weight:700">${(v.name||'tes').toString().slice(0,50)} <span style="color:var(--muted);font-weight:400">• ${when}</span></div>
-                <div style="white-space:pre-wrap;margin-top:6px">${(v.text||'').toString().slice(0,2000)}</div>
-              </div>
-            </div>`;
-          list.appendChild(t);
-        });
-      });
-
-      clearB.onclick = ()=>{ textI.value = ''; };
-      sendB.onclick = async ()=>{
-        const text = (textI.value||'').trim();
-        if(!text){ textI.focus(); return; }
-        const name = (nameI.value||'').trim().slice(0,50);
-        const avatar = (avatarI.value||'').trim().slice(0,400);
-        try{
-          await addDoc(collection(db, `posts/${postId}/comments`), {
-            name: name || 'tes',
-            avatar: avatar || '',
-            text,
-            createdAt: serverTimestamp()
-          });
-          textI.value='';
-        }catch(err){
-          alert('Gagal mengirim komentar');
-          console.error(err);
-        }
-      };
-    }
-
-    // ==== Start app ====
-    routeRender();
   </script>
+
+  <!-- App JS (non-module) -->
+  <script>
+  // ===== UTIL =====
+  const $ = (sel, el = document) => el.querySelector(sel);
+  const $$ = (sel, el = document) => Array.from(el.querySelectorAll(sel));
+  const root = document.documentElement;
+  const setTheme = (t)=>{ root.setAttribute('data-theme', t); localStorage.setItem('theme', t); const ic = $('#themeIcon'); if(ic){ ic.textContent = t==='light' ? '☀️' : '🌙'; ic.style.transition='transform .45s var(--ease)'; ic.style.transform = t==='light' ? 'rotate(-180deg) scale(1.1)' : 'rotate(0deg)'; } $('#themeToggle').setAttribute('aria-pressed', t==='dark' ? 'true':'false'); };
+  const savedTheme = localStorage.getItem('theme') || (matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+  setTheme(savedTheme);
+  $('#themeToggle').addEventListener('click', ()=> setTheme(root.getAttribute('data-theme')==='dark'?'light':'dark'));
+
+  const monthID = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+  const fmtDate = (iso) => { const d = new Date(iso + 'T00:00:00'); return `${d.getDate()} ${monthID[d.getMonth()]} ${d.getFullYear()}`; };
+
+  // ===== DATA (posts with body) =====
+  const posts = [
+    { id:'novel-bab-1', title:'Novel — Bab 1: Pagi yang Menggantung', date:'2025-08-20',
+      tags:['Novel','Progres','Bab 1'],
+      image:'https://images.unsplash.com/photo-1507842217343-583bb7270b66?q=80&w=1200&auto=format&fit=crop',
+      excerpt:'Awal cerita—sebuah pagi di Jakarta, ketika segalanya terasa biasa saja, sampai tidak lagi…',
+      body:`<p>Pagi di Jakarta selalu terdengar sama: klakson, pedagang roti, dan radio tetangga yang tak pernah tepat frekuensi. Aku berjalan menembus lorong kos yang sempit sambil menghitung napas.</p>
+      <p>Di halaman, ada sandal yang ditinggalkan tergesa. "Pertanda baik atau buruk?" batinku. Telepon bergetar—pesan dari Ibu, hanya satu kata: <em>Pulang.</em></p>
+      <h2>Set up konflik</h2><p>Bab ini memperkenalkan dua hal: hilangnya figur jangkar dan kota yang ikut menelan suara.</p>`},
+
+    { id:'catatan-riset', title:'Catatan Riset: Menentukan Setting & Perspektif', date:'2025-08-18',
+      tags:['Novel','Catatan','Riset'],
+      image:'https://images.unsplash.com/photo-1519681393784-d120267933ba?q=80&w=1200&auto=format&fit=crop',
+      excerpt:'Kenapa memilih sudut pandang orang pertama? Plus daftar referensi yang kupakai.',
+      body:`<p>Aku membandingkan POV orang pertama vs orang ketiga terbatas. Pilihan jatuh ke orang pertama untuk menangkap kegelisahan tokoh secara dekat.</p>
+      <blockquote>Satu kota bisa menjadi tokoh, jika kita memberinya napas.</blockquote>
+      <p>Referensi: <em>Norwegian Wood</em>, <em>Lelaki Harimau</em>, dan esai dialog.</p>`},
+
+    { id:'teknik-dialog', title:'Teknik Dialog: Biar Ngobrolnya Hidup', date:'2025-08-16',
+      tags:['Tips Menulis','Workshop','Blog'],
+      image:'https://images.unsplash.com/photo-1515516969-d4008cc6241a?q=80&w=1200&auto=format&fit=crop',
+      excerpt:'Beberapa trik sederhana untuk bikin dialog terasa alami tanpa “ceramah”.',
+      body:`<p>Trik cepat: kurangi penjelasan setelah dialog, biarkan respon lawan bicara memikul makna.</p>
+        <ul><li>Gunakan jeda seperlunya.</li><li>Gesture kecil menandai emosi.</li><li>Seimbangkan “kataku, katanya” dengan aksi.</li></ul>`},
+
+    { id:'novel-outline', title:'Outline Kasar: Alur Besar Novel', date:'2025-08-14',
+      tags:['Novel','Outline','Progres'],
+      image:'https://images.unsplash.com/photo-1491841550275-ad7854e35ca6?q=80&w=1200&auto=format&fit=crop',
+      excerpt:'Kerangka 3 babak + benang merah konflik utama dan subplot keluarga.',
+      body:`<p>Struktur 3 babak: pengenalan — eskalasi — resolusi. Subplot keluarga menempel pada pilihan kuliah tokoh.</p>`},
+
+    { id:'random-thoughts', title:'Random Thoughts: Nulis di Tengah Deadline', date:'2025-08-12',
+      tags:['Blog','Opini','Produktivitas'],
+      image:'https://images.unsplash.com/photo-1516542076529-1ea3854896e1?q=80&w=1200&auto=format&fit=crop',
+      excerpt:'Cara bagiku menjaga ritme nulis tanpa ngorbanin sekolah.',
+      body:`<p>Strategi: nulis 25 menit, rehat 5 menit—ulang 3 kali. Satu sesi ≈ 1 halaman.</p>`},
+
+    { id:'novel-bab-2', title:'Novel — Bab 2: Peta yang Hilang', date:'2025-08-10',
+      tags:['Novel','Progres','Bab 2'],
+      image:'https://images.unsplash.com/photo-1455390582262-044cdead277a?q=80&w=1200&auto=format&fit=crop',
+      excerpt:'Tokoh menemukan peta usang yang menuntun ke masa lalu ayahnya.',
+      body:`<p>Peta jadi pemicu babak dua.</p>`},
+
+    { id:'tips-outline', title:'Tips Outline yang Nggak Bikin Pusing', date:'2025-08-08',
+      tags:['Blog','Tips Menulis'],
+      image:'https://images.unsplash.com/photo-1524578271613-d550eacf6090?q=80&w=1200&auto=format&fit=crop',
+      excerpt:'Cara cepat bikin outline versi “kabel rapi”.',
+      body:`<p>Pakai pola 3 babak, tulis konflik per babak dalam 1 kalimat.</p>`},
+
+    { id:'novel-riset-lokasi', title:'Riset Lokasi: Catatan Lapangan', date:'2025-08-06',
+      tags:['Novel','Riset'],
+      image:'https://images.unsplash.com/photo-1456425712190-0dd8c2b00156?q=80&w=1200&auto=format&fit=crop',
+      excerpt:'Rute bus, suara pasar pagi, dan aroma hujan—semua dicatat.',
+      body:`<p>Merekam detail sensorik untuk adegan.</p>`},
+
+    { id:'esai-favorit', title:'Esai Favorit tentang Penokohan', date:'2025-08-04',
+      tags:['Blog','Opini'],
+      image:'https://images.unsplash.com/photo-1455390582262-044cdead277a?q=80&w=1200&auto=format&fit=crop',
+      excerpt:'Kumpulan esai yang bikin mikir ulang cara membangun karakter.',
+      body:`<p>Daftar esai dan ringkasannya.</p>`},
+
+    { id:'novel-bab-3', title:'Novel — Bab 3: Telepon Tengah Malam', date:'2025-08-02',
+      tags:['Novel','Progres','Bab 3'],
+      image:'https://images.unsplash.com/photo-1497250681960-ef046c08a56e?q=80&w=1200&auto=format&fit=crop',
+      excerpt:'Sebuah telepon mengubah keputusan tokoh.',
+      body:`<p>Twist pertama muncul.</p>`},
+
+    { id:'catatan-gaya', title:'Catatan Gaya: Metafora yang Hemat', date:'2025-07-30',
+      tags:['Blog','Catatan'],
+      image:'https://images.unsplash.com/photo-1526318472351-c75fcf070305?q=80&w=1200&auto=format&fit=crop',
+      excerpt:'Menjaga metafora tetap jernih dan tepat sasaran.',
+      body:`<p>Contoh sebelum–sesudah.</p>`},
+
+    { id:'review-buku', title:'Review Buku: Cara Menulis Dialog', date:'2025-07-28',
+      tags:['Blog','Review'],
+      image:'https://images.unsplash.com/photo-1544930834-45e1b225b0cc?q=80&w=1200&auto=format&fit=crop',
+      excerpt:'Catatan dari buku craft writing favorit.',
+      body:`<p>Tiga poin yang bisa langsung dipraktikkan.</p>`},
+
+    { id:'novel-bab-4', title:'Novel — Bab 4: Hujan di Peron', date:'2025-07-26',
+      tags:['Novel','Progres','Bab 4'],
+      image:'https://images.unsplash.com/photo-1444723121867-7a241cacace9?q=80&w=1200&auto=format&fit=crop',
+      excerpt:'Adegan peron jadi titik balik relasi.',
+      body:`<p>Adegan dialog singkat namun tajam.</p>`},
+  ];
+
+  // ===== STATE =====
+  const states = { home:{q:'', page:1}, blog:{q:'', page:1}, novel:{q:'', page:1} };
+
+  // ===== COMMON RENDERERS =====
+  function cardHTML(p){
+    return `
+      <a class="card-link" href="#/post/${encodeURIComponent(p.id)}" aria-label="Buka: ${p.title}">
+        <article class="card will-reveal">
+          <div class="thumb">${p.image?`<img src="${p.image}" alt="Thumbnail untuk: ${p.title}">`:''}</div>
+          <div class="card-body">
+            <div class="meta"><span>${fmtDate(p.date)}</span> • <span>${p.tags[0]}</span></div>
+            <h3 class="title">${p.title}</h3>
+            <p>${p.excerpt}</p>
+            <div class="tags">${p.tags.map(t => `<span class="tag">#${t}</span>`).join('')}</div>
+          </div>
+        </article>
+      </a>`;
+  }
+  const norm = (s)=> (s||'').toLowerCase().replace(/<[^>]+>/g,' ');
+  function searchFilter(list, q){
+    const tokens = q.trim()? q.trim().toLowerCase().split(/\s+/):[];
+    let res = list;
+    if(tokens.length){
+      res = res.filter(p=>{
+        const hay = norm(p.title+' '+p.excerpt+' '+p.tags.join(' ')+' '+p.body);
+        return tokens.every(t=> hay.includes(t));
+      });
+    }
+    return res.sort((a,b)=> new Date(b.date)-new Date(a.date));
+  }
+  function renderGrid(gridEl, list){
+    const fallback = `<div style="grid-column:1/-1;padding:26px;border:1px dashed rgba(255,255,255,.18);border-radius:14px;text-align:center;color:var(--muted)">Tidak ada hasil yang cocok.</div>`;
+    gridEl.innerHTML = list.length ? list.map(cardHTML).join('') : fallback;
+    attachReveal(gridEl);
+    $$('.thumb', gridEl).forEach(t=>{
+      t.classList.add('skeleton');
+      const img = t.querySelector('img');
+      if(img){
+        img.setAttribute('loading','lazy');
+        img.addEventListener('load', ()=> t.classList.remove('skeleton'), {once:true});
+        img.addEventListener('error', ()=> t.classList.remove('skeleton'), {once:true});
+      } else { t.classList.remove('skeleton'); }
+    });
+  }
+
+  // ===== SEARCH =====
+  function setupSearch(view){
+    const S = states[view];
+    const input = document.getElementById(`search-${view}`);
+    if(!input || input.dataset.inited){return;}
+    input.dataset.inited='1';
+    window.addEventListener('keydown', (e)=>{ if(document.getElementById(`view-${view}`).classList.contains('hidden')) return; if(e.key==='/' && document.activeElement!==input){ e.preventDefault(); input.focus(); } });
+    input.addEventListener('input', e=>{ S.q = e.target.value; S.page = 1; routeRender(); });
+  }
+
+  // ===== PAGINATION =====
+  const perPageForViewport = ()=> (innerWidth < 640 ? 8 : (innerWidth <= 1024 ? 8 : 12));
+  function renderPager(view, totalPages){
+    const wrap = document.getElementById(`pager-${view}`);
+    if(!wrap) return;
+    const cur = states[view].page;
+    if(totalPages <= 1){ wrap.innerHTML = ''; return; }
+    const nums = [];
+    const push = n => nums.push(`<button class="btn ${n===cur?'active':''}" data-p="${n}">${n}</button>`);
+    const addDots = ()=> nums.push(`<span style="padding:8px 6px;color:var(--muted)">…</span>`);
+    push(1);
+    if(cur > 3) addDots();
+    for(let n=Math.max(2,cur-1); n<=Math.min(totalPages-1,cur+1); n++) push(n);
+    if(cur < totalPages-2) addDots();
+    if(totalPages>1) push(totalPages);
+    wrap.innerHTML = `
+      <button class="btn" data-p="prev" ${cur===1?'disabled':''}>←</button>
+      ${nums.join('')}
+      <button class="btn" data-p="next" ${cur===totalPages?'disabled':''}>→</button>
+    `;
+    wrap.onclick = (e)=>{
+      const p = e.target.getAttribute('data-p');
+      if(!p) return;
+      if(p==='prev' && states[view].page>1) states[view].page--;
+      else if(p==='next' && states[view].page<totalPages) states[view].page++;
+      else if(/^\d+$/.test(p)) states[view].page = parseInt(p,10);
+      routeRender();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+  }
+
+  // ===== INTERACTIONS & ANIMATIONS =====
+  function onScrollNav(){ document.querySelector('.nav')?.classList.toggle('scrolled', window.scrollY>4); }
+  window.addEventListener('scroll', onScrollNav);
+  const revealObs = new IntersectionObserver((entries)=>{
+    entries.forEach(en=>{ if(en.isIntersecting){ en.target.classList.add('reveal-in'); revealObs.unobserve(en.target); } });
+  }, {rootMargin:'0px 0px -10% 0px', threshold:0.1});
+  function attachReveal(scope){ $$('.will-reveal', scope||document).forEach(el=> revealObs.observe(el)); }
+  function prepareReveal(){
+    ['.hero .avatar', '.hero h1', '.hero p', '.hero .hero-cta', '.about .avatar', '.about .card', '.foot-grid > *'].forEach(sel=>{
+      $$(sel).forEach(el=>{ if(!el.classList.contains('will-reveal')) el.classList.add('will-reveal'); });
+    });
+    attachReveal(document);
+  }
+  const showLoader = ()=> $('#page-loader')?.classList.add('show');
+  const hideLoader = ()=> $('#page-loader')?.classList.remove('show');
+
+  // ===== ROUTER RENDER =====
+  function renderHome(){
+    setupSearch('home');
+    const filtered = searchFilter(posts.slice(), states.home.q);
+    const per = perPageForViewport();
+    const total = Math.max(1, Math.ceil(filtered.length / per));
+    states.home.page = Math.min(Math.max(1, states.home.page), total);
+    const start = (states.home.page-1)*per;
+    renderGrid(document.getElementById('grid-home'), filtered.slice(start, start+per));
+    renderPager('home', total);
+  }
+  function renderBlog(){
+    setupSearch('blog');
+    const base = posts.filter(p=> p.tags.includes('Blog'));
+    const filtered = searchFilter(base, states.blog.q);
+    const per = perPageForViewport();
+    const total = Math.max(1, Math.ceil(filtered.length / per));
+    states.blog.page = Math.min(Math.max(1, states.blog.page), total);
+    const start = (states.blog.page-1)*per;
+    renderGrid(document.getElementById('grid-blog'), filtered.slice(start, start+per));
+    renderPager('blog', total);
+  }
+  function renderNovel(){
+    setupSearch('novel');
+    const base = posts.filter(p=> p.tags.includes('Novel'));
+    const filtered = searchFilter(base, states.novel.q);
+    const per = perPageForViewport();
+    const total = Math.max(1, Math.ceil(filtered.length / per));
+    states.novel.page = Math.min(Math.max(1, states.novel.page), total);
+    const start = (states.novel.page-1)*per;
+    renderGrid(document.getElementById('grid-novel'), filtered.slice(start, start+per));
+    renderPager('novel', total);
+  }
+  function renderPost(id){
+    const idx = posts.findIndex(p=>p.id===id); const post = posts[idx] || posts[0];
+    document.title = post.title + ' — Rafy Rayyan';
+    $('#postTitle').textContent = post.title;
+    $('#postMeta').textContent = fmtDate(post.date) + ' • ' + post.tags.join(', ');
+    const hero = $('#postHero');
+    if(post.image){ hero.classList.remove('hidden'); const img = hero.firstElementChild; img.src = post.image; img.alt = 'Gambar: ' + post.title; }
+    else { hero.classList.add('hidden'); }
+    $('#postBody').innerHTML = post.body;
+    const prev = posts[idx-1]||null; const next = posts[idx+1]||null;
+    const prevA = $('#prevPost'); const nextA = $('#nextPost');
+    if(prev){ prevA.href = `#/post/${prev.id}`; prevA.textContent = '← ' + prev.title; prevA.style.visibility='visible'; } else prevA.style.visibility='hidden';
+    if(next){ nextA.href = `#/post/${next.id}`; nextA.textContent = next.title + ' →'; nextA.style.visibility='visible'; } else nextA.style.visibility='hidden';
+    // integrate features
+    setupReactions(id);
+    setupComments(id);
+  }
+
+  function setActive(h){
+    $$('.menu a').forEach(a=>{
+      const k=a.dataset.link;
+      const on = (k==='home' && (h==='#/'||h===''||h==='#')) || (k==='about'&&h.startsWith('#/about')) || (k==='blog'&&h.startsWith('#/blog')) || (k==='novel'&&h.startsWith('#/novel'));
+      a.classList.toggle('active', on);
+    });
+  }
+  function show(view){
+    $('#view-home').classList.toggle('hidden', view!=='home');
+    $('#view-about').classList.toggle('hidden', view!=='about');
+    $('#view-post').classList.toggle('hidden', view!=='post');
+    $('#view-blog').classList.toggle('hidden', view!=='blog');
+    $('#view-novel').classList.toggle('hidden', view!=='novel');
+    window.scrollTo({top:0, behavior:'auto'});
+  }
+  function routeRender(){
+    const h = location.hash || '#/' ;
+    setActive(h);
+    showLoader();
+    const finish = ()=>{ prepareReveal(); setTimeout(hideLoader, 200); onScrollNav(); };
+    if(h.startsWith('#/post/')){ show('post'); renderPost(decodeURIComponent(h.replace('#/post/',''))); finish(); }
+    else if(h==='#/about'){ show('about'); finish(); }
+    else if(h==='#/blog'){ show('blog'); renderBlog(); finish(); }
+    else if(h==='#/novel'){ show('novel'); renderNovel(); finish(); }
+    else { show('home'); renderHome(); finish(); }
+  }
+  window.addEventListener('hashchange', routeRender);
+
+  // footer stats
+  $('#statPosts').textContent = posts.length;
+  $('#statTags').textContent = new Set(posts.flatMap(p=>p.tags)).size;
+
+  // Subscribe modal logic
+  function openSub(){ const m=$('#subModal'); if(m){ m.classList.remove('hidden'); $('#subEmail')?.focus(); document.body.style.overflow='hidden'; }}
+  function closeSub(){ $('#subModal')?.classList.add('hidden'); document.body.style.overflow=''; }
+  $('#openSub')?.addEventListener('click', openSub);
+  $('#closeSub')?.addEventListener('click', closeSub);
+  $('#subCancel')?.addEventListener('click', closeSub);
+  $('#subSave')?.addEventListener('click', ()=>{
+    const email = ($('#subEmail')?.value||'').trim();
+    const valid = /[^@\s]+@[^@\s]+\.[^@\s]+/.test(email);
+    const notice = $('#subNotice');
+    if(!valid){ notice.textContent='Email tidak valid.'; notice.style.color='salmon'; return; }
+    const key='subscribers'; const arr = JSON.parse(localStorage.getItem(key)||'[]');
+    if(!arr.includes(email)) arr.push(email);
+    localStorage.setItem(key, JSON.stringify(arr));
+    notice.textContent='Berhasil! Email tersimpan di perangkat ini. Integrasi pengiriman bisa ditambahkan nanti.'; notice.style.color='var(--muted)';
+    setTimeout(closeSub, 1000);
+  });
+  $('#subModal')?.addEventListener('click', (e)=>{ if(e.target.id==='subModal' || e.target.classList.contains('modal-backdrop')) closeSub(); });
+
+  // initial
+  routeRender();
+
+  // back-to-top
+  $('#toTop')?.addEventListener('click', ()=> window.scrollTo({top:0, behavior:'smooth'}));
+
+  // re-render on resize
+  let rszT; 
+  window.addEventListener('resize', ()=>{ clearTimeout(rszT); rszT = setTimeout(()=> routeRender(), 120); });
+
+  // --- Boot splash loader on hard reload / direct URL ---
+  (function bootSplash(){
+    var l = document.getElementById('loader') || document.getElementById('page-loader');
+    if(!l) return;
+    var min = 550;
+    function splash(){
+      var start = performance.now();
+      l.classList.remove('hidden');
+      requestAnimationFrame(function(){
+        var wait = Math.max(0, min - (performance.now() - start));
+        setTimeout(function(){ l.classList.add('hidden'); }, wait);
+      });
+    }
+    if (document.readyState === 'complete' || document.readyState === 'interactive') splash();
+    else document.addEventListener('DOMContentLoaded', splash, {once:true});
+  })();
+
+  // ===== Background Music =====
+  (function(){
+    const MUSIC_SRC = new URLSearchParams(location.search).get('music') || 'bgm.mp3';
+    const bgm = document.getElementById('bgm');
+    const bgmBtn = document.getElementById('bgmToggle');
+    if(!bgm || !bgmBtn) return;
+    const ico = bgmBtn.querySelector('.bgm-ico');
+    bgm.src = MUSIC_SRC; bgm.loop = true; bgm.preload = 'auto';
+    try{ const vol = parseFloat(localStorage.getItem('bgmVol')||'0.7'); if(!Number.isNaN(vol)) bgm.volume = Math.min(1, Math.max(0, vol)); }catch(_){ }
+    function updateUI(){ const playing = !bgm.paused && !bgm.ended; bgmBtn.classList.toggle('playing', playing); bgmBtn.setAttribute('aria-pressed', playing? 'true':'false'); if(ico) ico.textContent = playing? '🔊':'🔇'; }
+    async function playIfAllowed(){ try{ await bgm.play(); localStorage.setItem('bgm','on'); } catch(e){ localStorage.setItem('bgm','off'); } finally{ updateUI(); } }
+    if(localStorage.getItem('bgm')==='on'){ playIfAllowed(); } else { updateUI(); }
+    bgmBtn.addEventListener('click', async ()=>{ if(bgm.paused){ await playIfAllowed(); } else { bgm.pause(); localStorage.setItem('bgm','off'); updateUI(); } });
+    document.addEventListener('pointerdown', function once(){ if(localStorage.getItem('bgm')==='on' && bgm.paused){ playIfAllowed(); } document.removeEventListener('pointerdown', once); }, {capture:false});
+    window.addEventListener('hashchange', ()=>{ if(localStorage.getItem('bgm')==='on' && bgm.paused){ playIfAllowed(); } });
+  })();
+
+  // ===== BGM first-visit autoplay + intercept =====
+  (function(){
+    var bgm = document.getElementById('bgm');
+    var btn = document.getElementById('bgmToggle');
+    if(!bgm || !btn) { return; }
+    var FIRST='bgm_first_visit';
+    var PENDING='bgm_autoplay_pending';
+    function updateIco(){
+      var ico = btn.querySelector('.bgm-ico');
+      if(!ico) return;
+      var playing = !bgm.paused && !bgm.ended;
+      btn.classList.toggle('playing', playing);
+      btn.setAttribute('aria-pressed', playing? 'true':'false');
+      ico.textContent = playing? '🔊':'🔇';
+    }
+    if(!sessionStorage.getItem(FIRST)){
+      sessionStorage.setItem(FIRST,'1');
+      bgm.play().then(function(){ localStorage.setItem('bgm','on'); updateIco(); })
+        .catch(function(){ sessionStorage.setItem(PENDING,'1'); updateIco(); });
+      document.addEventListener('pointerdown', function once(){
+        if(sessionStorage.getItem(PENDING)==='1' && bgm.paused){
+          bgm.play().then(function(){ localStorage.setItem('bgm','on'); })
+            .catch(function(){})
+            .finally(function(){ updateIco(); sessionStorage.removeItem(PENDING); });
+        }
+        document.removeEventListener('pointerdown', once);
+      }, {capture:false});
+    }
+    if(!window.__bgm_intercept_installed){
+      window.__bgm_intercept_installed = true;
+      window.addEventListener('hashchange', function(e){
+        if (typeof routeRender === 'function') { try { routeRender(); } catch(_){} }
+        e.stopImmediatePropagation();
+        e.stopPropagation();
+      }, true);
+    }
+  })();
+
+  // ===== Reactions (Firestore) =====
+  function deviceId(){
+    let id = localStorage.getItem('device_id');
+    if(!id){ id = Math.random().toString(36).slice(2)+Date.now().toString(36); localStorage.setItem('device_id', id); }
+    return id;
+  }
+  function setupReactions(postId){
+    const row = document.getElementById('reactRow');
+    if(!row) return;
+    const keys = ['like','love','fire','clap','wow'];
+    const dev = deviceId();
+    // cleanup listener sebelumnya
+    if(window.__unsubReact){ try{ window.__unsubReact(); }catch(_){ } }
+    try{
+      const { collection, onSnapshot } = window.firebaseFirestore;
+      const col = collection(window.db, `posts/${postId}/reactions`);
+      window.__unsubReact = onSnapshot(col, snap=>{
+        const counts = {like:0,love:0,fire:0,clap:0,wow:0};
+        let mine = null;
+        snap.forEach(d=>{
+          const data = d.data()||{};
+          keys.forEach(k=>{ if(data[k]) counts[k]++; });
+          if(d.id===dev) mine = data;
+        });
+        keys.forEach(k=>{
+          const btn = row.querySelector(`[data-key="${k}"]`);
+          if(!btn) return;
+          btn.querySelector('.cnt').textContent = counts[k]||0;
+          btn.classList.toggle('on', !!(mine && mine[k]));
+        });
+      });
+    }catch(err){ console.error(err); }
+
+    row.onclick = async (e)=>{
+      const btn = e.target.closest('button[data-key]');
+      if(!btn) return;
+      const k = btn.dataset.key;
+      const turnOn = !btn.classList.contains('on');
+      const { doc, setDoc, getDoc, deleteDoc, serverTimestamp } = window.firebaseFirestore;
+      try{
+        const ref = doc(window.db, `posts/${postId}/reactions/${dev}`);
+        if(turnOn){
+          await setDoc(ref, { [k]: true, updatedAt: serverTimestamp() }, { merge: true });
+        }else{
+          const cur = await getDoc(ref);
+          const data = cur.exists()? cur.data() : {};
+          await setDoc(ref, { [k]: false, updatedAt: serverTimestamp() }, { merge: true });
+          const allOff = ['like','love','fire','clap','wow'].every(x => !((x in data) ? data[x] : (x===k?false:undefined)));
+          if(allOff){ await deleteDoc(ref); }
+        }
+      }catch(err){ console.error(err); alert('Gagal menyimpan reaction.'); }
+    };
+  }
+
+  // ===== Komentar (Firestore) — terbaru di atas =====
+  (function(){
+    const fmtTime = ts => {
+      try{
+        const d = ts && ts.toDate ? ts.toDate() : (ts instanceof Date ? ts : new Date());
+        const pad = n=>String(n).padStart(2,'0');
+        const bln = ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
+        return `${pad(d.getDate())} ${bln[d.getMonth()]} ${d.getFullYear()}, ${pad(d.getHours())}.${pad(d.getMinutes())}`;
+      }catch{ return ''; }
+    };
+    function commentItemHTML(d){
+      const data = d.data();
+      const name = (data.name||'anon').slice(0,40);
+      const text = (data.text||'').trim();
+      const at   = fmtTime(data.createdAt||null);
+      const init = (name||'?').trim()[0]?.toUpperCase() || '?';
+      return `
+        <div class="card">
+          <div class="c-item">
+            <div class="c-dot">${init}</div>
+            <div>
+              <div class="c-meta"><span class="c-name">${name}</span>• <span>${at}</span></div>
+              <div class="c-body">${text.replace(/</g,'&lt;')}</div>
+            </div>
+          </div>
+        </div>`;
+    }
+    window.setupComments = function(postId){
+      const nameEl = document.getElementById('cname');
+      const avatarEl = document.getElementById('cavatar');
+      const textEl = document.getElementById('ctext');
+      const btnSend = document.getElementById('cSend');
+      const btnClear = document.getElementById('cClear');
+      const listEl = document.getElementById('clist');
+      if(!listEl || !btnSend) return;
+      // cleanup listener sebelumnya
+      if(window.__unsubComments){ try{ window.__unsubComments(); }catch(_){ } }
+      btnSend.onclick = async () => {
+        const text = (textEl.value||'').trim();
+        if(!text){ textEl.focus(); return; }
+        const name = (nameEl.value||'').trim() || 'anon';
+        const avatar = (avatarEl.value||'').trim() || '';
+        try{
+          const { collection, addDoc, serverTimestamp } = window.firebaseFirestore;
+          const col = collection(window.db, `posts/${postId}/comments`);
+          await addDoc(col, { name, avatar, text, createdAt: serverTimestamp() });
+          textEl.value = '';
+        }catch(err){ alert('Gagal mengirim komentar.'); console.error(err); }
+      };
+      btnClear.onclick = () => { nameEl.value=''; avatarEl.value=''; textEl.value=''; };
+      try{
+        const { collection, query, orderBy, onSnapshot } = window.firebaseFirestore;
+        const q = query(collection(window.db, `posts/${postId}/comments`), orderBy('createdAt','desc'));
+        window.__unsubComments = onSnapshot(q, snap=>{
+          const html = [];
+          snap.forEach(doc=> html.push(commentItemHTML(doc)));
+          listEl.innerHTML = html.join('') || '<div class="card" style="color:var(--muted)">Belum ada komentar.</div>';
+        });
+      }catch(err){ console.error('listen comments error', err); }
+    };
+  })();
+
+  </script>
+
+  <div id="page-loader" class="loader" aria-hidden="true"><div class="spinner" role="status" aria-label="Memuat"></div></div>
+  <!-- BACKGROUND MUSIC -->
+  <audio id="bgm" loop preload="auto"></audio>
+  <button id="bgmToggle" class="bgm-btn" aria-pressed="false" title="Musik latar">
+    <span class="bgm-ico" aria-hidden="true">🔇</span>
+    <span class="visually-hidden">Toggle musik latar</span>
+  </button>
 </body>
 </html>
