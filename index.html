@@ -22,7 +22,6 @@
       --shadow: 0 10px 30px rgba(0,0,0,.35);
       --maxw: 1200px;
       --nav-h: 72px;
-      --ease: cubic-bezier(.22,1,.36,1);
     }
     html[data-theme="light"]{
       --bg: #f7f8fc;       /* light */
@@ -50,10 +49,8 @@
       backdrop-filter: blur(8px);
       background: color-mix(in oklab, var(--bg) 80%, #000 20%);
       border-bottom: 1px solid rgba(255,255,255,.06);
-      transition:background .3s var(--ease), box-shadow .3s var(--ease), transform .3s var(--ease)
     }
     html[data-theme="light"] .nav{border-bottom:1px solid rgba(16,19,33,.08)}
-    .nav.scrolled{box-shadow:0 12px 30px rgba(0,0,0,.35); background:color-mix(in oklab, var(--bg) 70%, #000 30%)}
     .nav-inner{display:flex;align-items:center;justify-content:space-between;gap:12px}
     .brand{display:flex;align-items:center;gap:12px;font-weight:800;letter-spacing:.2px;flex:0 0 auto}
     .brand-badge{width:34px;height:34px;border-radius:10px;background:linear-gradient(135deg,var(--brand),var(--brand-2));display:grid;place-items:center;box-shadow: var(--shadow)}
@@ -80,10 +77,8 @@
     .hero h1{margin:0;font-family:"Playfair Display", serif;font-weight:600;font-size:42px;letter-spacing:.2px}
     .hero p{margin:10px 0 0;color:var(--muted);max-width:70ch;line-height:1.65}
     .hero-cta{margin-top:16px;display:flex;gap:10px;flex-wrap:wrap}
-    .btn{padding:10px 14px;border-radius:12px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.04);color:var(--text);cursor:pointer;transition:transform .2s var(--ease), box-shadow .2s var(--ease), background .2s var(--ease)}
+    .btn{padding:10px 14px;border-radius:12px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.04);color:var(--text);cursor:pointer}
     .btn.primary{background:linear-gradient(135deg,var(--brand),var(--brand-2));border:none}
-    .btn:hover{box-shadow:0 10px 24px rgba(0,0,0,.25); transform:translateY(-1px)}
-    .btn:active{transform:translateY(0) scale(.98)}
 
     .toolbar{position:sticky; top:calc(var(--nav-h) - 1px); z-index:65; background:color-mix(in oklab, var(--bg) 85%, #000 15%);backdrop-filter: blur(8px);
       border-top:1px solid rgba(255,255,255,.06); border-bottom:1px solid rgba(255,255,255,.06)}
@@ -91,7 +86,7 @@
     .toolbar-inner{display:flex;gap:10px;align-items:center;padding:12px 0}
     .search{flex:1;display:flex;align-items:center;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:14px;overflow:hidden}
     html[data-theme="light"] .search{background:rgba(16,19,33,.04);border-color:rgba(16,19,33,.12)}
-    .search input{flex:1;padding:12px 14px;background:transparent;border:none;outline:none;color:var(--text);transition:border-color .2s ease, box-shadow .2s ease}
+    .search input{flex:1;padding:12px 14px;background:transparent;border:none;outline:none;color:var(--text)}
     .search .kbd{padding:0 10px;color:var(--muted);border-left:1px solid rgba(255,255,255,.08)}
     html[data-theme="light"] .search .kbd{border-left-color:rgba(16,19,33,.1)}
 
@@ -103,8 +98,7 @@
     .card:hover{transform:translateY(-4px); box-shadow:0 16px 40px rgba(0,0,0,.2)}
     .thumb{aspect-ratio:16/9; background:#0b0d13; overflow:hidden; position:relative}
     html[data-theme="light"] .thumb{background:#e9ecf7}
-    .thumb img{width:100%;height:100%;object-fit:cover;transition:transform .6s var(--ease)}
-    .card:hover .thumb img{transform:scale(1.06)}
+    .thumb img{width:100%;height:100%;object-fit:cover}
     .card-body{padding:14px;display:flex;flex-direction:column;gap:6px;flex:1}
     .meta{display:flex;gap:10px;align-items:center;color:var(--muted);font-size:13px}
     .title{margin:6px 0 8px;font-weight:700;line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
@@ -131,6 +125,12 @@
     article blockquote{margin:16px 0;padding:8px 14px;border-left:3px solid var(--brand);background:rgba(255,255,255,.05);border-radius:8px}
     article img{max-width:100%;height:auto;border-radius:12px;display:block;margin:10px auto}
     .post-nav{display:flex;justify-content:space-between;gap:10px;margin:22px 0}
+
+    /* REACTIONS */
+    .react-row{display:flex;gap:10px;align-items:center;margin:8px 0 18px}
+    .rx-btn{display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border-radius:999px;background:var(--card);border:1px solid rgba(255,255,255,.12);cursor:pointer;font-size:14px}
+    .rx-btn .rx-c{min-width:16px;text-align:center;color:var(--muted)}
+    .rx-btn.active{outline:2px solid color-mix(in oklab, var(--brand) 50%, transparent)}
 
     /* FOOTER — BIO STYLE */
     .site-footer{position:relative;border-top:1px solid rgba(255,255,255,.08);padding:50px 0 24px;color:var(--muted);overflow:hidden;background:
@@ -163,41 +163,44 @@
     .modal-card{position:relative;z-index:1;width:min(520px,92vw);background:var(--bg-soft);border:1px solid rgba(255,255,255,.12);border-radius:16px;padding:18px}
     .modal-card input{width:100%;padding:10px 12px;border-radius:10px;border:1px solid rgba(255,255,255,.12);background:transparent;color:var(--text)}
     .modal-actions{display:flex;gap:8px;justify-content:flex-end;margin-top:10px}
-
+  
     /* ANIMATIONS */
+    :root{ --ease: cubic-bezier(.22,1,.36,1); }
     @keyframes spin{to{transform:rotate(360deg)}}
+
+    /* Ensure JS hide wins over inline display */
+    .loader.hidden{display:none !important}
     @keyframes fadeSlideUp{from{opacity:0;transform:translateY(16px) scale(.98)}to{opacity:1;transform:none}}
     @keyframes shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
-
-    .loader{position:fixed; inset:0; display:none; place-items:center; background:rgba(0,0,0,.35); backdrop-filter:blur(4px); z-index:140}
-    .loader.show{display:grid}
-    .loader .spinner{width:56px;height:56px;border-radius:50%;background:conic-gradient(from 0deg, var(--brand), var(--brand-2), var(--brand));mask:radial-gradient(farthest-side, transparent calc(50% - 6px), #000 0);animation:spin 1s linear infinite}
-    .loader.hidden{display:none !important}
-
-    .thumb.skeleton::before{content:"";position:absolute;inset:0;background:linear-gradient(110deg, rgba(255,255,255,.06) 8%, rgba(255,255,255,.18) 18%, rgba(255,255,255,.06) 33%);background-size:200% 100%;animation:shimmer 1.2s linear infinite}
 
     .will-reveal{opacity:0;transform:translateY(16px) scale(.98)}
     .reveal-in{opacity:1;transform:none;transition:opacity .7s var(--ease), transform .7s var(--ease)}
 
-    /* REACTIONS + COMMENTS (match your style) */
-    .reacts{display:flex;gap:10px;align-items:center;margin:14px 0 20px}
-    .react-btn{display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border-radius:999px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.04);font-size:13px;cursor:pointer}
-    html[data-theme="light"] .react-btn{border-color:rgba(16,19,33,.12);background:rgba(16,19,33,.04)}
-    .react-btn .num{opacity:.9}
-    .react-btn.active{outline:2px solid color-mix(in oklab, var(--brand) 60%, transparent)}
+    .card .thumb img{transition:transform .6s var(--ease)}
+    .card:hover .thumb img{transform:scale(1.06)}
 
-    .cm-wrap{background:var(--card);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:10px}
-    .cm-item{display:flex;gap:10px;padding:8px;border-bottom:1px dashed rgba(255,255,255,.12)}
-    .cm-item:last-child{border-bottom:none}
-    .cm-avatar{width:28px;height:28px;border-radius:999px;background:#0b0d13;flex:0 0 auto;overflow:hidden}
-    .cm-head{font-weight:700}
-    .cm-time{color:var(--muted);font-size:12px;margin-left:6px}
-    .cm-form{display:grid;gap:8px;margin-top:10px}
-    .cm-form input,.cm-form textarea{width:100%;padding:10px 12px;border-radius:10px;border:1px solid rgba(255,255,255,.12);background:transparent;color:var(--text)}
-    html[data-theme="light"] .cm-form input, html[data-theme="light"] .cm-form textarea{border-color:rgba(16,19,33,.12)}
+    .btn{transition:transform .2s var(--ease), box-shadow .2s var(--ease), background .2s var(--ease)}
+    .btn:hover{box-shadow:0 10px 24px rgba(0,0,0,.25); transform:translateY(-1px)}
+    .btn:active{transform:translateY(0) scale(.98)}
 
-    /* BGM */
+    .search input{transition:border-color .2s ease, box-shadow .2s ease}
+    .search:focus-within{box-shadow:0 0 0 3px color-mix(in oklab, var(--ring) 40%, transparent)}
+
+    .nav{transition:background .3s var(--ease), box-shadow .3s var(--ease), transform .3s var(--ease)}
+    .nav.scrolled{box-shadow:0 12px 30px rgba(0,0,0,.35); background:color-mix(in oklab, var(--bg) 70%, #000 30%)}
+
+    .loader{position:fixed; inset:0; display:none; place-items:center; background:rgba(0,0,0,.35); backdrop-filter:blur(4px); z-index:140}
+    .loader.show{display:grid}
+    .loader .spinner{width:56px;height:56px;border-radius:50%;background:conic-gradient(from 0deg, var(--brand), var(--brand-2), var(--brand));mask:radial-gradient(farthest-side, transparent calc(50% - 6px), #000 0);animation:spin 1s linear infinite}
+
+    .thumb.skeleton::before{content:"";position:absolute;inset:0;background:linear-gradient(110deg, rgba(255,255,255,.06) 8%, rgba(255,255,255,.18) 18%, rgba(255,255,255,.06) 33%);background-size:200% 100%;animation:shimmer 1.2s linear infinite}
+
+    @media (prefers-reduced-motion: reduce){*{animation:none !important; transition:none !important}}
+  
+    /* Force-fixed position override for background music button */
     .bgm-btn{position:fixed !important; right:max(16px, env(safe-area-inset-right)); bottom:max(16px, env(safe-area-inset-bottom)); z-index:200}
+  
+    /* === BGM Toast (one-time prompt when autoplay blocked) === */
     .bgm-toast{position:fixed; right:max(70px, calc(env(safe-area-inset-right) + 70px)); bottom:max(22px, calc(env(safe-area-inset-bottom) + 22px)); z-index:201; background:color-mix(in oklab, var(--bg) 85%, #000 15%); color:var(--text); border:1px solid rgba(255,255,255,.12); padding:8px 12px; border-radius:12px; box-shadow: var(--shadow); font-size:14px; opacity:0; transform: translateY(6px); animation: toastIn .25s var(--ease) forwards}
     html[data-theme="light"] .bgm-toast{border-color: rgba(16,19,33,.12); background: rgba(16,19,33,.92)}
     @keyframes toastIn{to{opacity:1; transform:none}}
@@ -208,7 +211,6 @@
   <div id="loader" class="loader" style="position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.45);backdrop-filter:blur(2px);z-index:120">
     <div class="spinner" style="width:48px;height:48px;border-radius:50%;border:4px solid rgba(255,255,255,.25);border-top-color:var(--brand-2);animation:spin 1s linear infinite" aria-label="Memuat"></div>
   </div>
-
   <!-- NAVBAR -->
   <nav class="nav">
     <div class="container nav-inner">
@@ -344,14 +346,30 @@
     </header>
     <main class="container">
       <article id="postBody"></article>
-      <div id="reactBar" class="reacts" aria-label="Reaksi"></div>
+
+      <!-- REACTION ROW -->
+      <div class="react-row" id="reactRow" aria-label="Reaksi pembaca"></div>
+
       <nav class="post-nav">
         <a id="prevPost" class="btn" href="#">← Sebelumnya</a>
         <a id="nextPost" class="btn" href="#">Berikutnya →</a>
       </nav>
+
+      <!-- Komentar -->
       <section id="comments" style="margin:26px 0 60px">
         <h2>Komentar</h2>
-        <div id="cmWrap" class="cm-wrap"></div>
+        <div id="cList" style="display:flex;flex-direction:column;gap:10px;margin:12px 0"></div>
+        <div class="card" style="padding:12px">
+          <div style="display:grid;gap:8px">
+            <input id="cName" placeholder="Nama (opsional)" />
+            <input id="cAvatar" placeholder="URL foto profil (opsional)" />
+            <textarea id="cText" rows="3" placeholder="Tulis komentar…" style="resize:vertical;border-radius:10px;border:1px solid rgba(255,255,255,.12);background:transparent;color:var(--text);padding:10px"></textarea>
+            <div style="display:flex;gap:8px;justify-content:flex-end">
+              <button class="btn" id="cClear">Bersihkan</button>
+              <button class="btn primary" id="cSend">Kirim</button>
+            </div>
+          </div>
+        </div>
       </section>
     </main>
   </div>
@@ -402,452 +420,430 @@
     </div>
   </div>
 
-  <script>
-  // ===== UTIL =====
-  const $ = (sel, el = document) => el.querySelector(sel);
-  const $$ = (sel, el = document) => Array.from(el.querySelectorAll(sel));
-  const root = document.documentElement;
-  const setTheme = (t)=>{ root.setAttribute('data-theme', t); localStorage.setItem('theme', t); const ic = $('#themeIcon'); if(ic){ ic.textContent = t==='light' ? '☀️' : '🌙'; ic.style.transition='transform .45s var(--ease)'; ic.style.transform = t==='light' ? 'rotate(-180deg) scale(1.1)' : 'rotate(0deg)'; } $('#themeToggle').setAttribute('aria-pressed', t==='dark' ? 'true':'false'); };
-  const savedTheme = localStorage.getItem('theme') || (matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
-  setTheme(savedTheme);
-  $('#themeToggle').addEventListener('click', ()=> setTheme(root.getAttribute('data-theme')==='dark'?'light':'dark'));
-
-  const monthID = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
-  const fmtDate = (iso) => { const d = new Date(iso + 'T00:00:00'); return `${d.getDate()} ${monthID[d.getMonth()]} ${d.getFullYear()}`; };
-
-  // ===== DATA (posts with body) =====
-  const posts = [
-    { id:'novel-bab-1', title:'Novel — Bab 1: Pagi yang Menggantung', date:'2025-08-20',
-      tags:['Novel','Progres','Bab 1'],
-      image:'https://images.unsplash.com/photo-1507842217343-583bb7270b66?q=80&w=1200&auto=format&fit=crop',
-      excerpt:'Awal cerita—sebuah pagi di Jakarta, ketika segalanya terasa biasa saja, sampai tidak lagi…',
-      body:`<p>Pagi di Jakarta selalu terdengar sama: klakson, pedagang roti, dan radio tetangga yang tak pernah tepat frekuensi. Aku berjalan menembus lorong kos yang sempit sambil menghitung napas.</p>
-      <p>Di halaman, ada sandal yang ditinggalkan tergesa. "Pertanda baik atau buruk?" batinku. Telepon bergetar—pesan dari Ibu, hanya satu kata: <em>Pulang.</em></p>
-      <h2>Set up konflik</h2><p>Bab ini memperkenalkan dua hal: hilangnya figur jangkar dan kota yang ikut menelan suara.</p>`},
-
-    { id:'catatan-riset', title:'Catatan Riset: Menentukan Setting & Perspektif', date:'2025-08-18',
-      tags:['Novel','Catatan','Riset'],
-      image:'https://images.unsplash.com/photo-1519681393784-d120267933ba?q=80&w=1200&auto=format&fit=crop',
-      excerpt:'Kenapa memilih sudut pandang orang pertama? Plus daftar referensi yang kupakai.',
-      body:`<p>Aku membandingkan POV orang pertama vs orang ketiga terbatas. Pilihan jatuh ke orang pertama untuk menangkap kegelisahan tokoh secara dekat.</p>
-      <blockquote>Satu kota bisa menjadi tokoh, jika kita memberinya napas.</blockquote>
-      <p>Referensi: <em>Norwegian Wood</em>, <em>Lelaki Harimau</em>, dan esai dialog.</p>`},
-
-    { id:'teknik-dialog', title:'Teknik Dialog: Biar Ngobrolnya Hidup', date:'2025-08-16',
-      tags:['Tips Menulis','Workshop','Blog'],
-      image:'https://images.unsplash.com/photo-1515516969-d4008cc6241a?q=80&w=1200&auto=format&fit=crop',
-      excerpt:'Beberapa trik sederhana untuk bikin dialog terasa alami tanpa “ceramah”.',
-      body:`<p>Trik cepat: kurangi penjelasan setelah dialog, biarkan respon lawan bicara memikul makna.</p>
-        <ul><li>Gunakan jeda seperlunya.</li><li>Gesture kecil menandai emosi.</li><li>Seimbangkan “kataku, katanya” dengan aksi.</li></ul>`},
-
-    { id:'novel-outline', title:'Outline Kasar: Alur Besar Novel', date:'2025-08-14',
-      tags:['Novel','Outline','Progres'],
-      image:'https://images.unsplash.com/photo-1491841550275-ad7854e35ca6?q=80&w=1200&auto=format&fit=crop',
-      excerpt:'Kerangka 3 babak + benang merah konflik utama dan subplot keluarga.',
-      body:`<p>Struktur 3 babak: pengenalan — eskalasi — resolusi. Subplot keluarga menempel pada pilihan kuliah tokoh.</p>`},
-
-    { id:'random-thoughts', title:'Random Thoughts: Nulis di Tengah Deadline', date:'2025-08-12',
-      tags:['Blog','Opini','Produktivitas'],
-      image:'https://images.unsplash.com/photo-1516542076529-1ea3854896e1?q=80&w=1200&auto=format&fit=crop',
-      excerpt:'Cara bagiku menjaga ritme nulis tanpa ngorbanin sekolah.',
-      body:`<p>Strategi: nulis 25 menit, rehat 5 menit—ulang 3 kali. Satu sesi ≈ 1 halaman.</p>`},
-
-    { id:'novel-bab-2', title:'Novel — Bab 2: Peta yang Hilang', date:'2025-08-10',
-      tags:['Novel','Progres','Bab 2'],
-      image:'https://images.unsplash.com/photo-1455390582262-044cdead277a?q=80&w=1200&auto=format&fit=crop',
-      excerpt:'Tokoh menemukan peta usang yang menuntun ke masa lalu ayahnya.',
-      body:`<p>Peta jadi pemicu babak dua.</p>`},
-
-    { id:'tips-outline', title:'Tips Outline yang Nggak Bikin Pusing', date:'2025-08-08',
-      tags:['Blog','Tips Menulis'],
-      image:'https://images.unsplash.com/photo-1524578271613-d550eacf6090?q=80&w=1200&auto=format&fit=crop',
-      excerpt:'Cara cepat bikin outline versi “kabel rapi”.',
-      body:`<p>Pakai pola 3 babak, tulis konflik per babak dalam 1 kalimat.</p>`},
-
-    { id:'novel-riset-lokasi', title:'Riset Lokasi: Catatan Lapangan', date:'2025-08-06',
-      tags:['Novel','Riset'],
-      image:'https://images.unsplash.com/photo-1456425712190-0dd8c2b00156?q=80&w=1200&auto=format&fit=crop',
-      excerpt:'Rute bus, suara pasar pagi, dan aroma hujan—semua dicatat.',
-      body:`<p>Merekam detail sensorik untuk adegan.</p>`},
-
-    { id:'esai-favorit', title:'Esai Favorit tentang Penokohan', date:'2025-08-04',
-      tags:['Blog','Opini'],
-      image:'https://images.unsplash.com/photo-1455390582262-044cdead277a?q=80&w=1200&auto=format&fit=crop',
-      excerpt:'Kumpulan esai yang bikin mikir ulang cara membangun karakter.',
-      body:`<p>Daftar esai dan ringkasannya.</p>`},
-
-    { id:'novel-bab-3', title:'Novel — Bab 3: Telepon Tengah Malam', date:'2025-08-02',
-      tags:['Novel','Progres','Bab 3'],
-      image:'https://images.unsplash.com/photo-1497250681960-ef046c08a56e?q=80&w=1200&auto=format&fit=crop',
-      excerpt:'Sebuah telepon mengubah keputusan tokoh.',
-      body:`<p>Twist pertama muncul.</p>`},
-
-    { id:'catatan-gaya', title:'Catatan Gaya: Metafora yang Hemat', date:'2025-07-30',
-      tags:['Blog','Catatan'],
-      image:'https://images.unsplash.com/photo-1526318472351-c75fcf070305?q=80&w=1200&auto=format&fit=crop',
-      excerpt:'Menjaga metafora tetap jernih dan tepat sasaran.',
-      body:`<p>Contoh sebelum–sesudah.</p>`},
-
-    { id:'review-buku', title:'Review Buku: Cara Menulis Dialog', date:'2025-07-28',
-      tags:['Blog','Review'],
-      image:'https://images.unsplash.com/photo-1544930834-45e1b225b0cc?q=80&w=1200&auto=format&fit=crop',
-      excerpt:'Catatan dari buku craft writing favorit.',
-      body:`<p>Tiga poin yang bisa langsung dipraktikkan.</p>`},
-
-    { id:'novel-bab-4', title:'Novel — Bab 4: Hujan di Peron', date:'2025-07-26',
-      tags:['Novel','Progres','Bab 4'],
-      image:'https://images.unsplash.com/photo-1444723121867-7a241cacace9?q=80&w=1200&auto=format&fit=crop',
-      excerpt:'Adegan peron jadi titik balik relasi.',
-      body:`<p>Adegan dialog singkat namun tajam.</p>`},
-  ];
-
-  // ===== STATE (query per view + page) =====
-  const states = { home:{q:'', page:1}, blog:{q:'', page:1}, novel:{q:'', page:1} };
-
-  // ===== COMMON RENDERERS =====
-  function cardHTML(p){
-    return `
-      <a class="card-link" href="#/post/${encodeURIComponent(p.id)}" aria-label="Buka: ${p.title}">
-        <article class="card will-reveal">
-          <div class="thumb">${p.image?`<img src="${p.image}" alt="Thumbnail untuk: ${p.title}">`:''}</div>
-          <div class="card-body">
-            <div class="meta"><span>${fmtDate(p.date)}</span> • <span>${p.tags[0]}</span></div>
-            <h3 class="title">${p.title}</h3>
-            <p>${p.excerpt}</p>
-            <div class="tags">${p.tags.map(t => `<span class="tag">#${t}</span>`).join('')}</div>
-          </div>
-        </article>
-      </a>`;
-  }
-  const norm = (s)=> (s||'').toLowerCase().replace(/<[^>]+>/g,' ');
-  function searchFilter(list, q){
-    const tokens = q.trim()? q.trim().toLowerCase().split(/\s+/):[];
-    let res = list;
-    if(tokens.length){
-      res = res.filter(p=>{
-        const hay = norm(p.title+' '+p.excerpt+' '+p.tags.join(' ')+' '+p.body);
-        return tokens.every(t=> hay.includes(t));
-      });
-    }
-    return res.sort((a,b)=> new Date(b.date)-new Date(a.date));
-  }
-  function renderGrid(gridEl, list){
-    const fallback = `<div style="grid-column:1/-1;padding:26px;border:1px dashed rgba(255,255,255,.18);border-radius:14px;text-align:center;color:var(--muted)">Tidak ada hasil yang cocok.</div>`;
-    gridEl.innerHTML = list.length ? list.map(cardHTML).join('') : fallback;
-    // reveal on scroll
-    attachReveal(gridEl);
-    // skeleton shimmer until image loaded
-    $$('.thumb', gridEl).forEach(t=>{
-      t.classList.add('skeleton');
-      const img = t.querySelector('img');
-      if(img){
-        img.setAttribute('loading','lazy');
-        img.addEventListener('load', ()=> t.classList.remove('skeleton'), {once:true});
-        img.addEventListener('error', ()=> t.classList.remove('skeleton'), {once:true});
-      } else {
-        t.classList.remove('skeleton');
-      }
-    });
-  }
-
-  // ===== WIRING SEARCH =====
-  function setupSearch(view){
-    const S = states[view];
-    const input = document.getElementById(`search-${view}`);
-    if(!input || input.dataset.inited){return;}
-    input.dataset.inited='1';
-    window.addEventListener('keydown', (e)=>{ if(document.getElementById(`view-${view}`).classList.contains('hidden')) return; if(e.key==='/' && document.activeElement!==input){ e.preventDefault(); input.focus(); } });
-    input.addEventListener('input', e=>{ S.q = e.target.value; S.page = 1; routeRender(); });
-  }
-
-  // ===== PAGINATION =====
-  const perPageForViewport = ()=> (innerWidth < 640 ? 8 : (innerWidth <= 1024 ? 8 : 12));
-
-  function renderPager(view, totalPages){
-    const wrap = document.getElementById(`pager-${view}`);
-    if(!wrap) return;
-    const cur = states[view].page;
-    if(totalPages <= 1){ wrap.innerHTML = ''; return; }
-
-    const nums = [];
-    const push = n => nums.push(`<button class="btn ${n===cur?'active':''}" data-p="${n}">${n}</button>`);
-    const addDots = ()=> nums.push(`<span style="padding:8px 6px;color:var(--muted)">…</span>`);
-
-    push(1);
-    if(cur > 3) addDots();
-    for(let n=Math.max(2,cur-1); n<=Math.min(totalPages-1,cur+1); n++) push(n);
-    if(cur < totalPages-2) addDots();
-    if(totalPages>1) push(totalPages);
-
-    wrap.innerHTML = `
-      <button class="btn" data-p="prev" ${cur===1?'disabled':''}>←</button>
-      ${nums.join('')}
-      <button class="btn" data-p="next" ${cur===totalPages?'disabled':''}>→</button>
-    `;
-
-    wrap.onclick = (e)=>{
-      const p = e.target.getAttribute('data-p');
-      if(!p) return;
-      if(p==='prev' && states[view].page>1) states[view].page--;
-      else if(p==='next' && states[view].page<totalPages) states[view].page++;
-      else if(/^\d+$/.test(p)) states[view].page = parseInt(p,10);
-      routeRender();
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    };
-  }
-
-  // ===== INTERACTIONS & ANIMATIONS =====
-  function onScrollNav(){ document.querySelector('.nav')?.classList.toggle('scrolled', window.scrollY>4); }
-  window.addEventListener('scroll', onScrollNav);
-
-  const showLoader = ()=> $('#page-loader')?.classList.add('show');
-  const hideLoader = ()=> $('#page-loader')?.classList.remove('show');
-
-  const revealObs = new IntersectionObserver((entries)=>{
-    entries.forEach(en=>{ if(en.isIntersecting){ en.target.classList.add('reveal-in'); revealObs.unobserve(en.target); } });
-  }, {rootMargin:'0px 0px -10% 0px', threshold:0.1});
-  function attachReveal(scope){ $$('.will-reveal', scope||document).forEach(el=> revealObs.observe(el)); }
-  function prepareReveal(){
-    ['.hero .avatar', '.hero h1', '.hero p', '.hero .hero-cta', '.about .avatar', '.about .card', '.foot-grid > *'].forEach(sel=>{
-      $$(sel).forEach(el=>{ if(!el.classList.contains('will-reveal')) el.classList.add('will-reveal'); });
-    });
-    attachReveal(document);
-  }
-
-  // ===== RENDER PER ROUTE =====
-  function renderHome(){
-    setupSearch('home');
-    const filtered = searchFilter(posts.slice(), states.home.q);
-    const per = perPageForViewport();
-    const total = Math.max(1, Math.ceil(filtered.length / per));
-    states.home.page = Math.min(Math.max(1, states.home.page), total);
-    const start = (states.home.page-1)*per;
-    renderGrid(document.getElementById('grid-home'), filtered.slice(start, start+per));
-    renderPager('home', total);
-  }
-  function renderBlog(){
-    setupSearch('blog');
-    const base = posts.filter(p=> p.tags.includes('Blog'));
-    const filtered = searchFilter(base, states.blog.q);
-    const per = perPageForViewport();
-    const total = Math.max(1, Math.ceil(filtered.length / per));
-    states.blog.page = Math.min(Math.max(1, states.blog.page), total);
-    const start = (states.blog.page-1)*per;
-    renderGrid(document.getElementById('grid-blog'), filtered.slice(start, start+per));
-    renderPager('blog', total);
-  }
-  function renderNovel(){
-    setupSearch('novel');
-    const base = posts.filter(p=> p.tags.includes('Novel'));
-    const filtered = searchFilter(base, states.novel.q);
-    const per = perPageForViewport();
-    const total = Math.max(1, Math.ceil(filtered.length / per));
-    states.novel.page = Math.min(Math.max(1, states.novel.page), total);
-    const start = (states.novel.page-1)*per;
-    renderGrid(document.getElementById('grid-novel'), filtered.slice(start, start+per));
-    renderPager('novel', total);
-  }
-  function renderPost(id){
-    const idx = posts.findIndex(p=>p.id===id); const post = posts[idx] || posts[0];
-    document.title = post.title + ' — Rafy Rayyan';
-    $('#postTitle').textContent = post.title;
-    $('#postMeta').textContent = fmtDate(post.date) + ' • ' + post.tags.join(', ');
-    const hero = $('#postHero');
-    if(post.image){ hero.classList.remove('hidden'); const img = hero.firstElementChild; img.src = post.image; img.alt = 'Gambar: ' + post.title; }
-    else { hero.classList.add('hidden'); }
-    $('#postBody').innerHTML = post.body;
-    const prev = posts[idx-1]||null; const next = posts[idx+1]||null;
-    const prevA = $('#prevPost'); const nextA = $('#nextPost');
-    if(prev){ prevA.href = `#/post/${prev.id}`; prevA.textContent = '← ' + prev.title; prevA.style.visibility='visible'; } else prevA.style.visibility='hidden';
-    if(next){ nextA.href = `#/post/${next.id}`; nextA.textContent = next.title + ' →'; nextA.style.visibility='visible'; } else nextA.style.visibility='hidden';
-
-    // mount reactions & comments (Firebase functions exposed by module)
-    window.setupReactions?.(post.id);
-    window.mountComments?.(post.id);
-  }
-
-  function setActive(h){
-    $$('.menu a').forEach(a=>{
-      const k=a.dataset.link;
-      const on = (k==='home' && (h==='#/'||h===''||h==='#')) || (k==='about'&&h.startsWith('#/about')) || (k==='blog'&&h.startsWith('#/blog')) || (k==='novel'&&h.startsWith('#/novel'));
-      a.classList.toggle('active', on);
-    });
-  }
-  function show(view){
-    $('#view-home').classList.toggle('hidden', view!=='home');
-    $('#view-about').classList.toggle('hidden', view!=='about');
-    $('#view-post').classList.toggle('hidden', view!=='post');
-    $('#view-blog').classList.toggle('hidden', view!=='blog');
-    $('#view-novel').classList.toggle('hidden', view!=='novel');
-    window.scrollTo({top:0, behavior:'auto'});
-  }
-  function routeRender(){
-    const h = location.hash || '#/' ;
-    setActive(h);
-    showLoader();
-    const finish = ()=>{ prepareReveal(); setTimeout(hideLoader, 200); onScrollNav(); };
-    if(h.startsWith('#/post/')){ show('post'); renderPost(decodeURIComponent(h.replace('#/post/',''))); finish(); }
-    else if(h==='#/about'){ show('about'); finish(); }
-    else if(h==='#/blog'){ show('blog'); renderBlog(); finish(); }
-    else if(h==='#/novel'){ show('novel'); renderNovel(); finish(); }
-    else { show('home'); renderHome(); finish(); }
-  }
-  window.addEventListener('hashchange', routeRender);
-
-  // footer stats
-  $('#statPosts').textContent = posts.length;
-  $('#statTags').textContent = new Set(posts.flatMap(p=>p.tags)).size;
-
-  // Subscribe modal logic
-  function openSub(){ const m=$('#subModal'); if(m){ m.classList.remove('hidden'); $('#subEmail')?.focus(); document.body.style.overflow='hidden'; }}
-  function closeSub(){ $('#subModal')?.classList.add('hidden'); document.body.style.overflow=''; }
-  $('#openSub')?.addEventListener('click', openSub);
-  $('#closeSub')?.addEventListener('click', closeSub);
-  $('#subCancel')?.addEventListener('click', closeSub);
-  $('#subSave')?.addEventListener('click', ()=>{
-    const email = ($('#subEmail')?.value||'').trim();
-    const valid = /[^@\s]+@[^@\s]+\.[^@\s]+/.test(email);
-    const notice = $('#subNotice');
-    if(!valid){ notice.textContent='Email tidak valid.'; notice.style.color='salmon'; return; }
-    const key='subscribers'; const arr = JSON.parse(localStorage.getItem(key)||'[]');
-    if(!arr.includes(email)) arr.push(email);
-    localStorage.setItem(key, JSON.stringify(arr));
-    notice.textContent='Berhasil! Email tersimpan di perangkat ini. Integrasi pengiriman bisa ditambahkan nanti.'; notice.style.color='var(--muted)';
-    setTimeout(closeSub, 1000);
-  });
-  $('#subModal')?.addEventListener('click', (e)=>{ if(e.target.id==='subModal' || e.target.classList.contains('modal-backdrop')) closeSub(); });
-
-  // initial
-  routeRender();
-
-  // back-to-top
-  $('#toTop')?.addEventListener('click', ()=> window.scrollTo({top:0, behavior:'smooth'}));
-
-  // re-render on resize (for responsive per-page)
-  let rszT; 
-  window.addEventListener('resize', ()=>{ clearTimeout(rszT); rszT = setTimeout(()=> routeRender(), 120); });
-
-  // Boot splash on cold load
-  (function bootSplash(){
-    var l = document.getElementById('loader') || document.getElementById('page-loader');
-    if(!l) return;
-    var min = 550;
-    function splash(){
-      var start = performance.now();
-      l.classList.remove('hidden');
-      requestAnimationFrame(function(){
-        var wait = Math.max(0, min - (performance.now() - start));
-        setTimeout(function(){ l.classList.add('hidden'); }, wait);
-      });
-    }
-    if (document.readyState === 'complete' || document.readyState === 'interactive') splash();
-    else document.addEventListener('DOMContentLoaded', splash, {once:true});
-  })();
-  </script>
-
-  <div id="page-loader" class="loader" aria-hidden="true"><div class="spinner" role="status" aria-label="Memuat"></div></div>
-
   <!-- BACKGROUND MUSIC -->
+  <div id="page-loader" class="loader" aria-hidden="true"><div class="spinner" role="status" aria-label="Memuat"></div></div>
   <audio id="bgm" loop preload="auto"></audio>
   <button id="bgmToggle" class="bgm-btn" aria-pressed="false" title="Musik latar">
     <span class="bgm-ico" aria-hidden="true">🔇</span>
     <span class="visually-hidden">Toggle musik latar</span>
   </button>
-  <script>
-  (function(){
-    const MUSIC_SRC = new URLSearchParams(location.search).get('music') || 'audio/bg.mp3';
-    const bgm = document.getElementById('bgm');
-    const bgmBtn = document.getElementById('bgmToggle');
-    if(!bgm || !bgmBtn) return;
-    const ico = bgmBtn.querySelector('.bgm-ico');
-    bgm.src = MUSIC_SRC; bgm.loop = true; bgm.preload = 'auto';
-    try{ const vol = parseFloat(localStorage.getItem('bgmVol')||'0.7'); if(!Number.isNaN(vol)) bgm.volume = Math.min(1, Math.max(0, vol)); }catch(_){ }
-    function updateUI(){ const playing = !bgm.paused && !bgm.ended; bgmBtn.classList.toggle('playing', playing); bgmBtn.setAttribute('aria-pressed', playing? 'true':'false'); if(ico) ico.textContent = playing? '🔊':'🔇'; }
-    async function playIfAllowed(){ try{ await bgm.play(); localStorage.setItem('bgm','on'); } catch(e){ localStorage.setItem('bgm','off'); } finally{ updateUI(); } }
-    if(localStorage.getItem('bgm')==='on'){ playIfAllowed(); } else { updateUI(); }
-    bgmBtn.addEventListener('click', async ()=>{ if(bgm.paused){ await playIfAllowed(); } else { bgm.pause(); localStorage.setItem('bgm','off'); updateUI(); } });
-    document.addEventListener('pointerdown', function once(){ if(localStorage.getItem('bgm')==='on' && bgm.paused){ playIfAllowed(); } document.removeEventListener('pointerdown', once); }, {capture:false});
-    window.addEventListener('hashchange', ()=>{ if(localStorage.getItem('bgm')==='on' && bgm.paused){ playIfAllowed(); } });
-  })();
-  </script>
 
-  <!-- BGM first-visit autoplay + hashchange intercept -->
-  <script>
-  (function(){
-    var bgm = document.getElementById('bgm');
-    var btn = document.getElementById('bgmToggle');
-    if(!bgm || !btn) { return; }
-    var FIRST='bgm_first_visit';
-    var PENDING='bgm_autoplay_pending';
-    function updateIco(){
-      var ico = btn.querySelector('.bgm-ico');
-      if(!ico) return;
-      var playing = !bgm.paused && !bgm.ended;
-      btn.classList.toggle('playing', playing);
-      btn.setAttribute('aria-pressed', playing? 'true':'false');
-      ico.textContent = playing? '🔊':'🔇';
-    }
-    if(!sessionStorage.getItem(FIRST)){
-      sessionStorage.setItem(FIRST,'1');
-      bgm.play().then(function(){ localStorage.setItem('bgm','on'); updateIco(); })
-        .catch(function(){ sessionStorage.setItem(PENDING,'1'); updateIco(); });
-      document.addEventListener('pointerdown', function once(){
-        if(sessionStorage.getItem(PENDING)==='1' && bgm.paused){
-          bgm.play().then(function(){ localStorage.setItem('bgm','on'); })
-            .catch(function(){})
-            .finally(function(){ updateIco(); sessionStorage.removeItem(PENDING); });
-        }
-        document.removeEventListener('pointerdown', once);
-      }, {capture:false});
-    }
-    if(!window.__bgm_intercept_installed){
-      window.__bgm_intercept_installed = true;
-      window.addEventListener('hashchange', function(e){
-        if (typeof routeRender === 'function') { try { routeRender(); } catch(_){} }
-        e.stopImmediatePropagation();
-        e.stopPropagation();
-      }, true);
-    }
-  })();
-  </script>
-
-  <script>
-  (function(){
-    if(sessionStorage.getItem('bgm_autoplay_pending') !== '1') return;
-    var btn = document.getElementById('bgmToggle');
-    var bgm = document.getElementById('bgm');
-    if(!btn) return;
-    function showToast(){
-      if(document.getElementById('bgmToast')) return;
-      var t = document.createElement('div');
-      t.className = 'bgm-toast';
-      t.id = 'bgmToast';
-      t.textContent = 'Klik untuk nyalakan musik 🎵';
-      document.body.appendChild(t);
-      setTimeout(function(){ if(t && t.parentNode){ t.parentNode.removeChild(t); } }, 7000);
-    }
-    function hideToast(){ var t = document.getElementById('bgmToast'); if(t && t.parentNode){ t.parentNode.removeChild(t); } }
-    showToast();
-    if(bgm){ bgm.addEventListener('play', hideToast, {once:true}); }
-    btn.addEventListener('click', hideToast, {once:true});
-    function onInteract(){
-      if(bgm && sessionStorage.getItem('bgm_autoplay_pending')==='1' && bgm.paused){
-        bgm.play().then(function(){ localStorage.setItem('bgm','on'); }).catch(function(){})
-          .finally(function(){ hideToast(); sessionStorage.removeItem('bgm_autoplay_pending'); document.removeEventListener('pointerdown', onInteract); });
-      } else {
-        hideToast(); document.removeEventListener('pointerdown', onInteract);
-      }
-    }
-    document.addEventListener('pointerdown', onInteract, {capture:false});
-  })();
-  </script>
-
-  <!-- === FIREBASE (module) === -->
+  <!-- === SELURUH LOGIKA DALAM 1 MODULE (termasuk Firebase) === -->
   <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
-    import { getFirestore, doc, setDoc, getDoc, updateDoc, serverTimestamp, onSnapshot, collection, query, orderBy, addDoc } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+    /* =================== THEME =================== */
+    const $ = (sel, el = document) => el.querySelector(sel);
+    const $$ = (sel, el = document) => Array.from(el.querySelectorAll(sel));
+    const root = document.documentElement;
+    const setTheme = (t)=>{ root.setAttribute('data-theme', t); localStorage.setItem('theme', t); const ic = $('#themeIcon'); if(ic){ ic.textContent = t==='light' ? '☀️' : '🌙'; ic.style.transition='transform .45s var(--ease)'; ic.style.transform = t==='light' ? 'rotate(-180deg) scale(1.1)' : 'rotate(0deg)'; } $('#themeToggle').setAttribute('aria-pressed', t==='dark' ? 'true':'false'); };
+    const savedTheme = localStorage.getItem('theme') || (matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+    setTheme(savedTheme);
+    $('#themeToggle').addEventListener('click', ()=> setTheme(root.getAttribute('data-theme')==='dark'?'light':'dark'));
 
-    // Your config
+    const monthID = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+    const fmtDate = (iso) => { const d = new Date(iso + 'T00:00:00'); return `${d.getDate()} ${monthID[d.getMonth()]} ${d.getFullYear()}`; };
+
+    /* =================== DATA POSTS =================== */
+    const posts = [
+      { id:'novel-bab-1', title:'Novel — Bab 1: Pagi yang Menggantung', date:'2025-08-20',
+        tags:['Novel','Progres','Bab 1'],
+        image:'https://images.unsplash.com/photo-1507842217343-583bb7270b66?q=80&w=1200&auto=format&fit=crop',
+        excerpt:'Awal cerita—sebuah pagi di Jakarta, ketika segalanya terasa biasa saja, sampai tidak lagi…',
+        body:`<p>Pagi di Jakarta selalu terdengar sama: klakson, pedagang roti, dan radio tetangga yang tak pernah tepat frekuensi. Aku berjalan menembus lorong kos yang sempit sambil menghitung napas.</p>
+        <p>Di halaman, ada sandal yang ditinggalkan tergesa. "Pertanda baik atau buruk?" batinku. Telepon bergetar—pesan dari Ibu, hanya satu kata: <em>Pulang.</em></p>
+        <h2>Set up konflik</h2><p>Bab ini memperkenalkan dua hal: hilangnya figur jangkar dan kota yang ikut menelan suara.</p>`},
+
+      { id:'catatan-riset', title:'Catatan Riset: Menentukan Setting & Perspektif', date:'2025-08-18',
+        tags:['Novel','Catatan','Riset'],
+        image:'https://images.unsplash.com/photo-1519681393784-d120267933ba?q=80&w=1200&auto=format&fit=crop',
+        excerpt:'Kenapa memilih sudut pandang orang pertama? Plus daftar referensi yang kupakai.',
+        body:`<p>Aku membandingkan POV orang pertama vs orang ketiga terbatas. Pilihan jatuh ke orang pertama untuk menangkap kegelisahan tokoh secara dekat.</p>
+        <blockquote>Satu kota bisa menjadi tokoh, jika kita memberinya napas.</blockquote>
+        <p>Referensi: <em>Norwegian Wood</em>, <em>Lelaki Harimau</em>, dan esai dialog.</p>`},
+
+      { id:'teknik-dialog', title:'Teknik Dialog: Biar Ngobrolnya Hidup', date:'2025-08-16',
+        tags:['Tips Menulis','Workshop','Blog'],
+        image:'https://images.unsplash.com/photo-1515516969-d4008cc6241a?q=80&w=1200&auto=format&fit=crop',
+        excerpt:'Beberapa trik sederhana untuk bikin dialog terasa alami tanpa “ceramah”.',
+        body:`<p>Trik cepat: kurangi penjelasan setelah dialog, biarkan respon lawan bicara memikul makna.</p>
+          <ul><li>Gunakan jeda seperlunya.</li><li>Gesture kecil menandai emosi.</li><li>Seimbangkan “kataku, katanya” dengan aksi.</li></ul>`},
+
+      { id:'novel-outline', title:'Outline Kasar: Alur Besar Novel', date:'2025-08-14',
+        tags:['Novel','Outline','Progres'],
+        image:'https://images.unsplash.com/photo-1491841550275-ad7854e35ca6?q=80&w=1200&auto=format&fit=crop',
+        excerpt:'Kerangka 3 babak + benang merah konflik utama dan subplot keluarga.',
+        body:`<p>Struktur 3 babak: pengenalan — eskalasi — resolusi. Subplot keluarga menempel pada pilihan kuliah tokoh.</p>`},
+
+      { id:'random-thoughts', title:'Random Thoughts: Nulis di Tengah Deadline', date:'2025-08-12',
+        tags:['Blog','Opini','Produktivitas'],
+        image:'https://images.unsplash.com/photo-1516542076529-1ea3854896e1?q=80&w=1200&auto=format&fit=crop',
+        excerpt:'Cara bagiku menjaga ritme nulis tanpa ngorbanin sekolah.',
+        body:`<p>Strategi: nulis 25 menit, rehat 5 menit—ulang 3 kali. Satu sesi ≈ 1 halaman.</p>`},
+
+      { id:'novel-bab-2', title:'Novel — Bab 2: Peta yang Hilang', date:'2025-08-10',
+        tags:['Novel','Progres','Bab 2'],
+        image:'https://images.unsplash.com/photo-1455390582262-044cdead277a?q=80&w=1200&auto=format&fit=crop',
+        excerpt:'Tokoh menemukan peta usang yang menuntun ke masa lalu ayahnya.',
+        body:`<p>Peta jadi pemicu babak dua.</p>`},
+
+      { id:'tips-outline', title:'Tips Outline yang Nggak Bikin Pusing', date:'2025-08-08',
+        tags:['Blog','Tips Menulis'],
+        image:'https://images.unsplash.com/photo-1524578271613-d550eacf6090?q=80&w=1200&auto=format&fit=crop',
+        excerpt:'Cara cepat bikin outline versi “kabel rapi”.',
+        body:`<p>Pakai pola 3 babak, tulis konflik per babak dalam 1 kalimat.</p>`},
+
+      { id:'novel-riset-lokasi', title:'Riset Lokasi: Catatan Lapangan', date:'2025-08-06',
+        tags:['Novel','Riset'],
+        image:'https://images.unsplash.com/photo-1456425712190-0dd8c2b00156?q=80&w=1200&auto=format&fit=crop',
+        excerpt:'Rute bus, suara pasar pagi, dan aroma hujan—semua dicatat.',
+        body:`<p>Merekam detail sensorik untuk adegan.</p>`},
+
+      { id:'esai-favorit', title:'Esai Favorit tentang Penokohan', date:'2025-08-04',
+        tags:['Blog','Opini'],
+        image:'https://images.unsplash.com/photo-1455390582262-044cdead277a?q=80&w=1200&auto=format&fit=crop',
+        excerpt:'Kumpulan esai yang bikin mikir ulang cara membangun karakter.',
+        body:`<p>Daftar esai dan ringkasannya.</p>`},
+
+      { id:'novel-bab-3', title:'Novel — Bab 3: Telepon Tengah Malam', date:'2025-08-02',
+        tags:['Novel','Progres','Bab 3'],
+        image:'https://images.unsplash.com/photo-1497250681960-ef046c08a56e?q=80&w=1200&auto=format&fit=crop',
+        excerpt:'Sebuah telepon mengubah keputusan tokoh.',
+        body:`<p>Twist pertama muncul.</p>`},
+
+      { id:'catatan-gaya', title:'Catatan Gaya: Metafora yang Hemat', date:'2025-07-30',
+        tags:['Blog','Catatan'],
+        image:'https://images.unsplash.com/photo-1526318472351-c75fcf070305?q=80&w=1200&auto=format&fit=crop',
+        excerpt:'Menjaga metafora tetap jernih dan tepat sasaran.',
+        body:`<p>Contoh sebelum–sesudah.</p>`},
+
+      { id:'review-buku', title:'Review Buku: Cara Menulis Dialog', date:'2025-07-28',
+        tags:['Blog','Review'],
+        image:'https://images.unsplash.com/photo-1544930834-45e1b225b0cc?q=80&w=1200&auto=format&fit=crop',
+        excerpt:'Catatan dari buku craft writing favorit.',
+        body:`<p>Tiga poin yang bisa langsung dipraktikkan.</p>`},
+
+      { id:'novel-bab-4', title:'Novel — Bab 4: Hujan di Peron', date:'2025-07-26',
+        tags:['Novel','Progres','Bab 4'],
+        image:'https://images.unsplash.com/photo-1444723121867-7a241cacace9?q=80&w=1200&auto=format&fit=crop',
+        excerpt:'Adegan peron jadi titik balik relasi.',
+        body:`<p>Adegan dialog singkat namun tajam.</p>`},
+    ];
+
+    const states = { home:{q:'', page:1}, blog:{q:'', page:1}, novel:{q:'', page:1} };
+
+    function cardHTML(p){
+      return `
+        <a class="card-link" href="#/post/${encodeURIComponent(p.id)}" aria-label="Buka: ${p.title}">
+          <article class="card will-reveal">
+            <div class="thumb">${p.image?`<img src="${p.image}" alt="Thumbnail untuk: ${p.title}">`:''}</div>
+            <div class="card-body">
+              <div class="meta"><span>${fmtDate(p.date)}</span> • <span>${p.tags[0]}</span></div>
+              <h3 class="title">${p.title}</h3>
+              <p>${p.excerpt}</p>
+              <div class="tags">${p.tags.map(t => `<span class="tag">#${t}</span>`).join('')}</div>
+            </div>
+          </article>
+        </a>`;
+    }
+    const norm = (s)=> (s||'').toLowerCase().replace(/<[^>]+>/g,' ');
+    function searchFilter(list, q){
+      const tokens = q.trim()? q.trim().toLowerCase().split(/\s+/):[];
+      let res = list;
+      if(tokens.length){
+        res = res.filter(p=>{
+          const hay = norm(p.title+' '+p.excerpt+' '+p.tags.join(' ')+' '+p.body);
+          return tokens.every(t=> hay.includes(t));
+        });
+      }
+      return res.sort((a,b)=> new Date(b.date)-new Date(a.date));
+    }
+    function renderGrid(gridEl, list){
+      const fallback = `<div style="grid-column:1/-1;padding:26px;border:1px dashed rgba(255,255,255,.18);border-radius:14px;text-align:center;color:var(--muted)">Tidak ada hasil yang cocok.</div>`;
+      gridEl.innerHTML = list.length ? list.map(cardHTML).join('') : fallback;
+      attachReveal(gridEl);
+      $$('.thumb', gridEl).forEach(t=>{
+        t.classList.add('skeleton');
+        const img = t.querySelector('img');
+        if(img){
+          img.setAttribute('loading','lazy');
+          img.addEventListener('load', ()=> t.classList.remove('skeleton'), {once:true});
+          img.addEventListener('error', ()=> t.classList.remove('skeleton'), {once:true});
+        } else { t.classList.remove('skeleton'); }
+      });
+    }
+
+    function setupSearch(view){
+      const S = states[view];
+      const input = document.getElementById(`search-${view}`);
+      if(!input || input.dataset.inited){return;}
+      input.dataset.inited='1';
+      window.addEventListener('keydown', (e)=>{ if(document.getElementById(`view-${view}`).classList.contains('hidden')) return; if(e.key==='/' && document.activeElement!==input){ e.preventDefault(); input.focus(); } });
+      input.addEventListener('input', e=>{ S.q = e.target.value; S.page = 1; routeRender(); });
+    }
+
+    const perPageForViewport = ()=> (innerWidth < 640 ? 8 : (innerWidth <= 1024 ? 8 : 12));
+
+    function renderPager(view, totalPages){
+      const wrap = document.getElementById(`pager-${view}`);
+      if(!wrap) return;
+      const cur = states[view].page;
+      if(totalPages <= 1){ wrap.innerHTML = ''; return; }
+
+      const nums = [];
+      const push = n => nums.push(`<button class="btn ${n===cur?'active':''}" data-p="${n}">${n}</button>`);
+      const addDots = ()=> nums.push(`<span style="padding:8px 6px;color:var(--muted)">…</span>`);
+
+      push(1);
+      if(cur > 3) addDots();
+      for(let n=Math.max(2,cur-1); n<=Math.min(totalPages-1,cur+1); n++) push(n);
+      if(cur < totalPages-2) addDots();
+      if(totalPages>1) push(totalPages);
+
+      wrap.innerHTML = `
+        <button class="btn" data-p="prev" ${cur===1?'disabled':''}>←</button>
+        ${nums.join('')}
+        <button class="btn" data-p="next" ${cur===totalPages?'disabled':''}>→</button>
+      `;
+
+      wrap.onclick = (e)=>{
+        const p = e.target.getAttribute('data-p');
+        if(!p) return;
+        if(p==='prev' && states[view].page>1) states[view].page--;
+        else if(p==='next' && states[view].page<totalPages) states[view].page++;
+        else if(/^\d+$/.test(p)) states[view].page = parseInt(p,10);
+        routeRender();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      };
+    }
+
+    function onScrollNav(){ document.querySelector('.nav')?.classList.toggle('scrolled', window.scrollY>4); }
+    window.addEventListener('scroll', onScrollNav);
+
+    const showLoader = ()=> $('#page-loader')?.classList.add('show');
+    const hideLoader = ()=> $('#page-loader')?.classList.remove('show');
+
+    const revealObs = new IntersectionObserver((entries)=>{
+      entries.forEach(en=>{ if(en.isIntersecting){ en.target.classList.add('reveal-in'); revealObs.unobserve(en.target); } });
+    }, {rootMargin:'0px 0px -10% 0px', threshold:0.1});
+    function attachReveal(scope){ $$('.will-reveal', scope||document).forEach(el=> revealObs.observe(el)); }
+    function prepareReveal(){
+      ['.hero .avatar', '.hero h1', '.hero p', '.hero .hero-cta', '.about .avatar', '.about .card', '.foot-grid > *'].forEach(sel=>{
+        $$(sel).forEach(el=>{ if(!el.classList.contains('will-reveal')) el.classList.add('will-reveal'); });
+      });
+      attachReveal(document);
+    }
+
+    function renderHome(){
+      setupSearch('home');
+      const filtered = searchFilter(posts.slice(), states.home.q);
+      const per = perPageForViewport();
+      const total = Math.max(1, Math.ceil(filtered.length / per));
+      states.home.page = Math.min(Math.max(1, states.home.page), total);
+      const start = (states.home.page-1)*per;
+      renderGrid(document.getElementById('grid-home'), filtered.slice(start, start+per));
+      renderPager('home', total);
+    }
+    function renderBlog(){
+      setupSearch('blog');
+      const base = posts.filter(p=> p.tags.includes('Blog'));
+      const filtered = searchFilter(base, states.blog.q);
+      const per = perPageForViewport();
+      const total = Math.max(1, Math.ceil(filtered.length / per));
+      states.blog.page = Math.min(Math.max(1, states.blog.page), total);
+      const start = (states.blog.page-1)*per;
+      renderGrid(document.getElementById('grid-blog'), filtered.slice(start, start+per));
+      renderPager('blog', total);
+    }
+    function renderNovel(){
+      setupSearch('novel');
+      const base = posts.filter(p=> p.tags.includes('Novel'));
+      const filtered = searchFilter(base, states.novel.q);
+      const per = perPageForViewport();
+      const total = Math.max(1, Math.ceil(filtered.length / per));
+      states.novel.page = Math.min(Math.max(1, states.novel.page), total);
+      const start = (states.novel.page-1)*per;
+      renderGrid(document.getElementById('grid-novel'), filtered.slice(start, start+per));
+      renderPager('novel', total);
+    }
+
+    function renderPost(id){
+      const idx = posts.findIndex(p=>p.id===id); const post = posts[idx] || posts[0];
+      document.title = post.title + ' — Rafy Rayyan';
+      $('#postTitle').textContent = post.title;
+      $('#postMeta').textContent = fmtDate(post.date) + ' • ' + post.tags.join(', ');
+      const hero = $('#postHero');
+      if(post.image){ hero.classList.remove('hidden'); const img = hero.firstElementChild; img.src = post.image; img.alt = 'Gambar: ' + post.title; }
+      else { hero.classList.add('hidden'); }
+      $('#postBody').innerHTML = post.body;
+      const prev = posts[idx-1]||null; const next = posts[idx+1]||null;
+      const prevA = $('#prevPost'); const nextA = $('#nextPost');
+      if(prev){ prevA.href = `#/post/${prev.id}`; prevA.textContent = '← ' + prev.title; prevA.style.visibility='visible'; } else prevA.style.visibility='hidden';
+      if(next){ nextA.href = `#/post/${next.id}`; nextA.textContent = next.title + ' →'; nextA.style.visibility='visible'; } else nextA.style.visibility='hidden';
+
+      // Setup reactions & comments for this post
+      setupReactions(post.id);
+      setupComments(post.id);
+    }
+
+    function setActive(h){
+      $$('.menu a').forEach(a=>{
+        const k=a.dataset.link;
+        const on = (k==='home' && (h==='#/'||h===''||h==='#')) || (k==='about'&&h.startsWith('#/about')) || (k==='blog'&&h.startsWith('#/blog')) || (k==='novel'&&h.startsWith('#/novel'));
+        a.classList.toggle('active', on);
+      });
+    }
+    function show(view){
+      $('#view-home').classList.toggle('hidden', view!=='home');
+      $('#view-about').classList.toggle('hidden', view!=='about');
+      $('#view-post').classList.toggle('hidden', view!=='post');
+      $('#view-blog').classList.toggle('hidden', view!=='blog');
+      $('#view-novel').classList.toggle('hidden', view!=='novel');
+      window.scrollTo({top:0, behavior:'auto'});
+    }
+    function routeRender(){
+      const h = location.hash || '#/' ;
+      setActive(h);
+      showLoader();
+      const finish = ()=>{ prepareReveal(); setTimeout(hideLoader, 200); onScrollNav(); };
+      if(h.startsWith('#/post/')){ show('post'); renderPost(decodeURIComponent(h.replace('#/post/',''))); finish(); }
+      else if(h==='#/about'){ show('about'); finish(); }
+      else if(h==='#/blog'){ show('blog'); renderBlog(); finish(); }
+      else if(h==='#/novel'){ show('novel'); renderNovel(); finish(); }
+      else { show('home'); renderHome(); finish(); }
+    }
+    window.addEventListener('hashchange', routeRender);
+
+    $('#statPosts').textContent = posts.length;
+    $('#statTags').textContent = new Set(posts.flatMap(p=>p.tags)).size;
+
+    function openSub(){ const m=$('#subModal'); if(m){ m.classList.remove('hidden'); $('#subEmail')?.focus(); document.body.style.overflow='hidden'; }}
+    function closeSub(){ $('#subModal')?.classList.add('hidden'); document.body.style.overflow=''; }
+    $('#openSub')?.addEventListener('click', openSub);
+    $('#closeSub')?.addEventListener('click', closeSub);
+    $('#subCancel')?.addEventListener('click', closeSub);
+    $('#subSave')?.addEventListener('click', ()=>{
+      const email = ($('#subEmail')?.value||'').trim();
+      const valid = /[^@\s]+@[^@\s]+\.[^@\s]+/.test(email);
+      const notice = $('#subNotice');
+      if(!valid){ notice.textContent='Email tidak valid.'; notice.style.color='salmon'; return; }
+      const key='subscribers'; const arr = JSON.parse(localStorage.getItem(key)||'[]');
+      if(!arr.includes(email)) arr.push(email);
+      localStorage.setItem(key, JSON.stringify(arr));
+      notice.textContent='Berhasil! Email tersimpan di perangkat ini. Integrasi pengiriman bisa ditambahkan nanti.'; notice.style.color='var(--muted)';
+      setTimeout(closeSub, 1000);
+    });
+    $('#subModal')?.addEventListener('click', (e)=>{ if(e.target.id==='subModal' || e.target.classList.contains('modal-backdrop')) closeSub(); });
+
+    // back-to-top
+    $('#toTop')?.addEventListener('click', ()=> window.scrollTo({top:0, behavior:'smooth'}));
+
+    // re-render on resize
+    let rszT; 
+    window.addEventListener('resize', ()=>{ clearTimeout(rszT); rszT = setTimeout(()=> routeRender(), 120); });
+
+    (function bootSplash(){
+      var l = document.getElementById('loader') || document.getElementById('page-loader');
+      if(!l) return;
+      var min = 550;
+      function splash(){
+        var start = performance.now();
+        l.classList.remove('hidden');
+        requestAnimationFrame(function(){
+          var wait = Math.max(0, min - (performance.now() - start));
+          setTimeout(function(){ l.classList.add('hidden'); }, wait);
+        });
+      }
+      if (document.readyState === 'complete' || document.readyState === 'interactive') splash();
+      else document.addEventListener('DOMContentLoaded', splash, {once:true});
+    })();
+
+    /* =================== BGM =================== */
+    (function(){
+      const MUSIC_SRC = new URLSearchParams(location.search).get('music') || 'bgm.mp3';
+      const bgm = document.getElementById('bgm');
+      const bgmBtn = document.getElementById('bgmToggle');
+      if(!bgm || !bgmBtn) return;
+      const ico = bgmBtn.querySelector('.bgm-ico');
+      bgm.src = MUSIC_SRC; bgm.loop = true; bgm.preload = 'auto';
+      try{ const vol = parseFloat(localStorage.getItem('bgmVol')||'0.7'); if(!Number.isNaN(vol)) bgm.volume = Math.min(1, Math.max(0, vol)); }catch(_){ }
+      function updateUI(){ const playing = !bgm.paused && !bgm.ended; bgmBtn.classList.toggle('playing', playing); bgmBtn.setAttribute('aria-pressed', playing? 'true':'false'); if(ico) ico.textContent = playing? '🔊':'🔇'; }
+      async function playIfAllowed(){ try{ await bgm.play(); localStorage.setItem('bgm','on'); } catch(e){ localStorage.setItem('bgm','off'); } finally{ updateUI(); } }
+      if(localStorage.getItem('bgm')==='on'){ playIfAllowed(); } else { updateUI(); }
+      bgmBtn.addEventListener('click', async ()=>{ if(bgm.paused){ await playIfAllowed(); } else { bgm.pause(); localStorage.setItem('bgm','off'); updateUI(); } });
+      document.addEventListener('pointerdown', function once(){ if(localStorage.getItem('bgm')==='on' && bgm.paused){ playIfAllowed(); } document.removeEventListener('pointerdown', once); }, {capture:false});
+      window.addEventListener('hashchange', ()=>{ if(localStorage.getItem('bgm')==='on' && bgm.paused){ playIfAllowed(); } });
+    })();
+
+    (function(){
+      var bgm = document.getElementById('bgm');
+      var btn = document.getElementById('bgmToggle');
+      if(!bgm || !btn) { return; }
+      var FIRST='bgm_first_visit';
+      var PENDING='bgm_autoplay_pending';
+      function updateIco(){
+        var ico = btn.querySelector('.bgm-ico');
+        if(!ico) return;
+        var playing = !bgm.paused && !bgm.ended;
+        btn.classList.toggle('playing', playing);
+        btn.setAttribute('aria-pressed', playing? 'true':'false');
+        ico.textContent = playing? '🔊':'🔇';
+      }
+      if(!sessionStorage.getItem(FIRST)){
+        sessionStorage.setItem(FIRST,'1');
+        bgm.play().then(function(){ localStorage.setItem('bgm','on'); updateIco(); })
+          .catch(function(){ sessionStorage.setItem(PENDING,'1'); updateIco(); });
+        document.addEventListener('pointerdown', function once(){
+          if(sessionStorage.getItem(PENDING)==='1' && bgm.paused){
+            bgm.play().then(function(){ localStorage.setItem('bgm','on'); })
+              .catch(function(){})
+              .finally(function(){ updateIco(); sessionStorage.removeItem(PENDING); document.removeEventListener('pointerdown', once); });
+          } else {
+            updateIco(); document.removeEventListener('pointerdown', once);
+          }
+        }, {capture:false});
+      }
+      if(!window.__bgm_intercept_installed){
+        window.__bgm_intercept_installed = true;
+        window.addEventListener('hashchange', function(e){
+          if (typeof routeRender === 'function') { try { routeRender(); } catch(_){} }
+          e.stopImmediatePropagation();
+          e.stopPropagation();
+        }, true);
+      }
+    })();
+
+    (function(){
+      if(sessionStorage.getItem('bgm_autoplay_pending') !== '1') return;
+      var btn = document.getElementById('bgmToggle');
+      var bgm = document.getElementById('bgm');
+      if(!btn) return;
+      function showToast(){
+        if(document.getElementById('bgmToast')) return;
+        var t = document.createElement('div');
+        t.className = 'bgm-toast';
+        t.id = 'bgmToast';
+        t.textContent = 'Klik untuk nyalakan musik 🎵';
+        document.body.appendChild(t);
+        setTimeout(function(){ if(t && t.parentNode){ t.parentNode.removeChild(t); } }, 7000);
+      }
+      function hideToast(){ var t = document.getElementById('bgmToast'); if(t && t.parentNode){ t.parentNode.removeChild(t); } }
+      showToast();
+      if(bgm){ bgm.addEventListener('play', hideToast, {once:true}); }
+      btn.addEventListener('click', hideToast, {once:true});
+      function onInteract(){
+        if(bgm && sessionStorage.getItem('bgm_autoplay_pending')==='1' && bgm.paused){
+          bgm.play().then(function(){ localStorage.setItem('bgm','on'); }).catch(function(){})
+            .finally(function(){ hideToast(); sessionStorage.removeItem('bgm_autoplay_pending'); document.removeEventListener('pointerdown', onInteract); });
+        } else {
+          hideToast(); document.removeEventListener('pointerdown', onInteract);
+        }
+      }
+      document.addEventListener('pointerdown', onInteract, {capture:false});
+    })();
+
+    /* =================== FIREBASE (COMMENTS + REACTIONS) =================== */
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+    import { getFirestore, collection, doc, addDoc, setDoc, deleteDoc, onSnapshot, getDocs, serverTimestamp, query, orderBy } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+
     const firebaseConfig = {
       apiKey: "AIzaSyA0Nc3sCYCfhsX6y6Ft5SxEuZDBcfT0zHk",
       authDomain: "rafyermadi-a4e98.firebaseapp.com",
@@ -856,163 +852,131 @@
       messagingSenderId: "529097759816",
       appId: "1:529097759816:web:7c0081bf4b612b2dee4c7d"
     };
-
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
     console.log('Firebase ready');
 
-    // helpers
-    const EMOJIS = [
-      {key:'like', char:'👍', title:'Suka'},
-      {key:'love', char:'❤️', title:'Cinta'},
-      {key:'fire', char:'🔥', title:'Keren'},
-      {key:'clap', char:'👏', title:'Bagus'},
-      {key:'wow',  char:'😯', title:'Wow'},
-    ];
+    // Device id (persist di localStorage)
     function getDeviceId(){
       let id = localStorage.getItem('deviceId');
       if(!id){
-        id = (crypto.randomUUID ? crypto.randomUUID() : 'dev-' + Math.random().toString(36).slice(2));
+        if (crypto?.randomUUID) id = crypto.randomUUID();
+        else id = 'dev-' + Math.random().toString(36).slice(2) + Date.now().toString(36);
         localStorage.setItem('deviceId', id);
       }
       return id;
     }
 
-    // ===== Reactions =====
-    let _unsubReact = null;
-    window.setupReactions = async function(postId){
-      const bar = document.getElementById('reactBar');
-      if(!bar) return;
-      bar.innerHTML = EMOJIS.map(e=>`<button class="react-btn" data-k="${e.key}" title="${e.title}"><span class="emo">${e.char}</span><span class="num">0</span></button>`).join('');
-
-      const devId = getDeviceId();
-      const colRef = collection(db, 'posts', postId, 'reactions');
-      const myRef = doc(db, 'posts', postId, 'reactions', devId);
-
-      // live counts + my state
-      if(_unsubReact) _unsubReact();
-      _unsubReact = onSnapshot(colRef, snap=>{
-        const counts = {like:0,love:0,fire:0,clap:0,wow:0};
-        let mine = {};
-        snap.forEach(d=>{
-          const v = d.data();
-          EMOJIS.forEach(e=>{ if(v[e.key]) counts[e.key]++; });
-          if(d.id===devId) mine = v||{};
-        });
-        // update UI
-        EMOJIS.forEach(e=>{
-          const btn = bar.querySelector(`.react-btn[data-k="${e.key}"]`);
-          if(btn){
-            btn.querySelector('.num').textContent = counts[e.key]||0;
-            btn.classList.toggle('active', !!mine[e.key]);
-          }
-        });
-      });
-
-      // click -> toggle one emoji for my doc
-      bar.onclick = async (ev)=>{
-        const btn = ev.target.closest('.react-btn');
-        if(!btn) return;
-        const k = btn.getAttribute('data-k');
-        try{
-          const curSnap = await getDoc(myRef);
-          const cur = curSnap.exists()? (curSnap.data()||{}) : {like:false,love:false,fire:false,clap:false,wow:false};
-          const next = {like:!!cur.like, love:!!cur.love, fire:!!cur.fire, clap:!!cur.clap, wow:!!cur.wow};
-          next[k] = !next[k];
-          await setDoc(myRef, { ...next, updatedAt: serverTimestamp(), device: devId }, { merge:true });
-        }catch(err){
-          console.error(err);
-          alert('Gagal menyimpan reaction.');
-        }
-      };
+    // ======== Reactions ========
+    const EMOJIS = ['👍','❤️','🔥','👏','😯'];
+    let unsubReact = null;
+    function renderReactRow(container, counts, activeFlags){
+      container.innerHTML = EMOJIS.map((e,i)=>{
+        const c = counts[e]||0; const on = !!activeFlags[e];
+        return `<button class="rx-btn ${on?'active':''}" data-k="${e}" title="${e}"><span class="rx-e">${e}</span> <span class="rx-c">${c}</span></button>`;
+      }).join('');
     }
 
-    // ===== Comments =====
-    let _unsubComments = null;
-    window.mountComments = function(postId){
-      const wrap = document.getElementById('cmWrap');
+    function setupReactions(postId){
+      const wrap = $('#reactRow');
       if(!wrap) return;
-      wrap.innerHTML = `
-        <div id="cmList"></div>
-        <form id="cmForm" class="cm-form" autocomplete="off">
-          <input id="cmName" placeholder="Nama (opsional)" maxlength="40"/>
-          <input id="cmAvatar" placeholder="URL foto profil (opsional)"/>
-          <textarea id="cmText" placeholder="Tulis komentar…" rows="3" required></textarea>
-          <div style="display:flex;gap:8px;justify-content:flex-end">
-            <button type="reset" class="btn">Bersihkan</button>
-            <button type="submit" class="btn primary">Kirim</button>
-          </div>
-        </form>`;
+      const deviceId = getDeviceId();
+      let myDoc = {}; // cache flags milik device ini
 
-      const listEl = document.getElementById('cmList');
-      const form = document.getElementById('cmForm');
-      const nameEl = document.getElementById('cmName');
-      const avatarEl = document.getElementById('cmAvatar');
-      const textEl = document.getElementById('cmText');
-
-      // restore last name/avatar
-      try{ nameEl.value = localStorage.getItem('cmName')||''; avatarEl.value = localStorage.getItem('cmAvatar')||''; }catch(_){ }
-
-      const colRef = collection(db, 'posts', postId, 'comments');
-      if(_unsubComments) _unsubComments();
-      _unsubComments = onSnapshot(query(colRef, orderBy('createdAt','asc')), (snap)=>{
-        const items = [];
+      // Listener menghitung total
+      if (unsubReact) { try{unsubReact();}catch(_){}}; 
+      const col = collection(db, `posts/${postId}/reactions`);
+      unsubReact = onSnapshot(col, (snap)=>{
+        const counts = { '👍':0,'❤️':0,'🔥':0,'👏':0,'😯':0 };
+        myDoc = {};
         snap.forEach(d=>{
-          const v = d.data();
-          const when = v.createdAt?.toDate ? v.createdAt.toDate() : (v.createdAt||new Date());
-          const t = new Date(when);
-          const time = `${t.getDate().toString().padStart(2,'0')} ${['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'][t.getMonth()]} ${t.getFullYear()}, ${t.getHours().toString().padStart(2,'0')}.${t.getMinutes().toString().padStart(2,'0')}`;
-          const ava = v.avatar ? `<img src="${v.avatar}" alt="avatar" width="28" height="28">` : '';
-          items.push(`<div class="cm-item"><div class="cm-avatar">${ava}</div><div><div class="cm-head">${(v.name||'Anonim')}<span class="cm-time">• ${time}</span></div><div>${(v.text||'').replace(/[<>]/g,'')}</div></div></div>`);
+          const data = d.data();
+          EMOJIS.forEach(k=>{ if(data[k]) counts[k]++; });
+          if(d.id === deviceId){ EMOJIS.forEach(k=> myDoc[k] = !!data[k]); }
         });
-        listEl.innerHTML = items.join('');
+        renderReactRow(wrap, counts, myDoc);
       });
 
-      form.onsubmit = async (e)=>{
-        e.preventDefault();
-        const text = textEl.value.trim();
-        if(!text) return;
+      // Click handler
+      wrap.onclick = async (e)=>{
+        const btn = e.target.closest('.rx-btn'); if(!btn) return;
+        const key = btn.getAttribute('data-k');
+        const ref = doc(db, `posts/${postId}/reactions/${deviceId}`);
+        const newVal = !myDoc[key];
+        // bentuk data set
+        const payload = { [key]: newVal, updatedAt: serverTimestamp() };
         try{
-          await addDoc(colRef, {
-            name: nameEl.value.trim().slice(0,40) || null,
-            avatar: avatarEl.value.trim() || null,
-            text: text.slice(0, 1000),
-            createdAt: serverTimestamp(),
-            device: getDeviceId()
-          });
-          localStorage.setItem('cmName', nameEl.value.trim());
-          localStorage.setItem('cmAvatar', avatarEl.value.trim());
-          textEl.value='';
+          // jika setelah toggle semua off -> hapus dokumen
+          const temp = { ...myDoc, [key]: newVal };
+          const allOff = EMOJIS.every(k => !temp[k]);
+          if(allOff){ await deleteDoc(ref); }
+          else { await setDoc(ref, payload, { merge:true }); }
         }catch(err){
+          alert('Gagal menyimpan reaction.');
           console.error(err);
-          alert('Gagal mengirim komentar.');
         }
       };
     }
-  </script>
 
-  <!-- Firestore Rules (referensi, set via Console) 
-  rules_version = '2';
-  service cloud.firestore {
-    match /databases/{database}/documents {
-      // Semua boleh baca
-      match /{document=**} { allow read: if true; }
+    // ======== Comments ========
+    let unsubC = null;
+    function setupComments(postId){
+      const list = $('#cList');
+      const nameI = $('#cName');
+      const avatarI = $('#cAvatar');
+      const textI = $('#cText');
+      const clearB = $('#cClear');
+      const sendB = $('#cSend');
+      if(!list || !textI) return;
+      if(unsubC){ try{unsubC();}catch(_){}}
 
-      // Reactions: posts/{postId}/reactions/{deviceId}
-      match /posts/{postId}/reactions/{deviceId} {
-        allow create, update, delete: if request.resource.data.diff(resource.data).changedKeys().hasOnly(['like','love','fire','clap','wow','updatedAt','device'])
-          && request.auth == null; // tanpa login
-      }
+      const qRef = query(collection(db, `posts/${postId}/comments`), orderBy('createdAt','desc'));
+      unsubC = onSnapshot(qRef, (snap)=>{
+        list.innerHTML = '';
+        snap.forEach(d=>{
+          const v = d.data();
+          const t = document.createElement('div');
+          t.className = 'card';
+          t.style.padding = '10px';
+          const date = v.createdAt?.toDate ? v.createdAt.toDate() : new Date();
+          const when = date.toLocaleString('id-ID', { day:'2-digit', month:'short', year:'numeric', hour:'2-digit', minute:'2-digit' });
+          t.innerHTML = `
+            <div style="display:flex;gap:10px;align-items:flex-start">
+              <div style="width:34px;height:34px;border-radius:50%;overflow:hidden;background:#111;border:1px solid rgba(255,255,255,.1)">
+                ${v.avatar ? `<img src="${v.avatar}" alt="${v.name||'Anon'}" style="width:100%;height:100%;object-fit:cover">` : ''}
+              </div>
+              <div style="flex:1">
+                <div style="font-weight:700">${(v.name||'tes').toString().slice(0,50)} <span style="color:var(--muted);font-weight:400">• ${when}</span></div>
+                <div style="white-space:pre-wrap;margin-top:6px">${(v.text||'').toString().slice(0,2000)}</div>
+              </div>
+            </div>`;
+          list.appendChild(t);
+        });
+      });
 
-      // Comments: posts/{postId}/comments/{commentId}
-      match /posts/{postId}/comments/{commentId} {
-        allow create: if request.auth == null
-          && request.resource.data.text.size() > 0
-          && request.resource.data.text.size() <= 1000;
-        allow read: if true;
-      }
+      clearB.onclick = ()=>{ textI.value = ''; };
+      sendB.onclick = async ()=>{
+        const text = (textI.value||'').trim();
+        if(!text){ textI.focus(); return; }
+        const name = (nameI.value||'').trim().slice(0,50);
+        const avatar = (avatarI.value||'').trim().slice(0,400);
+        try{
+          await addDoc(collection(db, `posts/${postId}/comments`), {
+            name: name || 'tes',
+            avatar: avatar || '',
+            text,
+            createdAt: serverTimestamp()
+          });
+          textI.value='';
+        }catch(err){
+          alert('Gagal mengirim komentar');
+          console.error(err);
+        }
+      };
     }
-  }
-  -->
+
+    // ==== Start app ====
+    routeRender();
+  </script>
 </body>
 </html>
