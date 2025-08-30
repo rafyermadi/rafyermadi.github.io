@@ -193,6 +193,11 @@
   
     /* Force-fixed position override for background music button */
     .bgm-btn{position:fixed !important; right:max(16px, env(safe-area-inset-right)); bottom:max(16px, env(safe-area-inset-bottom)); z-index:200}
+  
+    /* === BGM Toast (one-time prompt when autoplay blocked) === */
+    .bgm-toast{position:fixed; right:max(70px, calc(env(safe-area-inset-right) + 70px)); bottom:max(22px, calc(env(safe-area-inset-bottom) + 22px)); z-index:201; background:color-mix(in oklab, var(--bg) 85%, #000 15%); color:var(--text); border:1px solid rgba(255,255,255,.12); padding:8px 12px; border-radius:12px; box-shadow: var(--shadow); font-size:14px; opacity:0; transform: translateY(6px); animation: toastIn .25s var(--ease) forwards}
+    html[data-theme="light"] .bgm-toast{border-color: rgba(16,19,33,.12); background: rgba(16,19,33,.92)}
+    @keyframes toastIn{to{opacity:1; transform:none}}
   </style>
 </head>
 <body>
@@ -804,6 +809,41 @@
         e.stopPropagation();
       }, true);
     }
+  })();
+  </script>
+  
+  <!-- Show BGM toast if autoplay blocked on first visit -->
+  <script>
+  (function(){
+    if(sessionStorage.getItem('bgm_autoplay_pending') !== '1') return;
+    var btn = document.getElementById('bgmToggle');
+    var bgm = document.getElementById('bgm');
+    if(!btn) return;
+    function showToast(){
+      if(document.getElementById('bgmToast')) return;
+      var t = document.createElement('div');
+      t.className = 'bgm-toast';
+      t.id = 'bgmToast';
+      t.textContent = 'Klik untuk nyalakan musik 🎵';
+      document.body.appendChild(t);
+      // auto-hide after 7s if user mengabaikan
+      setTimeout(function(){ if(t && t.parentNode){ t.parentNode.removeChild(t); } }, 7000);
+    }
+    function hideToast(){ var t = document.getElementById('bgmToast'); if(t && t.parentNode){ t.parentNode.removeChild(t); } }
+    showToast();
+    // Hapus toast ketika musik berhasil play atau user klik tombol
+    if(bgm){ bgm.addEventListener('play', hideToast, {once:true}); }
+    btn.addEventListener('click', hideToast, {once:true});
+    // Jika user melakukan interaksi pertama di halaman, coba play sekali lalu tutup toast
+    function onInteract(){
+      if(bgm && sessionStorage.getItem('bgm_autoplay_pending')==='1' && bgm.paused){
+        bgm.play().then(function(){ localStorage.setItem('bgm','on'); }).catch(function(){})
+          .finally(function(){ hideToast(); sessionStorage.removeItem('bgm_autoplay_pending'); document.removeEventListener('pointerdown', onInteract); });
+      } else {
+        hideToast(); document.removeEventListener('pointerdown', onInteract);
+      }
+    }
+    document.addEventListener('pointerdown', onInteract, {capture:false});
   })();
   </script>
 </body>
