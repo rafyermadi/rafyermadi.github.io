@@ -202,6 +202,12 @@
     .react-btn.active{outline:2px solid color-mix(in oklab, var(--brand) 55%, transparent)}
     .cform{display:flex;flex-direction:column;gap:8px;margin:12px 0}
     .cform input,.cform textarea{width:100%;padding:10px 12px;border-radius:10px;border:1px solid rgba(255,255,255,.12);background:transparent;color:var(--text)}
+     /* Batasi tinggi textarea komentar */
+  .cform textarea{
+    min-height:90px;
+    max-height:220px;
+    resize:vertical; /* opsional: biar user bisa tarik ke bawah */
+  }
     #clist{display:flex;flex-direction:column;gap:10px;margin:12px 0}
     .card{position:relative}
     /* ===== Override khusus kartu KOMENTAR ===== */
@@ -213,6 +219,13 @@
   border: 1px solid rgba(255,255,255,.08);
   background: transparent;     /* atau pakai var(--card) kalau mau solid */
 }
+     /* === Comment item card === */
+    .comment-card{
+      padding:12px;
+      border-radius:12px;
+      border:1px solid rgba(255,255,255,.08);
+      background:transparent; /* atau var(--surface) */
+    }
   </style>
 </head>
 <body>
@@ -483,9 +496,13 @@
     nextA.style.visibility = 'visible';
   } else nextA.style.visibility = 'hidden';
 
-  // simpan id post aktif lalu init fitur
-  window.__currentPostId = post.id;
-  window.initPostFeatures(post.id);   // ⟵ letakkan DI SINI
+// simpan id post aktif; panggil kalau modul Firebase sudah siap
+window.__currentPostId = post.id;
+if (window.initPostFeatures) {
+  window.initPostFeatures(post.id);
+} else {
+  // kalau modul belum siap, tunda dulu
+  window.__deferredPF = post.id;
 }
 
   function setActive(h){ $$('.menu a').forEach(a=>{ const k=a.dataset.link; const on = (k==='home' && (h==='#/'||h===''||h==='#')) || (k==='about'&&h.startsWith('#/about')) || (k==='blog'&&h.startsWith('#/blog')) || (k==='novel'&&h.startsWith('#/novel')); a.classList.toggle('active', on); }); }
@@ -812,7 +829,7 @@ function mountCommentList(container){
       const d = docSnap.data();
       const el = document.createElement('div');
 // boleh tetap pakai .card untuk tampilan, tapi override ukuran
-el.className = 'card';
+el.className = 'comment-card';  
 el.style.cssText = 'padding:12px;min-height:unset;'; // ⟵ kunci: min-height:unset
 el.innerHTML = `
   <div style="display:flex;align-items:center;gap:8px;color:var(--muted);font-size:12px">
@@ -866,6 +883,11 @@ async function initPostFeatures(postId){
 /* ==== Hook ke routermu yang sudah ada ==== */
 /* Penting: definisikan fungsi ini SEBELUM dipanggil renderPost */
 window.initPostFeatures = initPostFeatures;
+  // kalau renderPost sempat jalan duluan, jalankan sekarang
+if (window.__deferredPF) {
+  initPostFeatures(window.__deferredPF);
+  window.__deferredPF = null;
+}
 
 /* ==== Dengarkan perubahan login agar highlight tombol & auth box terupdate tanpa reload ==== */
 onAuthStateChanged(auth, ()=>{
@@ -890,6 +912,7 @@ onAuthStateChanged(auth, ()=>{
 
 </body>
 </html>
+
 
 
 
