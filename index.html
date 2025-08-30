@@ -464,7 +464,7 @@
     const cur = states[view].page;
     if(totalPages <= 1){ wrap.innerHTML = ''; return; }
     const nums = [];
-    const push = n => nums.push(`<button class="btn ${'${n===cur?"active":""}'}" data-p="${'${n}'}">${'${n}'}</button>`);
+    const push = n => nums.push(`<button class="btn ${n===cur?'active':''}" data-p="${n}">${n}</button>`);
     const addDots = ()=> nums.push(`<span style="padding:8px 6px;color:var(--muted)">…</span>`);
     push(1);
     if(cur > 3) addDots();
@@ -472,9 +472,9 @@
     if(cur < totalPages-2) addDots();
     if(totalPages>1) push(totalPages);
     wrap.innerHTML = `
-      <button class="btn" data-p="prev" ${'${cur===1?"disabled":""}'}>←</button>
-      ${'${nums.join("")}'}
-      <button class="btn" data-p="next" ${'${cur===totalPages?"disabled":""}'}>→</button>`;
+      <button class="btn" data-p="prev" ${cur===1?'disabled':''}>←</button>
+      ${nums.join('')}
+      <button class="btn" data-p="next" ${cur===totalPages?'disabled':''}>→</button>`;
     wrap.onclick = (e)=>{
       const p = e.target.getAttribute('data-p'); if(!p) return;
       if(p==='prev' && states[view].page>1) states[view].page--;
@@ -495,9 +495,9 @@
     const idx  = posts.findIndex(p => p.id === id);
     const post = posts[idx] || posts[0];
 
-    document.title = `${'${post.title}'} — Rafy Rayyan`;
+    document.title = `${post.title} — Rafy Rayyan`;
     $('#postTitle').textContent = post.title;
-    $('#postMeta').textContent  = `${'${fmtDate(post.date)}'} • ${'${post.tags.join(", ")}'}`;
+    $('#postMeta').textContent  = `${fmtDate(post.date)} • ${post.tags.join(', ')}`;
 
     const hero = $('#postHero');
     if (post.image){
@@ -514,8 +514,8 @@
     const prevA = $('#prevPost');
     const nextA = $('#nextPost');
 
-    if (prev){ prevA.href = `#/post/${'${prev.id}'}`; prevA.textContent = '← ' + prev.title; prevA.style.visibility='visible'; } else prevA.style.visibility='hidden';
-    if (next){ nextA.href = `#/post/${'${next.id}'}`; nextA.textContent = next.title + ' →'; nextA.style.visibility='visible'; } else nextA.style.visibility='hidden';
+    if (prev){ prevA.href = `#/post/${prev.id}`; prevA.textContent = '← ' + prev.title; prevA.style.visibility='visible'; } else prevA.style.visibility='hidden';
+    if (next){ nextA.href = `#/post/${next.id}`; nextA.textContent = next.title + ' →'; nextA.style.visibility='visible'; } else nextA.style.visibility='hidden';
 
     // simpan id post aktif; panggil kalau modul Firebase sudah siap
     window.__currentPostId = post.id;
@@ -631,8 +631,8 @@
       }, {once:true});
     } else {
       wrap.innerHTML = `
-        <img src="${'${u.photoURL||""}'}" alt="" style="width:28px;height:28px;border-radius:50%">
-        <span style="font-weight:600">${'${u.displayName||u.email||"Pengguna"}'}</span>
+        <img src="${u.photoURL||''}" alt="" style="width:28px;height:28px;border-radius:50%">
+        <span style="font-weight:600">${u.displayName||u.email||'Pengguna'}</span>
         <button id="gLogout" class="btn" type="button">Keluar</button>
       `;
       $('#gLogout',wrap)?.addEventListener('click', ()=> signOut(auth), {once:true});
@@ -645,10 +645,10 @@
     container.innerHTML = `
       ${[['like','👍'],['love','❤️'],['fire','🔥'],['clap','👏'],['wow','😯']]
         .map(([k,emo])=>`
-          <button class="btn react" data-k="${'${k}'}" aria-pressed="false"
+          <button class="btn react" data-k="${k}" aria-pressed="false"
             style="display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border-radius:12px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.04)">
-            <span class="emo">${'${emo}'}</span>
-            <span class="cnt" data-for="${'${k}'}">0</span>
+            <span class="emo">${emo}</span>
+            <span class="cnt" data-for="${k}">0</span>
           </button>`).join('')}
     `;
     if (!container.dataset.bound) {
@@ -665,20 +665,20 @@
     if (__countsBusy || !__currentPostId) return;
     __countsBusy = true;
     try {
-      const snap = await getDocs(collection(db, `posts/${'${__currentPostId}'}/reactions`));
+      const snap = await getDocs(collection(db, `posts/${__currentPostId}/reactions`));
       const sums = {like:0,love:0,fire:0,clap:0,wow:0};
       snap.forEach(d=>{
         const v = d.data();
         REACT_KEYS.forEach(k=>{ if (v[k]) sums[k]++; });
       });
       REACT_KEYS.forEach(k=>{
-        const el = $(`.cnt[data-for="${'${k}'}"]`);
+        const el = $(`.cnt[data-for="${k}"]`);
         if (el) el.textContent = String(sums[k]||0);
       });
       // highlight milik user
       const u = auth.currentUser;
       if (u) {
-        const my = await getDoc(doc(db, `posts/${'${__currentPostId}'}/reactions/${'${u.uid}'}`));
+        const my = await getDoc(doc(db, `posts/${__currentPostId}/reactions/${u.uid}`));
         const data = my.exists() ? my.data() : {};
         $$('#reactRow button.react').forEach(b=>{
           const on = !!data[b.dataset.k];
@@ -701,10 +701,10 @@
     if (!u) { alert('Masuk dulu untuk memberi reaction.'); return; }
     __reactBusy = true;
     try{
-      const ref = doc(db, `posts/${'${__currentPostId}'}/reactions/${'${u.uid}'}`);
+      const ref = doc(db, `posts/${__currentPostId}/reactions/${u.uid}`);
       // status target
       let wantOn = true;
-      const btn = $(`#reactRow button.react[data-k="${'${key}'}"]`);
+      const btn = $(`#reactRow button.react[data-k="${key}"]`);
       if (btn) wantOn = btn.getAttribute('aria-pressed') !== 'true';
       else {
         const snap = await getDoc(ref);
@@ -755,7 +755,7 @@
     const btn = $('#cSend',wrap);
     btn.disabled = true; btn.textContent = 'Mengirim…';
     try{
-      await addDoc(collection(db, `posts/${'${__currentPostId}'}/comments`), {
+      await addDoc(collection(db, `posts/${__currentPostId}/comments`), {
         uid: u.uid, postId: __currentPostId, name, avatar, text, createdAt: serverTimestamp()
       });
       textEl.value = '';
@@ -774,7 +774,7 @@
     const list = container.querySelector('#cList');
     if (!list) return;
     list.innerHTML = '';
-    const qy = query(collection(db, `posts/${'${__currentPostId}'}/comments`), orderBy('createdAt','desc'));
+    const qy = query(collection(db, `posts/${__currentPostId}/comments`), orderBy('createdAt','desc'));
     __postUnsub = onSnapshot(qy, (snap)=>{
       list.innerHTML = '';
       snap.forEach(docSnap=>{
@@ -784,12 +784,12 @@
         el.style.padding='12px';
         el.innerHTML = `
           <div style="display:flex;align-items:center;gap:8px;color:var(--muted);font-size:12px">
-            <img src="${'${d.avatar||""}'}" alt="" style="width:20px;height:20px;border-radius:50%">
-            <strong style="font-size:13px;color:var(--text)">${'${d.name||"Anon"}'}</strong>
+            <img src="${d.avatar||''}" alt="" style="width:20px;height:20px;border-radius:50%">
+            <strong style="font-size:13px;color:var(--text)">${d.name||'Anon'}</strong>
             <span>•</span>
-            <span>${'${d.createdAt?.toDate?.()?.toLocaleString?.()||""}'}</span>
+            <span>${d.createdAt?.toDate?.()?.toLocaleString?.()||''}</span>
           </div>
-          <div style="margin-top:6px;white-space:pre-wrap">${'${(d.text||"")}'}</div>
+          <div style="margin-top:6px;white-space:pre-wrap">${(d.text||'')}</div>
         `;
         list.appendChild(el);
       });
