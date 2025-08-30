@@ -190,6 +190,9 @@
     .thumb.skeleton::before{content:"";position:absolute;inset:0;background:linear-gradient(110deg, rgba(255,255,255,.06) 8%, rgba(255,255,255,.18) 18%, rgba(255,255,255,.06) 33%);background-size:200% 100%;animation:shimmer 1.2s linear infinite}
 
     @media (prefers-reduced-motion: reduce){*{animation:none !important; transition:none !important}}
+  
+    /* Force-fixed position override for background music button */
+    .bgm-btn{position:fixed !important; right:max(16px, env(safe-area-inset-right)); bottom:max(16px, env(safe-area-inset-bottom)); z-index:200}
   </style>
 </head>
 <body>
@@ -737,5 +740,29 @@
   })();
 </script>
   <div id="page-loader" class="loader" aria-hidden="true"><div class="spinner" role="status" aria-label="Memuat"></div></div>
+  <!-- BACKGROUND MUSIC -->
+  <audio id="bgm" loop preload="auto"></audio>
+  <button id="bgmToggle" class="bgm-btn" aria-pressed="false" title="Musik latar">
+    <span class="bgm-ico" aria-hidden="true">🔇</span>
+    <span class="visually-hidden">Toggle musik latar</span>
+  </button>
+  <script>
+  /* === Background Music === */
+  (function(){
+    const MUSIC_SRC = new URLSearchParams(location.search).get('music') || 'bgm.mp3';
+    const bgm = document.getElementById('bgm');
+    const bgmBtn = document.getElementById('bgmToggle');
+    if(!bgm || !bgmBtn) return;
+    const ico = bgmBtn.querySelector('.bgm-ico');
+    bgm.src = kicirkicir.mp3; bgm.loop = true; bgm.preload = 'auto';
+    try{ const vol = parseFloat(localStorage.getItem('bgmVol')||'0.7'); if(!Number.isNaN(vol)) bgm.volume = Math.min(1, Math.max(0, vol)); }catch(_){ }
+    function updateUI(){ const playing = !bgm.paused && !bgm.ended; bgmBtn.classList.toggle('playing', playing); bgmBtn.setAttribute('aria-pressed', playing? 'true':'false'); if(ico) ico.textContent = playing? '🔊':'🔇'; }
+    async function playIfAllowed(){ try{ await bgm.play(); localStorage.setItem('bgm','on'); } catch(e){ localStorage.setItem('bgm','off'); } finally{ updateUI(); } }
+    if(localStorage.getItem('bgm')==='on'){ playIfAllowed(); } else { updateUI(); }
+    bgmBtn.addEventListener('click', async ()=>{ if(bgm.paused){ await playIfAllowed(); } else { bgm.pause(); localStorage.setItem('bgm','off'); updateUI(); } });
+    document.addEventListener('pointerdown', function once(){ if(localStorage.getItem('bgm')==='on' && bgm.paused){ playIfAllowed(); } document.removeEventListener('pointerdown', once); }, {capture:false});
+    window.addEventListener('hashchange', ()=>{ if(localStorage.getItem('bgm')==='on' && bgm.paused){ playIfAllowed(); } });
+  })();
+  </script>
 </body>
 </html>
