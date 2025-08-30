@@ -195,37 +195,56 @@
     html[data-theme="light"] .bgm-toast{border-color: rgba(16,19,33,.12); background: rgba(16,19,33,.92)}
     @keyframes toastIn{to{opacity:1; transform:none}}
 
-    /* Reactions & comments */
-    .react-row{display:flex;gap:10px;align-items:center;margin:10px 0 18px}
-    .react-btn{display:inline-flex;gap:6px;align-items:center;padding:6px 9px;border-radius:12px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.04);cursor:pointer;font-size:14px}
-    .react-btn[disabled]{opacity:.6;cursor:not-allowed}
-    .react-btn.active{outline:2px solid color-mix(in oklab, var(--brand) 55%, transparent)}
-    .cform{display:flex;flex-direction:column;gap:8px;margin:12px 0}
-    .cform input,.cform textarea{width:100%;padding:10px 12px;border-radius:10px;border:1px solid rgba(255,255,255,.12);background:transparent;color:var(--text)}
-     /* Batasi tinggi textarea komentar */
-  .cform textarea{
-    min-height:90px;
-    max-height:220px;
-    resize:vertical; /* opsional: biar user bisa tarik ke bawah */
-  }
-    #clist{display:flex;flex-direction:column;gap:10px;margin:12px 0}
-    .card{position:relative}
-    /* ===== Override khusus kartu KOMENTAR ===== */
+/* Reactions & comments */
+.react-row{display:flex;gap:10px;align-items:center;margin:10px 0 18px}
+
+/* tombol reaction (sesuaikan dengan HTML: <button class="react">) */
+.react-row button.react{
+  display:inline-flex;gap:6px;align-items:center;
+  padding:6px 9px;border-radius:12px;
+  border:1px solid rgba(255,255,255,.12);
+  background:rgba(255,255,255,.04);
+  cursor:pointer;font-size:14px
+}
+.react-row button.react[disabled]{opacity:.6;cursor:not-allowed}
+.react-row button.react[aria-pressed="true"]{
+  outline:2px solid color-mix(in oklab, var(--brand) 55%, transparent)
+}
+
+.cform{display:flex;flex-direction:column;gap:8px;margin:12px 0}
+.cform input,.cform textarea{
+  width:100%;padding:10px 12px;border-radius:10px;
+  border:1px solid rgba(255,255,255,.12);background:transparent;color:var(--text)
+}
+/* Batasi tinggi textarea komentar */
+.cform textarea{
+  min-height:90px;
+  max-height:220px;
+  resize:vertical; /* opsional */
+}
+
+/* wrapper list komentar (ID yang benar: cList) */
+#cList{display:flex;flex-direction:column;gap:10px;margin:12px 0}
+
+/* Kartu komentar: kecil & tidak ikut min-height card umum */
 #comments .card,
 #cList .card{
-  min-height: unset;           /* buang tinggi minimum bawaan .card */
-  padding: 12px;
-  border-radius: 12px;
-  border: 1px solid rgba(255,255,255,.08);
-  background: transparent;     /* atau pakai var(--card) kalau mau solid */
+  min-height: unset;
+  padding:12px;
+  border-radius:12px;
+  border:1px solid rgba(255,255,255,.08);
+  background:transparent;
 }
-     /* === Comment item card === */
-    .comment-card{
-      padding:12px;
-      border-radius:12px;
-      border:1px solid rgba(255,255,255,.08);
-      background:transparent; /* atau var(--surface) */
-    }
+
+/* card umum boleh tetap punya position */
+.card{position:relative}
+
+/* (Opsional) jika kamu nanti pakai class khusus */
+.comment-card{
+  padding:12px;border-radius:12px;
+  border:1px solid rgba(255,255,255,.08);
+  background:transparent;
+}
   </style>
 </head>
 <body>
@@ -912,6 +931,7 @@ onAuthStateChanged(auth, ()=>{
 
 </body>
 </html>
+
 
 
 
