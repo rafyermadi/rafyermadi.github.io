@@ -204,6 +204,15 @@
     .cform input,.cform textarea{width:100%;padding:10px 12px;border-radius:10px;border:1px solid rgba(255,255,255,.12);background:transparent;color:var(--text)}
     #clist{display:flex;flex-direction:column;gap:10px;margin:12px 0}
     .card{position:relative}
+    /* ===== Override khusus kartu KOMENTAR ===== */
+#comments .card,
+#cList .card{
+  min-height: unset;           /* buang tinggi minimum bawaan .card */
+  padding: 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,.08);
+  background: transparent;     /* atau pakai var(--card) kalau mau solid */
+}
   </style>
 </head>
 <body>
@@ -881,5 +890,6 @@ onAuthStateChanged(auth, ()=>{
 
 </body>
 </html>
+
 
 
