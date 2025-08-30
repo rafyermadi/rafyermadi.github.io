@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Rafy Rayyan — Blog & Novel</title>
-  <meta name="description" content="Blog & arsip progres novel oleh Rafy Rayyan. Berbagi tulisan, ide, dan catatan proses."/>
+  <meta name="description" content="Blog & arsip progres novel oleh Rafy Rayyan. Komentar & reaksi dengan Firebase."/>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&family=Playfair+Display:wght@600&display=swap" rel="stylesheet">
@@ -60,8 +60,8 @@
     .menu a.active, .menu a:hover{color:var(--text);background:rgba(255,255,255,.06)}
     html[data-theme="light"] .menu a.active, html[data-theme="light"] .menu a:hover{background:rgba(16,19,33,.06)}
     .right-actions{display:flex;gap:10px;align-items:center;flex:0 0 auto}
-    .iconbtn{padding:9px 12px;border-radius:12px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.04);cursor:pointer}
-    html[data-theme="light"] .iconbtn{border-color:rgba(16,19,33,.12);background:rgba(16,19,33,.04)}
+    .toggle{padding:9px 12px;border-radius:12px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.04);cursor:pointer}
+    html[data-theme="light"] .toggle{border-color:rgba(16,19,33,.12);background:rgba(16,19,33,.04)}
 
     /* SHARED */
     .section{padding:28px 0 80px}
@@ -92,10 +92,9 @@
     .grid{display:grid;gap:18px;grid-template-columns:repeat(3, 1fr)}
     @media (max-width: 1024px){.grid{grid-template-columns:repeat(2,1fr)} .hero-wrap{grid-template-columns:140px 1fr;align-items:start}}
     @media (max-width: 640px){.grid{grid-template-columns:1fr} .hero{padding:36px 0 14px} .hero-wrap{grid-template-columns:1fr; text-align:center; gap:14px} .avatar{margin-inline:auto} .hero-cta{justify-content:center} .nav-inner{flex-wrap:nowrap}}
-    .card{background:var(--card);border:1px solid rgba(255,255,255,.08);border-radius:20px;overflow:hidden;transition:transform .2s ease, box-shadow .2s ease;display:flex;flex-direction:column;min-height:380px;opacity:0;transform:translateY(10px) scale(.98)}
+    .card{background:var(--card);border:1px solid rgba(255,255,255,.08);border-radius:20px;overflow:hidden;transition:transform .2s ease, box-shadow .2s ease;display:flex;flex-direction:column;min-height:380px}
     html[data-theme="light"] .card{border-color:rgba(16,19,33,.08)}
-    .card:hover{transform:translateY(-4px) scale(1.01); box-shadow:0 16px 40px rgba(0,0,0,.2)}
-    .card.reveal{opacity:1; transform:translateY(0) scale(1); transition:opacity .5s ease, transform .5s ease}
+    .card:hover{transform:translateY(-4px); box-shadow:0 16px 40px rgba(0,0,0,.2)}
     .thumb{aspect-ratio:16/9; background:#0b0d13; overflow:hidden}
     html[data-theme="light"] .thumb{background:#e9ecf7}
     .thumb img{width:100%;height:100%;object-fit:cover}
@@ -126,23 +125,17 @@
     article img{max-width:100%;height:auto;border-radius:12px;display:block;margin:10px auto}
     .post-nav{display:flex;justify-content:space-between;gap:10px;margin:22px 0}
 
-    /* COMMENTS */
-    .cmt{margin:26px 0;background:var(--card);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:16px}
-    .cmt-list{display:flex;flex-direction:column;gap:12px;margin:10px 0}
-    .cmt-item{display:flex;gap:10px}
-    .cmt-avatar{width:36px;height:36px;border-radius:999px;background:#2a2f45;overflow:hidden;flex:0 0 36px}
-    .cmt-item h4{margin:0 0 4px;font-size:14px}
-    .cmt-item p{margin:0;color:var(--muted)}
-    .cmt-form{display:grid;gap:8px;margin-top:10px}
-    .cmt-form input,.cmt-form textarea{padding:10px;border-radius:10px;border:1px solid rgba(255,255,255,.12);background:transparent;color:var(--text)}
-    .cmt-form textarea{min-height:88px;resize:vertical}
+    /* REACTIONS & COMMENTS */
+    .reacts{display:flex;gap:10px;flex-wrap:wrap;margin:20px 0}
+    .react-btn{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:999px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.04);cursor:pointer}
+    .react-btn .count{min-width:18px;display:inline-grid;place-items:center;font-weight:700}
+    .comment-card{background:var(--card);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:14px}
+    #commentList{list-style:none;padding:0;margin:10px 0;display:flex;flex-direction:column;gap:10px}
+    .comment-item{padding:10px;border:1px solid rgba(255,255,255,.08);border-radius:12px;background:rgba(255,255,255,.03)}
+    #commentForm{display:grid;gap:10px;margin-top:10px}
+    #commentForm input, #commentForm textarea{padding:10px;border-radius:10px;border:1px solid rgba(255,255,255,.12);background:transparent;color:var(--text)}
 
-    /* REACTIONS */
-    .react{display:flex;align-items:center;gap:10px;margin:16px 0}
-    .react .likebtn{display:inline-flex;align-items:center;gap:6px;padding:8px 12px;border:1px solid rgba(255,255,255,.12);border-radius:999px;background:rgba(255,255,255,.04);cursor:pointer}
-    .react .likebtn.active{border-color:var(--brand);box-shadow:0 0 0 3px color-mix(in oklab, var(--brand) 40%, transparent)}
-
-    /* FOOTER — BIO STYLE */
+    /* FOOTER */
     .site-footer{position:relative;border-top:1px solid rgba(255,255,255,.08);padding:50px 0 24px;color:var(--muted);overflow:hidden;background:
       radial-gradient(600px 200px at 10% -10%, rgba(139,92,246,.18), transparent 60%),
       radial-gradient(600px 200px at 110% 10%, rgba(34,211,238,.12), transparent 60%)}
@@ -152,37 +145,23 @@
     .foot-brand{display:flex;gap:12px;align-items:center}
     .foot-brand .desc{color:var(--muted);max-width:60ch;line-height:1.7}
     .foot-social{display:flex;gap:10px;margin-top:10px}
+    .iconbtn{display:inline-grid;place-items:center;width:36px;height:36px;border-radius:10px;border:1px solid rgba(255,255,255,.12)}
+    html[data-theme="light"] .iconbtn{border-color:rgba(16,19,33,.12)}
     .stat{display:grid;grid-template-columns:1fr 1fr;gap:10px}
     .stat .box{background:var(--card);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:12px;text-align:center}
     .quote{background:var(--card);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:14px;font-style:italic}
     .copy{margin-top:18px;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
 
-    /* MODAL */
-    .modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;z-index:120}
-    .modal:not(.hidden){display:flex}
-    .modal-backdrop{position:absolute;inset:0;background:rgba(0,0,0,.6);backdrop-filter:blur(3px)}
-    .modal-card{position:relative;z-index:1;width:min(520px,92vw);background:var(--bg-soft);border:1px solid rgba(255,255,255,.12);border-radius:16px;padding:18px}
-    .modal-card input{width:100%;padding:10px 12px;border-radius:10px;border:1px solid rgba(255,255,255,.12);background:transparent;color:var(--text)}
-    .modal-actions{display:flex;gap:8px;justify-content:flex-end;margin-top:10px}
-
-    /* LOADER */
-    #loader{position:fixed;inset:0;display:grid;place-items:center;background:rgba(10,12,20,.85);z-index:120;transition:opacity .35s ease}
-    #loader.hide{opacity:0;pointer-events:none}
-    .spinner{width:64px;height:64px;border-radius:50%;border:4px solid rgba(255,255,255,.15);border-top-color:var(--brand);animation:spin 1s linear infinite}
+    /* LOADER OVERLAY (sederhana) */
+    #pageLoader{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.55);backdrop-filter: blur(2px);z-index:200}
+    #pageLoader.show{display:flex}
+    .spinner{width:48px;height:48px;border-radius:50%;border:4px solid rgba(255,255,255,.2);border-top-color:#fff;animation:spin 1s linear infinite}
     @keyframes spin{to{transform:rotate(360deg)}}
-
-    /* MUSIC BUTTON */
-    #musicBtn{position:fixed;right:16px;top:calc(var(--nav-h) + 12px);z-index:90;border-radius:999px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.06);backdrop-filter:blur(6px);padding:10px 12px;display:flex;align-items:center;gap:8px;cursor:pointer}
-    #musicBtn span{font-size:12px;color:var(--muted)}
-
-    /* TOAST */
-    .toast{position:fixed;left:50%;transform:translateX(-50%);bottom:24px;background:rgba(20,24,38,.9);border:1px solid rgba(255,255,255,.1);padding:10px 14px;border-radius:10px;z-index:130;opacity:0;pointer-events:none;transition:opacity .3s ease}
-    .toast.show{opacity:1}
   </style>
 </head>
 <body>
-  <!-- LOADER (muncul saat reload & pindah halaman) -->
-  <div id="loader" class="hide" aria-hidden="true"><div class="spinner" aria-label="Memuat"></div></div>
+  <!-- LOADER -->
+  <div id="pageLoader"><div class="spinner" aria-label="Memuat…"></div></div>
 
   <!-- NAVBAR -->
   <nav class="nav">
@@ -198,7 +177,9 @@
         <a href="#/about" data-link="about">About</a>
       </div>
       <div class="right-actions">
-        <button id="themeToggle" class="iconbtn" aria-pressed="false" title="Ganti tema"><span id="themeIcon" aria-hidden="true">🌙</span></button>
+        <button id="themeToggle" class="toggle" aria-pressed="false" title="Ganti tema">
+          <span id="themeIcon" aria-hidden="true">🌙</span>
+        </button>
       </div>
     </div>
   </nav>
@@ -315,24 +296,26 @@
     <main class="container">
       <article id="postBody"></article>
 
-      <!-- Reaksi -->
-      <div class="react" id="reactWrap" aria-live="polite">
-        <button id="likeBtn" class="likebtn" type="button" title="Suka">❤️ <span id="likeCount">0</span></button>
-      </div>
+      <!-- REACTIONS -->
+      <section class="reacts" aria-label="Reaksi" id="reactBar">
+        <button class="react-btn" type="button" data-react="like">👍 <span class="count" data-react-count="like">0</span></button>
+        <button class="react-btn" type="button" data-react="love">❤️ <span class="count" data-react-count="love">0</span></button>
+        <button class="react-btn" type="button" data-react="wow">😮 <span class="count" data-react-count="wow">0</span></button>
+        <button class="react-btn" type="button" data-react="clap">👏 <span class="count" data-react-count="clap">0</span></button>
+      </section>
 
-      <!-- Komentar -->
-      <section id="comments" class="cmt">
-        <h2 style="margin:0">Komentar</h2>
-        <div id="cmtList" class="cmt-list"></div>
-        <form id="cmtForm" class="cmt-form">
-          <input id="cmtName" type="text" placeholder="Nama (wajib)" required>
-          <input id="cmtAvatar" type="url" placeholder="URL foto profil (opsional)">
-          <textarea id="cmtText" placeholder="Tulis komentar…" required></textarea>
+      <!-- COMMENTS -->
+      <section class="comment-card" aria-label="Komentar">
+        <h2 style="margin:0 0 6px">Komentar</h2>
+        <div data-comment-status style="color:var(--muted);margin-bottom:8px">Komentar nonaktif (Firebase belum siap).</div>
+        <ul id="commentList"></ul>
+        <form id="commentForm">
+          <input name="name" placeholder="Nama (opsional)"/>
+          <textarea name="text" placeholder="Tulis komentar…" required rows="3"></textarea>
           <div style="display:flex;gap:8px;justify-content:flex-end">
-            <button type="reset" class="btn">Bersihkan</button>
-            <button type="submit" class="btn primary">Kirim</button>
+            <button class="btn" type="reset">Bersihkan</button>
+            <button class="btn primary" type="submit">Kirim</button>
           </div>
-          <small id="cmtNote" style="color:var(--muted)">Komentar disimpan di Firestore. Jika offline/limit, form mungkin nonaktif.</small>
         </form>
       </section>
 
@@ -374,26 +357,49 @@
     </div>
   </footer>
 
-  <!-- MUSIC BUTTON & AUDIO -->
-  <button id="musicBtn" class="iconbtn" aria-pressed="false" title="Musik latar"><span id="musicIcon">🔇</span><span>Musik</span></button>
-  <audio id="bgm" src="music.mp3" loop preload="none"></audio>
-  <div id="toast" class="toast" role="status">Klik untuk menyalakan musik 🎵</div>
-
   <!-- SUBSCRIBE MODAL -->
-  <div id="subModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="subTitle">
-    <div class="modal-backdrop"></div>
-    <div class="modal-card">
+  <div id="subModal" class="hidden" role="dialog" aria-modal="true" aria-labelledby="subTitle" style="position:fixed;inset:0;display:none;align-items:center;justify-content:center;z-index:120">
+    <div class="modal-backdrop" style="position:absolute;inset:0;background:rgba(0,0,0,.6);backdrop-filter:blur(3px)"></div>
+    <div class="modal-card" style="position:relative;z-index:1;width:min(520px,92vw);background:var(--bg-soft);border:1px solid rgba(255,255,255,.12);border-radius:16px;padding:18px">
       <h3 id="subTitle">Berlangganan via Email</h3>
       <p id="subNotice" style="color:var(--muted);margin-top:2px">Masukkan email untuk mendapat kabar saat ada tulisan baru.</p>
-      <input type="email" id="subEmail" placeholder="nama@contoh.com" autocomplete="email" />
-      <div class="modal-actions">
+      <input type="email" id="subEmail" placeholder="nama@contoh.com" autocomplete="email" style="width:100%;padding:10px 12px;border-radius:10px;border:1px solid rgba(255,255,255,.12);background:transparent;color:var(--text)"/>
+      <div class="modal-actions" style="display:flex;gap:8px;justify-content:flex-end;margin-top:10px">
         <button class="btn" id="subCancel">Batal</button>
         <button class="btn primary" id="subSave">Simpan</button>
       </div>
-      <button class="iconbtn" id="closeSub" style="position:absolute;right:10px;top:10px">✕</button>
+      <button class="toggle" id="closeSub" style="position:absolute;right:10px;top:10px">✕</button>
     </div>
   </div>
 
+  <!-- ===== Firebase (module) ===== -->
+  <script type="module" id="firebase-init">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
+    import { getFirestore, collection, doc, setDoc, addDoc, getDoc, onSnapshot, query, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyA0Nc3sCYCfhsX6y6Ft5SxEuZDBcfT0zHk",
+      authDomain: "rafyermadi-a4e98.firebaseapp.com",
+      projectId: "rafyermadi-a4e98",
+      storageBucket: "rafyermadi-a4e98.firebasestorage.app",
+      messagingSenderId: "529097759816",
+      appId: "1:529097759816:web:7c0081bf4b612b2dee4c7d"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db  = getFirestore(app);
+
+    // expose untuk script non-module
+    window.FB = {
+      app, db,
+      fs: { collection, doc, setDoc, addDoc, getDoc, onSnapshot, query, orderBy, serverTimestamp }
+    };
+
+    window.dispatchEvent(new Event("firebase-ready"));
+    console.log("Firebase ready");
+  </script>
+
+  <!-- ===== App script (non-module) ===== -->
   <script>
   // ===== UTIL =====
   const $ = (sel, el = document) => el.querySelector(sel);
@@ -407,8 +413,7 @@
   const monthID = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
   const fmtDate = (iso) => { const d = new Date(iso + 'T00:00:00'); return `${d.getDate()} ${monthID[d.getMonth()]} ${d.getFullYear()}`; };
 
-  // Loader helpers
-  const showLoader = (on=true)=>{ const ld = $('#loader'); if(!ld) return; if(on){ ld.classList.remove('hide'); } else { ld.classList.add('hide'); }}
+  const Loader = { el: $('#pageLoader'), show(){this.el.classList.add('show')}, hide(){this.el.classList.remove('show')} };
 
   // ===== DATA (posts with body) =====
   const posts = [
@@ -491,7 +496,7 @@
 
     { id:'novel-bab-4', title:'Novel — Bab 4: Hujan di Peron', date:'2025-07-26',
       tags:['Novel','Progres','Bab 4'],
-      image:'https://images.unsplash.com/photo-1504333638930-c8787321eee0?q=80&w=1200&auto=format&fit=crop',
+      image:'https://images.unsplash.com/photo-1444723121867-7a241cacace9?q=80&w=1200&auto=format&fit=crop',
       excerpt:'Adegan peron jadi titik balik relasi.',
       body:`<p>Adegan dialog singkat namun tajam.</p>`},
   ];
@@ -526,14 +531,7 @@
     }
     return res.sort((a,b)=> new Date(b.date)-new Date(a.date));
   }
-  function renderGrid(gridEl, list){
-    gridEl.innerHTML = list.map(cardHTML).join('') || `<div style="grid-column:1/-1;padding:26px;border:1px dashed rgba(255,255,255,.18);border-radius:14px;text-align:center;color:var(--muted)">Tidak ada hasil yang cocok.</div>`;
-    // Scroll-reveal anim
-    const io = new IntersectionObserver((ents)=>{
-      ents.forEach(e=>{ if(e.isIntersecting){ e.target.querySelector('.card')?.classList.add('reveal'); io.unobserve(e.target); } });
-    },{threshold:.2});
-    $$('.card-link', gridEl).forEach(a=> io.observe(a));
-  }
+  function renderGrid(gridEl, list){ gridEl.innerHTML = list.map(cardHTML).join('') || `<div style="grid-column:1/-1;padding:26px;border:1px dashed rgba(255,255,255,.18);border-radius:14px;text-align:center;color:var(--muted)">Tidak ada hasil yang cocok.</div>`; }
 
   // ===== WIRING SEARCH =====
   function setupSearch(view){
@@ -545,25 +543,7 @@
     input.addEventListener('input', e=>{ S.q = e.target.value; routeRender(); });
   }
 
-  // ===== RENDER PER ROUTE =====
-  function renderHome(){
-    setupSearch('home');
-    const list = searchFilter(posts.slice(), states.home.q);
-    renderGrid(document.getElementById('grid-home'), list);
-  }
-  function renderBlog(){
-    setupSearch('blog');
-    const base = posts.filter(p=> p.tags.includes('Blog'));
-    const list = searchFilter(base, states.blog.q);
-    renderGrid(document.getElementById('grid-blog'), list);
-  }
-  function renderNovel(){
-    setupSearch('novel');
-    const base = posts.filter(p=> p.tags.includes('Novel'));
-    const list = searchFilter(base, states.novel.q);
-    renderGrid(document.getElementById('grid-novel'), list);
-  }
-
+  // ===== POST HELPERS =====
   function renderPost(id){
     const idx = posts.findIndex(p=>p.id===id); const post = posts[idx] || posts[0];
     document.title = post.title + ' — Rafy Rayyan';
@@ -573,15 +553,14 @@
     if(post.image){ hero.classList.remove('hidden'); const img = hero.firstElementChild; img.src = post.image; img.alt = 'Gambar: ' + post.title; }
     else { hero.classList.add('hidden'); }
     $('#postBody').innerHTML = post.body;
-
     const prev = posts[idx-1]||null; const next = posts[idx+1]||null;
     const prevA = $('#prevPost'); const nextA = $('#nextPost');
     if(prev){ prevA.href = `#/post/${prev.id}`; prevA.textContent = '← ' + prev.title; prevA.style.visibility='visible'; } else prevA.style.visibility='hidden';
     if(next){ nextA.href = `#/post/${next.id}`; nextA.textContent = next.title + ' →'; nextA.style.visibility='visible'; } else nextA.style.visibility='hidden';
 
-    // Setup reactions & comments for this post
-    setupReactions(post.id);
-    setupComments(post.id);
+    // Hook reactions & comments (tunggu firebase kalau perlu)
+    const startHooks = ()=>{ if(window.setupReactions) window.setupReactions(post.id); if(window.setupComments) window.setupComments(post.id); };
+    if(window.FB?.db) startHooks(); else window.addEventListener('firebase-ready', startHooks, { once:true });
   }
 
   function setActive(h){
@@ -602,23 +581,25 @@
   function routeRender(){
     const h = location.hash || '#/' ;
     setActive(h);
-    if(h.startsWith('#/post/')){ show('post'); renderPost(decodeURIComponent(h.replace('#/post/',''))); }
+    if(h.startsWith('#/post/')){ show('post'); Loader.show(); setTimeout(()=>{ renderPost(decodeURIComponent(h.replace('#/post/',''))); Loader.hide(); }, 100); }
     else if(h==='#/about'){ show('about'); }
     else if(h==='#/blog'){ show('blog'); renderBlog(); }
     else if(h==='#/novel'){ show('novel'); renderNovel(); }
     else { show('home'); renderHome(); }
-    // hide loader setelah render
-    setTimeout(()=> showLoader(false), 120);
   }
-  window.addEventListener('hashchange', ()=>{ showLoader(true); routeRender(); });
+  window.addEventListener('hashchange', routeRender);
+
+  function renderHome(){ setupSearch('home'); const list = searchFilter(posts.slice(), states.home.q); renderGrid(document.getElementById('grid-home'), list); }
+  function renderBlog(){ setupSearch('blog'); const base = posts.filter(p=> p.tags.includes('Blog')); const list = searchFilter(base, states.blog.q); renderGrid(document.getElementById('grid-blog'), list); }
+  function renderNovel(){ setupSearch('novel'); const base = posts.filter(p=> p.tags.includes('Novel')); const list = searchFilter(base, states.novel.q); renderGrid(document.getElementById('grid-novel'), list); }
 
   // footer stats
   $('#statPosts').textContent = posts.length;
   $('#statTags').textContent = new Set(posts.flatMap(p=>p.tags)).size;
 
   // Subscribe modal logic
-  function openSub(){ const m=$('#subModal'); if(m){ m.classList.remove('hidden'); $('#subEmail')?.focus(); document.body.style.overflow='hidden'; }}
-  function closeSub(){ $('#subModal')?.classList.add('hidden'); document.body.style.overflow=''; }
+  function openSub(){ const m=$('#subModal'); if(m){ m.style.display='flex'; $('#subEmail')?.focus(); document.body.style.overflow='hidden'; }}
+  function closeSub(){ const m=$('#subModal'); if(m){ m.style.display='none'; document.body.style.overflow=''; }}
   $('#openSub')?.addEventListener('click', openSub);
   $('#closeSub')?.addEventListener('click', closeSub);
   $('#subCancel')?.addEventListener('click', closeSub);
@@ -627,147 +608,101 @@
     const valid = /[^@\s]+@[^@\s]+\.[^@\s]+/.test(email);
     const notice = $('#subNotice');
     if(!valid){ notice.textContent='Email tidak valid.'; notice.style.color='salmon'; return; }
-    const key='subscribers'; const arr = JSON.parse(localStorage.getItem(key)||'[]');
-    if(!arr.includes(email)) arr.push(email);
-    localStorage.setItem(key, JSON.stringify(arr));
-    notice.textContent='Berhasil! Email tersimpan di perangkat ini. Integrasi pengiriman bisa ditambahkan nanti.'; notice.style.color='var(--muted)';
-    setTimeout(closeSub, 1000);
+    const key='subscribers'; const arr = JSON.parse(localStorage.getItem(key)||'[]'); if(!arr.includes(email)) arr.push(email); localStorage.setItem(key, JSON.stringify(arr));
+    notice.textContent='Berhasil! Email tersimpan di perangkat ini. Integrasi pengiriman bisa ditambahkan nanti.'; notice.style.color='var(--muted)'; setTimeout(closeSub, 900);
   });
   $('#subModal')?.addEventListener('click', (e)=>{ if(e.target.id==='subModal' || e.target.classList.contains('modal-backdrop')) closeSub(); });
 
-  // Back to top
-  $('#toTop')?.addEventListener('click', ()=> window.scrollTo({top:0, behavior:'smooth'}));
-
-  // MUSIC TOGGLE / AUTOPLAY GATE
-  const audio = $('#bgm');
-  const musicBtn = $('#musicBtn'); const musicIcon = $('#musicIcon'); const toast=$('#toast');
-  let musicOn = false; let firstVisit = !localStorage.getItem('musicGate');
-  function updateMusicUI(){ musicIcon.textContent = musicOn? '🔊':'🔇'; musicBtn.setAttribute('aria-pressed', musicOn?'true':'false'); }
-  async function setMusic(on){
-    musicOn = on;
-    updateMusicUI();
-    try{ if(on){ await audio.play(); } else { audio.pause(); } }catch(err){ console.log('autoplay blocked'); }
-  }
-  musicBtn.addEventListener('click', ()=> setMusic(!musicOn));
-  // Tampilkan toast pada kunjungan pertama (reload/page load) — klik di mana saja menyalakan musik
-  if(firstVisit){
-    localStorage.setItem('musicGate','1');
-    setTimeout(()=>{ toast.classList.add('show'); }, 400);
-    const gate = ()=>{ toast.classList.remove('show'); setMusic(true); window.removeEventListener('pointerdown', gate); };
-    window.addEventListener('pointerdown', gate);
-  }
-
-  // initial render
-  showLoader(true);
+  // initial
   routeRender();
+  // back-to-top
+  $('#toTop')?.addEventListener('click', ()=> window.scrollTo({top:0, behavior:'smooth'}));
   </script>
 
-  <!-- ===== Firebase SAFE INIT (paling bawah) ===== -->
+  <!-- ===== Reactions & Comments (global functions) ===== -->
   <script>
-    window.__fire = { enabled: false }; // default off
-  </script>
-  <script type="module">
-    try {
-      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
-      import {
-        getFirestore, doc, setDoc, getDoc, addDoc, updateDoc,
-        collection, query, orderBy, onSnapshot, serverTimestamp
-      } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+  (function(){
+    // util
+    const esc = (s='') => s.replace(/[&<>"']/g, m=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[m]));
+    const getDeviceId = () => { let id = localStorage.getItem('deviceId'); if(!id){ id = (self.crypto?.randomUUID?.() || (Date.now()+Math.random()).toString(36)); localStorage.setItem('deviceId', id); } return id; };
 
-      const firebaseConfig = {
-        apiKey: "AIzaSyA0Nc3sCYCfhsX6y6Ft5SxEuZDBcfT0zHk",
-        authDomain: "rafyermadi-a4e98.firebaseapp.com",
-        projectId: "rafyermadi-a4e98",
-        storageBucket: "rafyermadi-a4e98.firebasestorage.app",
-        messagingSenderId: "529097759816",
-        appId: "1:529097759816:web:7c0081bf4b612b2dee4c7d"
-      };
+    // --- REACTIONS
+    window.setupReactions = function(postId){
+      if(!window.FB?.db){ console.warn('FB not ready (reactions)'); return; }
+      const { db, fs } = window.FB;
+      const col = fs.collection(db, 'posts', postId, 'reactions');
+      const deviceId = getDeviceId();
 
-      const app = initializeApp(firebaseConfig);
-      const db  = getFirestore(app);
+      const btns = document.querySelectorAll('[data-react]');
+      if(!btns.length) return;
+      const allKeys = Array.from(new Set(Array.from(btns).map(b=>b.dataset.react)));
+      const myDoc = fs.doc(col, deviceId);
 
-      window.__fire = {
-        enabled: true,
-        db,
-        api: { doc, setDoc, getDoc, addDoc, updateDoc, collection, query, orderBy, onSnapshot, serverTimestamp }
-      };
-      window.dispatchEvent(new Event('fire-ready'));
-      console.log('[Firebase] ready');
-    } catch(err){
-      console.error('[Firebase] init failed', err);
-    }
-  </script>
-
-  <script>
-  // ===== Comments & Reactions (aktif bila Firebase ready) =====
-  const deviceId = (()=>{ let id = localStorage.getItem('deviceId'); if(!id){ id = (self.crypto?.randomUUID?.()||('dev-'+Math.random().toString(36).slice(2))); localStorage.setItem('deviceId', id); } return id; })();
-
-  function setupReactions(postId){
-    const likeBtn = $('#likeBtn'); const likeCount = $('#likeCount'); const wrap = $('#reactWrap');
-    if(!window.__fire?.enabled){
-      likeBtn.disabled = true; likeBtn.title = 'Reaksi offline';
-      return; // biarkan UI pasif
-    }
-    const { db, api } = window.__fire;
-    const rCol = api.collection(db, 'posts', postId, 'reactions');
-    const myDocRef = api.doc(db, 'posts', postId, 'reactions', deviceId);
-
-    // listen total
-    api.onSnapshot(api.query(rCol, api.orderBy('updatedAt','desc')), (snap)=>{
-      let total=0; snap.forEach(d=>{ if(d.data()?.like) total++; }); likeCount.textContent = total;
-    });
-
-    // set tombol aktif jika sudah like
-    api.getDoc(myDocRef).then(d=>{ if(d.exists() && d.data().like){ likeBtn.classList.add('active'); } });
-
-    likeBtn.onclick = async ()=>{
-      const active = likeBtn.classList.toggle('active');
-      await api.setDoc(myDocRef, { like: active, updatedAt: api.serverTimestamp() }, { merge:true });
-    };
-  }
-
-  function setupComments(postId){
-    const listEl = $('#cmtList'); const form = $('#cmtForm'); const note = $('#cmtNote');
-    listEl.innerHTML = '';
-
-    if(!window.__fire?.enabled){
-      form.querySelectorAll('input, textarea, button[type="submit"]').forEach(el=> el.disabled = true);
-      note.textContent = 'Komentar nonaktif (Firebase belum siap).';
-      return;
-    }
-
-    const { db, api } = window.__fire;
-    const cRef = api.collection(db, 'posts', postId, 'comments');
-
-    // render realtime
-    api.onSnapshot(api.query(cRef, api.orderBy('createdAt','asc')), (snap)=>{
-      listEl.innerHTML = '';
-      snap.forEach(doc=>{
-        const d = doc.data();
-        const item = document.createElement('div'); item.className='cmt-item';
-        item.innerHTML = `
-          <div class="cmt-avatar">${d.avatarUrl?`<img src="${d.avatarUrl}" alt="">`:''}</div>
-          <div><h4>${(d.name||'Anonim').replace(/[<>]/g,'')}</h4><p>${(d.text||'').replace(/[<>]/g,'')}</p></div>`;
-        listEl.appendChild(item);
+      btns.forEach(btn=>{
+        btn.addEventListener('click', async () => {
+          try{
+            const key = btn.dataset.react;
+            const snap = await fs.getDoc(myDoc);
+            const curData = snap.exists() ? snap.data() : {};
+            const next = {}; allKeys.forEach(k => next[k] = (k===key) ? !curData[k] : false ); next.updatedAt = fs.serverTimestamp();
+            await fs.setDoc(myDoc, next, { merge:true });
+          }catch(e){ console.error('react fail', e); }
+        });
       });
-    });
 
-    form.onsubmit = async (e)=>{
-      e.preventDefault();
-      const name = $('#cmtName').value.trim();
-      const avatar = $('#cmtAvatar').value.trim();
-      const text = $('#cmtText').value.trim();
-      if(!name || !text) return;
-      try{
-        await api.addDoc(cRef, { name, avatarUrl: avatar||null, text, createdAt: api.serverTimestamp(), deviceId });
-        form.reset();
-      }catch(err){ note.textContent = 'Gagal mengirim komentar.'; }
+      // realtime aggregate
+      fs.onSnapshot(col, qs => {
+        const total = Object.fromEntries(allKeys.map(k=>[k,0]));
+        qs.forEach(d=>{ const data = d.data(); allKeys.forEach(k => { if(data[k]) total[k]++; }); });
+        allKeys.forEach(k=>{ const el = document.querySelector(`[data-react-count="${k}"]`); if(el) el.textContent = total[k]; });
+      });
     };
-  }
 
-  // Jika Firebase siap setelah halaman jalan
-  if(window.__fire?.enabled){ /* noop */ }
-  window.addEventListener('fire-ready', ()=>{ if(location.hash.startsWith('#/post/')){ setupComments(location.hash.replace('#/post/','')); setupReactions(location.hash.replace('#/post/','')); } });
+    // --- COMMENTS
+    window.setupComments = function(postId){
+      if(!window.FB?.db){ console.warn('FB not ready (comments)'); return; }
+      const form = document.getElementById('commentForm');
+      const list = document.getElementById('commentList');
+      const status = document.querySelector('[data-comment-status]');
+      if(!form || !list) return;
+      if(status) status.classList.add('hidden');
+
+      const { db, fs } = window.FB;
+      const col = fs.collection(db, 'posts', postId, 'comments');
+      const q = fs.query(col, fs.orderBy('createdAt', 'asc'));
+
+      fs.onSnapshot(q, snap=>{
+        list.innerHTML = '';
+        snap.forEach(doc=>{
+          const d = doc.data();
+          const li = document.createElement('li');
+          li.className = 'comment-item';
+          li.innerHTML = `<strong>${esc(d.name||'Anon')}</strong><span style="opacity:.6"> — </span>${esc(d.text||'')}`;
+          list.appendChild(li);
+        });
+      });
+
+      form.addEventListener('submit', async (e)=>{
+        e.preventDefault();
+        const name = (form.querySelector('[name="name"]')?.value||'').trim() || 'Anon';
+        const text = (form.querySelector('[name="text"]')?.value||'').trim();
+        if(!text) return;
+        try{
+          await fs.addDoc(col, { name, text, createdAt: fs.serverTimestamp() });
+          form.reset();
+        }catch(err){ console.error('add comment fail', err); }
+      });
+    };
+
+    // Jika firebase baru siap setelah render
+    window.addEventListener('firebase-ready', ()=>{
+      if(location.hash.startsWith('#/post/')){
+        const id = decodeURIComponent(location.hash.replace('#/post/',''));
+        window.setupReactions(id);
+        window.setupComments(id);
+      }
+    });
+  })();
   </script>
 </body>
 </html>
