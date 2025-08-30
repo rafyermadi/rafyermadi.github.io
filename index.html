@@ -133,14 +133,20 @@
     article img{max-width:100%;height:auto;border-radius:12px;display:block;margin:10px auto}
     .post-nav{display:flex;justify-content:space-between;gap:10px;margin:22px 0}
 
-    /* REACTIONS row */
-    .react-row{display:flex;gap:8px;flex-wrap:wrap;margin:18px 0}
-    .rx{display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border-radius:999px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.05);color:inherit;cursor:pointer}
-    .rx[aria-pressed="true"]{background:linear-gradient(135deg, var(--brand), var(--brand-2));border-color:transparent;color:#0f1117}
-
     /* COMMENTS */
-    #comments .card{min-height:unset;padding:12px;border-radius:14px}
-    #clist{ display:flex; flex-direction:column; gap:10px; margin:12px 0; }
+    .comments{margin:26px 0 60px}
+    .comments .authline{display:flex;align-items:center;gap:10px;margin:0 0 12px}
+    .comments .comment-form{background:var(--card);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:12px;display:grid;gap:8px}
+    .comments textarea{width:100%;min-height:90px;max-height:220px;resize:vertical;padding:10px;border-radius:10px;border:1px solid rgba(255,255,255,.12);background:transparent;color:var(--text)}
+    .comments .items{display:flex;flex-direction:column;gap:12px;margin-top:14px}
+    .comment{display:flex;gap:10px;background:var(--card);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:12px}
+    .comment .ava{width:36px;height:36px;border-radius:50%;overflow:hidden;background:#222}
+    .comment .meta{font-size:12px;color:var(--muted)}
+
+    /* REACTIONS */
+    .reactions{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:14px 0}
+    .react-btn{display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border-radius:999px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.04);cursor:pointer}
+    .react-btn[aria-pressed="true"]{background:linear-gradient(135deg,var(--brand),var(--brand-2));color:#fff;border:none}
 
     /* FOOTER — BIO STYLE */
     .site-footer{position:relative;border-top:1px solid rgba(255,255,255,.08);padding:50px 0 24px;color:var(--muted);overflow:hidden;background:
@@ -166,40 +172,31 @@
     .pager .btn[disabled]{opacity:.5;cursor:not-allowed}
     .pager .btn.active{background:linear-gradient(135deg,var(--brand),var(--brand-2));border:none;color:#fff}
 
-    /* MODAL */
-    .modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;z-index:120}
-    .modal:not(.hidden){display:flex}
-    .modal-backdrop{position:absolute;inset:0;background:rgba(0,0,0,.6);backdrop-filter:blur(3px)}
-    .modal-card{position:relative;z-index:1;width:min(520px,92vw);background:var(--bg-soft);border:1px solid rgba(255,255,255,.12);border-radius:16px;padding:18px}
-    .modal-card input{width:100%;padding:10px 12px;border-radius:10px;border:1px solid rgba(255,255,255,.12);background:transparent;color:var(--text)}
-    .modal-actions{display:flex;gap:8px;justify-content:flex-end;margin-top:10px}
-
-    /* ANIMATIONS */
+    /* LOADERS */
     @keyframes spin{to{transform:rotate(360deg)}}
     .loader{position:fixed; inset:0; display:none; place-items:center; background:rgba(0,0,0,.35); backdrop-filter:blur(4px); z-index:140}
     .loader.show{display:grid}
     .loader .spinner{width:56px;height:56px;border-radius:50%;background:conic-gradient(from 0deg, var(--brand), var(--brand-2), var(--brand));mask:radial-gradient(farthest-side, transparent calc(50% - 6px), #000 0);animation:spin 1s linear infinite}
 
+    /* ANIMATIONS */
+    @keyframes fadeSlideUp{from{opacity:0;transform:translateY(16px) scale(.98)}to{opacity:1;transform:none}}
     @keyframes shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
-    .thumb.skeleton::before{content:"";position:absolute;inset:0;background:linear-gradient(110deg, rgba(255,255,255,.06) 8%, rgba(255,255,255,.18) 18%, rgba(255,255,255,.06) 33%);background-size:200% 100%;animation:shimmer 1.2s linear infinite}
-
     .will-reveal{opacity:0;transform:translateY(16px) scale(.98)}
     .reveal-in{opacity:1;transform:none;transition:opacity .7s var(--ease), transform .7s var(--ease)}
+    .thumb.skeleton::before{content:"";position:absolute;inset:0;background:linear-gradient(110deg, rgba(255,255,255,.06) 8%, rgba(255,255,255,.18) 18%, rgba(255,255,255,.06) 33%);background-size:200% 100%;animation:shimmer 1.2s linear infinite}
 
-    /* Force-fixed position override for background music button */
+    @media (prefers-reduced-motion: reduce){*{animation:none !important; transition:none !important}}
+
+    /* BGM BUTTON */
     .bgm-btn{position:fixed !important; right:max(16px, env(safe-area-inset-right)); bottom:max(16px, env(safe-area-inset-bottom)); z-index:200}
-
-    /* BGM Toast */
     .bgm-toast{position:fixed; right:max(70px, calc(env(safe-area-inset-right) + 70px)); bottom:max(22px, calc(env(safe-area-inset-bottom) + 22px)); z-index:201; background:color-mix(in oklab, var(--bg) 85%, #000 15%); color:var(--text); border:1px solid rgba(255,255,255,.12); padding:8px 12px; border-radius:12px; box-shadow: var(--shadow); font-size:14px; opacity:0; transform: translateY(6px); animation: toastIn .25s var(--ease) forwards}
     html[data-theme="light"] .bgm-toast{border-color: rgba(16,19,33,.12); background: rgba(16,19,33,.92)}
     @keyframes toastIn{to{opacity:1; transform:none}}
   </style>
 </head>
 <body>
-  <!-- Instant Loader at top for hard reload / direct URL -->
-  <div id="loader" class="loader" style="position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.45);backdrop-filter:blur(2px);z-index:120">
-    <div class="spinner" style="width:48px;height:48px;border-radius:50%;border:4px solid rgba(255,255,255,.25);border-top-color:var(--brand-2);animation:spin 1s linear infinite" aria-label="Memuat"></div>
-  </div>
+  <!-- Top Loader for hard reload / direct URL -->
+  <div id="loader" class="loader"><div class="spinner" aria-label="Memuat"></div></div>
 
   <!-- NAVBAR -->
   <nav class="nav">
@@ -215,7 +212,6 @@
         <a href="#/about" data-link="about">About</a>
       </div>
       <div class="right-actions">
-        <button id="authBtn" class="toggle" title="Masuk dengan Google">Masuk</button>
         <button id="themeToggle" class="toggle" aria-pressed="false" title="Ganti tema">
           <span id="themeIcon" aria-hidden="true">🌙</span>
         </button>
@@ -332,37 +328,27 @@
       <div class="container">
         <h1 id="postTitle" class="post-title">Judul</h1>
         <div id="postMeta" class="post-meta">Tanggal • Tag</div>
+        <div class="reactions" id="reactBar" aria-label="Reaksi pembaca"></div>
         <div id="postHero" class="post-hero hidden"><img alt=""></div>
       </div>
     </header>
     <main class="container">
       <article id="postBody"></article>
-
-      <!-- Reactions -->
-      <div class="react-row" id="reactRow"></div>
-
-      <!-- Komentar -->
-      <section id="comments" style="margin:26px 0 60px">
-        <h2 style="margin:0 0 10px">Komentar</h2>
-        <div id="cformGate" style="display:none;color:var(--muted);margin:6px 0 10px">Masuk dulu untuk menulis komentar (klik tombol <strong>Masuk</strong> di kanan atas).</div>
-        <div class="card" style="padding:12px">
-          <div style="display:grid;gap:8px;grid-template-columns:1fr 1fr; margin-bottom:8px">
-            <input id="cname" placeholder="Nama (opsional)">
-            <input id="cavatar" placeholder="URL foto profil (opsional)">
-          </div>
-          <textarea id="ctext" placeholder="Tulis komentar…" style="width:100%;min-height:96px"></textarea>
-          <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:8px">
-            <button class="btn" id="cclear" type="button">Bersihkan</button>
-            <button class="btn primary" id="csend" type="button">Kirim</button>
-          </div>
-        </div>
-        <div id="clist"></div>
-      </section>
-
       <nav class="post-nav">
         <a id="prevPost" class="btn" href="#">← Sebelumnya</a>
         <a id="nextPost" class="btn" href="#">Berikutnya →</a>
       </nav>
+      <section class="comments" id="comments">
+        <h2 style="margin-bottom:8px">Komentar</h2>
+        <div class="authline" id="authLine"></div>
+        <div class="comment-form" id="commentFormWrap">
+          <textarea id="commentText" placeholder="Tulis komentar…"></textarea>
+          <div style="display:flex;gap:8px;justify-content:flex-end">
+            <button class="btn" id="btnSendComment">Kirim</button>
+          </div>
+        </div>
+        <div class="items" id="commentItems"></div>
+      </section>
     </main>
   </div>
 
@@ -419,64 +405,244 @@
     <span class="visually-hidden">Toggle musik latar</span>
   </button>
 
-  <!-- BGM logic -->
-  <script>
-  (function(){
-    const MUSIC_SRC = new URLSearchParams(location.search).get('music') || 'bgm.mp3';
-    const bgm = document.getElementById('bgm');
-    const bgmBtn = document.getElementById('bgmToggle');
-    if(!bgm || !bgmBtn) return;
-    const ico = bgmBtn.querySelector('.bgm-ico');
-    bgm.src = MUSIC_SRC; bgm.loop = true; bgm.preload = 'auto';
-    try{ const vol = parseFloat(localStorage.getItem('bgmVol')||'0.7'); if(!Number.isNaN(vol)) bgm.volume = Math.min(1, Math.max(0, vol)); }catch(_){ }
-    function updateUI(){ const playing = !bgm.paused && !bgm.ended; bgmBtn.classList.toggle('playing', playing); bgmBtn.setAttribute('aria-pressed', playing? 'true':'false'); if(ico) ico.textContent = playing? '🔊':'🔇'; }
-    async function playIfAllowed(){ try{ await bgm.play(); localStorage.setItem('bgm','on'); } catch(e){ localStorage.setItem('bgm','off'); } finally{ updateUI(); } }
-    if(localStorage.getItem('bgm')==='on'){ playIfAllowed(); } else { updateUI(); }
-    bgmBtn.addEventListener('click', async ()=>{ if(bgm.paused){ await playIfAllowed(); } else { bgm.pause(); localStorage.setItem('bgm','off'); updateUI(); } });
-    document.addEventListener('pointerdown', function once(){ if(localStorage.getItem('bgm')==='on' && bgm.paused){ playIfAllowed(); } document.removeEventListener('pointerdown', once); }, {capture:false});
-    window.addEventListener('hashchange', ()=>{ if(localStorage.getItem('bgm')==='on' && bgm.paused){ playIfAllowed(); } });
-  })();
-  </script>
-  <!-- BGM first-visit autoplay + toast -->
-  <script>
-  (function(){
-    var bgm = document.getElementById('bgm');
-    var btn = document.getElementById('bgmToggle');
-    if(!bgm || !btn) { return; }
-    var FIRST='bgm_first_visit';
-    var PENDING='bgm_autoplay_pending';
-    function updateIco(){ var ico = btn.querySelector('.bgm-ico'); if(!ico) return; var playing = !bgm.paused && !bgm.ended; btn.classList.toggle('playing', playing); btn.setAttribute('aria-pressed', playing? 'true':'false'); ico.textContent = playing? '🔊':'🔇'; }
-    if(!sessionStorage.getItem(FIRST)){
-      sessionStorage.setItem(FIRST,'1');
-      bgm.play().then(function(){ localStorage.setItem('bgm','on'); updateIco(); })
-        .catch(function(){ sessionStorage.setItem(PENDING,'1'); updateIco(); });
-      document.addEventListener('pointerdown', function once(){
-        if(sessionStorage.getItem(PENDING)==='1' && bgm.paused){
-          bgm.play().then(function(){ localStorage.setItem('bgm','on'); })
-            .catch(function(){})
-            .finally(function(){ updateIco(); sessionStorage.removeItem(PENDING); });
-        }
-        document.removeEventListener('pointerdown', once);
-      }, {capture:false});
-    }
-    if(sessionStorage.getItem('bgm_autoplay_pending') === '1'){
-      var t = document.createElement('div'); t.className='bgm-toast'; t.id='bgmToast'; t.textContent='Klik untuk nyalakan musik 🎵'; document.body.appendChild(t);
-      setTimeout(function(){ var x=document.getElementById('bgmToast'); if(x) x.remove(); }, 7000);
-      function hide(){ var x=document.getElementById('bgmToast'); if(x) x.remove(); }
-      bgm.addEventListener('play', hide, {once:true}); btn.addEventListener('click', hide, {once:true});
-    }
-  })();
-  </script>
-
-  <!-- ========================= -->
-  <!--  FIREBASE MODULE (v12.2)  -->
-  <!-- ========================= -->
   <script type="module">
-    import { initializeApp } from 'https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js';
-    import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js';
-    import { getFirestore, collection, doc, getDoc, getDocs, setDoc, deleteDoc, addDoc, serverTimestamp, query, orderBy, onSnapshot } from 'https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js';
+    // ===== UTIL =====
+    const $ = (sel, el = document) => el.querySelector(sel);
+    const $$ = (sel, el = document) => Array.from(el.querySelectorAll(sel));
+    const root = document.documentElement;
+    const setTheme = (t)=>{ root.setAttribute('data-theme', t); localStorage.setItem('theme', t); const ic = $('#themeIcon'); if(ic){ ic.textContent = t==='light' ? '☀️' : '🌙'; ic.style.transition='transform .45s var(--ease)'; ic.style.transform = t==='light' ? 'rotate(-180deg) scale(1.1)' : 'rotate(0deg)'; } $('#themeToggle').setAttribute('aria-pressed', t==='dark' ? 'true':'false'); };
+    const savedTheme = localStorage.getItem('theme') || (matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+    setTheme(savedTheme);
+    $('#themeToggle').addEventListener('click', ()=> setTheme(root.getAttribute('data-theme')==='dark'?'light':'dark'));
 
-    // === Config dari Firebase Console kamu ===
+    const monthID = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+    const fmtDate = (iso) => { const d = new Date(iso + 'T00:00:00'); return `${d.getDate()} ${monthID[d.getMonth()]} ${d.getFullYear()}`; };
+
+    // ===== DATA (posts with body) =====
+    const posts = [
+      { id:'novel-bab-1', title:'Novel — Bab 1: Pagi yang Menggantung', date:'2025-08-20',
+        tags:['Novel','Progres','Bab 1'],
+        image:'https://images.unsplash.com/photo-1507842217343-583bb7270b66?q=80&w=1200&auto=format&fit=crop',
+        excerpt:'Awal cerita—sebuah pagi di Jakarta, ketika segalanya terasa biasa saja, sampai tidak lagi…',
+        body:`<p>Pagi di Jakarta selalu terdengar sama: klakson, pedagang roti, dan radio tetangga yang tak pernah tepat frekuensi. Aku berjalan menembus lorong kos yang sempit sambil menghitung napas.</p>
+        <p>Di halaman, ada sandal yang ditinggalkan tergesa. "Pertanda baik atau buruk?" batinku. Telepon bergetar—pesan dari Ibu, hanya satu kata: <em>Pulang.</em></p>
+        <h2>Set up konflik</h2><p>Bab ini memperkenalkan dua hal: hilangnya figur jangkar dan kota yang ikut menelan suara.</p>`},
+
+      { id:'catatan-riset', title:'Catatan Riset: Menentukan Setting & Perspektif', date:'2025-08-18',
+        tags:['Novel','Catatan','Riset'],
+        image:'https://images.unsplash.com/photo-1519681393784-d120267933ba?q=80&w=1200&auto=format&fit=crop',
+        excerpt:'Kenapa memilih sudut pandang orang pertama? Plus daftar referensi yang kupakai.',
+        body:`<p>Aku membandingkan POV orang pertama vs orang ketiga terbatas. Pilihan jatuh ke orang pertama untuk menangkap kegelisahan tokoh secara dekat.</p>
+        <blockquote>Satu kota bisa menjadi tokoh, jika kita memberinya napas.</blockquote>
+        <p>Referensi: <em>Norwegian Wood</em>, <em>Lelaki Harimau</em>, dan esai dialog.</p>`},
+
+      { id:'teknik-dialog', title:'Teknik Dialog: Biar Ngobrolnya Hidup', date:'2025-08-16',
+        tags:['Tips Menulis','Workshop','Blog'],
+        image:'https://images.unsplash.com/photo-1515516969-d4008cc6241a?q=80&w=1200&auto=format&fit=crop',
+        excerpt:'Beberapa trik sederhana untuk bikin dialog terasa alami tanpa “ceramah”.',
+        body:`<p>Trik cepat: kurangi penjelasan setelah dialog, biarkan respon lawan bicara memikul makna.</p>
+          <ul><li>Gunakan jeda seperlunya.</li><li>Gesture kecil menandai emosi.</li><li>Seimbangkan “kataku, katanya” dengan aksi.</li></ul>`},
+
+      { id:'novel-outline', title:'Outline Kasar: Alur Besar Novel', date:'2025-08-14',
+        tags:['Novel','Outline','Progres'],
+        image:'https://images.unsplash.com/photo-1491841550275-ad7854e35ca6?q=80&w=1200&auto=format&fit=crop',
+        excerpt:'Kerangka 3 babak + benang merah konflik utama dan subplot keluarga.',
+        body:`<p>Struktur 3 babak: pengenalan — eskalasi — resolusi. Subplot keluarga menempel pada pilihan kuliah tokoh.</p>`},
+
+      { id:'random-thoughts', title:'Random Thoughts: Nulis di Tengah Deadline', date:'2025-08-12',
+        tags:['Blog','Opini','Produktivitas'],
+        image:'https://images.unsplash.com/photo-1516542076529-1ea3854896e1?q=80&w=1200&auto=format&fit=crop',
+        excerpt:'Cara bagiku menjaga ritme nulis tanpa ngorbanin sekolah.',
+        body:`<p>Strategi: nulis 25 menit, rehat 5 menit—ulang 3 kali. Satu sesi ≈ 1 halaman.</p>`},
+
+      { id:'novel-bab-2', title:'Novel — Bab 2: Peta yang Hilang', date:'2025-08-10',
+        tags:['Novel','Progres','Bab 2'],
+        image:'https://images.unsplash.com/photo-1455390582262-044cdead277a?q=80&w=1200&auto=format&fit=crop',
+        excerpt:'Tokoh menemukan peta usang yang menuntun ke masa lalu ayahnya.',
+        body:`<p>Peta jadi pemicu babak dua.</p>`},
+
+      { id:'tips-outline', title:'Tips Outline yang Nggak Bikin Pusing', date:'2025-08-08',
+        tags:['Blog','Tips Menulis'],
+        image:'https://images.unsplash.com/photo-1524578271613-d550eacf6090?q=80&w=1200&auto=format&fit=crop',
+        excerpt:'Cara cepat bikin outline versi “kabel rapi”.',
+        body:`<p>Pakai pola 3 babak, tulis konflik per babak dalam 1 kalimat.</p>`},
+
+      { id:'novel-riset-lokasi', title:'Riset Lokasi: Catatan Lapangan', date:'2025-08-06',
+        tags:['Novel','Riset'],
+        image:'https://images.unsplash.com/photo-1456425712190-0dd8c2b00156?q=80&w=1200&auto=format&fit=crop',
+        excerpt:'Rute bus, suara pasar pagi, dan aroma hujan—semua dicatat.',
+        body:`<p>Merekam detail sensorik untuk adegan.</p>`},
+
+      { id:'esai-favorit', title:'Esai Favorit tentang Penokohan', date:'2025-08-04',
+        tags:['Blog','Opini'],
+        image:'https://images.unsplash.com/photo-1455390582262-044cdead277a?q=80&w=1200&auto=format&fit=crop',
+        excerpt:'Kumpulan esai yang bikin mikir ulang cara membangun karakter.',
+        body:`<p>Daftar esai dan ringkasannya.</p>`},
+
+      { id:'novel-bab-3', title:'Novel — Bab 3: Telepon Tengah Malam', date:'2025-08-02',
+        tags:['Novel','Progres','Bab 3'],
+        image:'https://images.unsplash.com/photo-1497250681960-ef046c08a56e?q=80&w=1200&auto=format&fit=crop',
+        excerpt:'Sebuah telepon mengubah keputusan tokoh.',
+        body:`<p>Twist pertama muncul.</p>`},
+
+      { id:'catatan-gaya', title:'Catatan Gaya: Metafora yang Hemat', date:'2025-07-30',
+        tags:['Blog','Catatan'],
+        image:'https://images.unsplash.com/photo-1526318472351-c75fcf070305?q=80&w=1200&auto=format&fit=crop',
+        excerpt:'Menjaga metafora tetap jernih dan tepat sasaran.',
+        body:`<p>Contoh sebelum–sesudah.</p>`},
+
+      { id:'review-buku', title:'Review Buku: Cara Menulis Dialog', date:'2025-07-28',
+        tags:['Blog','Review'],
+        image:'https://images.unsplash.com/photo-1544930834-45e1b225b0cc?q=80&w=1200&auto=format&fit=crop',
+        excerpt:'Catatan dari buku craft writing favorit.',
+        body:`<p>Tiga poin yang bisa langsung dipraktikkan.</p>`},
+
+      { id:'novel-bab-4', title:'Novel — Bab 4: Hujan di Peron', date:'2025-07-26',
+        tags:['Novel','Progres','Bab 4'],
+        image:'https://images.unsplash.com/photo-1444723121867-7a241cacace9?q=80&w=1200&auto=format&fit=crop',
+        excerpt:'Adegan peron jadi titik balik relasi.',
+        body:`<p>Adegan dialog singkat namun tajam.</p>`},
+    ];
+
+    // ===== STATE (query per view + page) =====
+    const states = { home:{q:'', page:1}, blog:{q:'', page:1}, novel:{q:'', page:1} };
+
+    // ===== COMMON RENDERERS =====
+    function cardHTML(p){
+      return `
+        <a class="card-link" href="#/post/${encodeURIComponent(p.id)}" aria-label="Buka: ${p.title}">
+          <article class="card will-reveal">
+            <div class="thumb">${p.image?`<img src="${p.image}" alt="Thumbnail untuk: ${p.title}">`:''}</div>
+            <div class="card-body">
+              <div class="meta"><span>${fmtDate(p.date)}</span> • <span>${p.tags[0]}</span></div>
+              <h3 class="title">${p.title}</h3>
+              <p>${p.excerpt}</p>
+              <div class="tags">${p.tags.map(t => `<span class="tag">#${t}</span>`).join('')}</div>
+            </div>
+          </article>
+        </a>`;
+    }
+    const norm = (s)=> (s||'').toLowerCase().replace(/<[^>]+>/g,' ');
+    function searchFilter(list, q){
+      const tokens = q.trim()? q.trim().toLowerCase().split(/\\s+/):[];
+      let res = list;
+      if(tokens.length){
+        res = res.filter(p=>{
+          const hay = norm(p.title+' '+p.excerpt+' '+p.tags.join(' ')+' '+p.body);
+          return tokens.every(t=> hay.includes(t));
+        });
+      }
+      return res.sort((a,b)=> new Date(b.date)-new Date(a.date));
+    }
+    function renderGrid(gridEl, list){
+      const fallback = `<div style="grid-column:1/-1;padding:26px;border:1px dashed rgba(255,255,255,.18);border-radius:14px;text-align:center;color:var(--muted)">Tidak ada hasil yang cocok.</div>`;
+      gridEl.innerHTML = list.length ? list.map(cardHTML).join('') : fallback;
+      // reveal on scroll
+      attachReveal(gridEl);
+      // skeleton shimmer until image loaded
+      $$('.thumb', gridEl).forEach(t=>{
+        t.classList.add('skeleton');
+        const img = t.querySelector('img');
+        if(img){
+          img.setAttribute('loading','lazy');
+          img.addEventListener('load', ()=> t.classList.remove('skeleton'), {once:true});
+          img.addEventListener('error', ()=> t.classList.remove('skeleton'), {once:true});
+        } else {
+          t.classList.remove('skeleton');
+        }
+      });
+    }
+
+    // ===== WIRING SEARCH =====
+    function setupSearch(view){
+      const S = states[view];
+      const input = document.getElementById(`search-${view}`);
+      if(!input || input.dataset.inited){return;}
+      input.dataset.inited='1';
+      window.addEventListener('keydown', (e)=>{ if(document.getElementById(`view-${view}`).classList.contains('hidden')) return; if(e.key==='/' && document.activeElement!==input){ e.preventDefault(); input.focus(); } });
+      input.addEventListener('input', e=>{ S.q = e.target.value; S.page = 1; routeRender(); });
+    }
+
+    // ===== PAGINATION =====
+    const perPageForViewport = ()=> (innerWidth < 640 ? 8 : (innerWidth <= 1024 ? 8 : 12));
+
+    function renderPager(view, totalPages){
+      const wrap = document.getElementById(`pager-${view}`);
+      if(!wrap) return;
+      const cur = states[view].page;
+      if(totalPages <= 1){ wrap.innerHTML = ''; return; }
+
+      const nums = [];
+      const push = n => nums.push(`<button class="btn ${n===cur?'active':''}" data-p="${n}">${n}</button>`);
+      const addDots = ()=> nums.push(`<span style=\"padding:8px 6px;color:var(--muted)\">…</span>`);
+
+      push(1);
+      if(cur > 3) addDots();
+      for(let n=Math.max(2,cur-1); n<=Math.min(totalPages-1,cur+1); n++) push(n);
+      if(cur < totalPages-2) addDots();
+      if(totalPages>1) push(totalPages);
+
+      wrap.innerHTML = `
+        <button class="btn" data-p="prev" ${cur===1?'disabled':''}>←</button>
+        ${nums.join('')}
+        <button class="btn" data-p="next" ${cur===totalPages?'disabled':''}>→</button>
+      `;
+
+      wrap.onclick = (e)=>{
+        const p = e.target.getAttribute('data-p');
+        if(!p) return;
+        if(p==='prev' && states[view].page>1) states[view].page--;
+        else if(p==='next' && states[view].page<totalPages) states[view].page++;
+        else if(/^[0-9]+$/.test(p)) states[view].page = parseInt(p,10);
+        routeRender();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      };
+    }
+
+    // ===== INTERACTIONS & ANIMATIONS =====
+    function onScrollNav(){ document.querySelector('.nav')?.classList.toggle('scrolled', window.scrollY>4); }
+    window.addEventListener('scroll', onScrollNav);
+    function attachReveal(scope){ $$('.will-reveal', scope||document).forEach(el=> { el.style.animation='fadeSlideUp .7s var(--ease) forwards'; el.classList.add('reveal-in'); }); }
+
+    // ===== RENDER PER ROUTE =====
+    function renderHome(){
+      setupSearch('home');
+      const filtered = searchFilter(posts.slice(), states.home.q);
+      const per = perPageForViewport();
+      const total = Math.max(1, Math.ceil(filtered.length / per));
+      states.home.page = Math.min(Math.max(1, states.home.page), total);
+      const start = (states.home.page-1)*per;
+      renderGrid(document.getElementById('grid-home'), filtered.slice(start, start+per));
+      renderPager('home', total);
+    }
+    function renderBlog(){
+      setupSearch('blog');
+      const base = posts.filter(p=> p.tags.includes('Blog'));
+      const filtered = searchFilter(base, states.blog.q);
+      const per = perPageForViewport();
+      const total = Math.max(1, Math.ceil(filtered.length / per));
+      states.blog.page = Math.min(Math.max(1, states.blog.page), total);
+      const start = (states.blog.page-1)*per;
+      renderGrid(document.getElementById('grid-blog'), filtered.slice(start, start+per));
+      renderPager('blog', total);
+    }
+    function renderNovel(){
+      setupSearch('novel');
+      const base = posts.filter(p=> p.tags.includes('Novel'));
+      const filtered = searchFilter(base, states.novel.q);
+      const per = perPageForViewport();
+      const total = Math.max(1, Math.ceil(filtered.length / per));
+      states.novel.page = Math.min(Math.max(1, states.novel.page), total);
+      const start = (states.novel.page-1)*per;
+      renderGrid(document.getElementById('grid-novel'), filtered.slice(start, start+per));
+      renderPager('novel', total);
+    }
+
+    // ===== FIREBASE (Google Auth + Firestore) =====
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
+    import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
+    import { getFirestore, collection, doc, addDoc, setDoc, serverTimestamp, onSnapshot, orderBy, query, runTransaction } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
+
     const firebaseConfig = {
       apiKey: "AIzaSyDXQygwS9MCOwnHPxwg6oSfczsp51S-n9o",
       authDomain: "rafyermadi-d0eef.firebaseapp.com",
@@ -485,349 +651,291 @@
       messagingSenderId: "200873624449",
       appId: "1:200873624449:web:6a96fa29f37deca10f9e80"
     };
-
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const db = getFirestore(app);
+    const fapp = initializeApp(firebaseConfig);
+    const auth = getAuth(fapp);
+    const db = getFirestore(fapp);
     const provider = new GoogleAuthProvider();
 
-    // Helpers
-    const $ = (s, el=document) => el.querySelector(s);
-    const $$ = (s, el=document) => Array.from(el.querySelectorAll(s));
-    const monthID = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
-    const fmtTime = (ts)=>{ if(!ts) return ''; const d = ts.toDate? ts.toDate() : new Date(ts); return `${String(d.getDate()).padStart(2,'0')} ${monthID[d.getMonth()]} ${d.getFullYear()}, ${String(d.getHours()).padStart(2,'0')}.${String(d.getMinutes()).padStart(2,'0')}`; };
+    let _authReadyResolve; 
+    const authReady = new Promise(res=>{ _authReadyResolve = res; });
+    onAuthStateChanged(auth, (user)=>{
+      window.__user = user || null;
+      _authReadyResolve && _authReadyResolve(); _authReadyResolve = null; // resolve once
+      // Update auth UI area (inside comments)
+      updateAuthLine();
+    });
 
-    // Auth button
-    (function wireAuth(){
-      const btn = $('#authBtn');
-      if(!btn) return;
-      const setLabel = (u)=>{ btn.textContent = u? 'Keluar' : 'Masuk'; btn.title = u? 'Keluar akun' : 'Masuk dengan Google'; };
-      setLabel(auth.currentUser);
-      btn.onclick = async ()=>{ try{ if(!auth.currentUser) await signInWithPopup(auth, provider); else await signOut(auth); }catch(e){ console.error(e); alert('Gagal autentikasi.'); } };
-      onAuthStateChanged(auth, (u)=>{
-        setLabel(u);
-        // prefilling form
-        if(u){ $('#cname') && !$('#cname').value && ($('#cname').value = u.displayName||''); $('#cavatar') && !$('#cavatar').value && ($('#cavatar').value = u.photoURL||''); toggleCommentForm(true); }
-        else { toggleCommentForm(false); }
+    async function signIn(){ try{ await signInWithPopup(auth, provider); }catch(e){ console.error(e); } }
+    async function signOutNow(){ try{ await signOut(auth); }catch(e){ console.error(e); } }
+
+    // ===== REACTIONS =====
+    const EMOJIS = [ ['like','👍'], ['love','❤️'], ['fire','🔥'], ['clap','👏'], ['wow','😯'] ];
+
+    function renderReactionsUI(postId){
+      const bar = $('#reactBar');
+      if(!bar) return;
+      bar.innerHTML = '';
+      if(!auth.currentUser){
+        bar.innerHTML = `<div style=\"color:var(--muted)\">Masuk untuk memberi reaksi.</div>`;
+        return;
+      }
+      EMOJIS.forEach(([key, ico])=>{
+        const b = document.createElement('button');
+        b.className='react-btn';
+        b.setAttribute('data-key', key);
+        b.innerHTML = `<span>${ico}</span><span class=\"cnt\" data-k=\"${key}\">0</span>`;
+        b.addEventListener('click', ()=> toggleReaction(postId, key));
+        bar.appendChild(b);
       });
-    })();
-
-    function toggleCommentForm(enabled){
-      const form = $('#comments .card');
-      const gate = $('#cformGate');
-      if(!form) return;
-      $$('#comments .card input, #comments .card textarea, #comments .card button').forEach(el=> el.disabled = !enabled);
-      if(gate) gate.style.display = enabled? 'none':'block';
-    }
-
-    async function ensureUser(){ if(auth.currentUser) return auth.currentUser; await signInWithPopup(auth, provider); return auth.currentUser; }
-
-    // ===== Reactions =====
-    const EMOJIS = [ {key:'up',glyph:'👍'}, {key:'heart',glyph:'❤️'}, {key:'fire',glyph:'🔥'}, {key:'clap',glyph:'👏'}, {key:'wow',glyph:'😯'} ];
-
-    async function readReactionCounts(postId){
-      const col = collection(db, `posts/${postId}/reactions`);
-      const snap = await getDocs(col);
-      const sums = {up:0,heart:0,fire:0,clap:0,wow:0};
-      snap.forEach(d=>{ const v=d.data(); EMOJIS.forEach(({key})=>{ if(v[key]) sums[key]++; }); });
-      let mine = {};
-      if(auth.currentUser){ const me = await getDoc(doc(db,`posts/${postId}/reactions/${auth.currentUser.uid}`)); if(me.exists()) mine = me.data(); }
-      return {sums, mine};
     }
 
     async function toggleReaction(postId, key){
+      if(!auth.currentUser){ updateAuthLine(); return; }
+      const uid = auth.currentUser.uid;
+      const ref = doc(db, `posts/${postId}/reactions/${uid}`);
       try{
-        const u = await ensureUser();
-        const ref = doc(db, `posts/${postId}/reactions/${u.uid}`);
-        const cur = await getDoc(ref);
-        const now = cur.exists()? cur.data() : {up:false,heart:false,fire:false,clap:false,wow:false};
-        const will = !now[key];
-        const next = { ...now, [key]: will, updatedAt: serverTimestamp(), displayName: u.displayName||'', photoURL: u.photoURL||'' };
-        const allOff = EMOJIS.every(e => (e.key===key? !will : !next[e.key]));
-        if(allOff) await deleteDoc(ref); else await setDoc(ref, next, {merge:true});
-      }catch(err){ console.error(err); alert('Gagal menyimpan reaction.'); }
+        await runTransaction(db, async (tx)=>{
+          const snap = await tx.get(ref);
+          const cur = snap.exists()? snap.data() : {};
+          const currentVal = !!cur[key];
+          const next = { ...cur, [key]: !currentVal, uid, updatedAt: serverTimestamp() };
+          tx.set(ref, next, { merge:true });
+        });
+      }catch(e){ console.error('toggleReaction failed', e); }
     }
 
-    function updateReactionUI(host, sums, mine){
-      $$('.rx', host).forEach(b=>{ const k=b.dataset.key; b.querySelector('.n').textContent = String(sums[k]||0); const on=!!mine[k]; b.setAttribute('aria-pressed', on?'true':'false'); });
+    function listenReactions(postId){
+      const col = collection(db, `posts/${postId}/reactions`);
+      let unsub = onSnapshot(col, (snap)=>{
+        const counts = { like:0,love:0,fire:0,clap:0,wow:0 };
+        let my = {};
+        snap.forEach(docu=>{
+          const d = docu.data()||{};
+          EMOJIS.forEach(([k])=>{ if(d[k]) counts[k]++; });
+          if(auth.currentUser && docu.id===auth.currentUser.uid){ my = d; }
+        });
+        // update UI
+        EMOJIS.forEach(([k])=>{
+          const cnt = $(`.cnt[data-k=\"${k}\"]`);
+          if(cnt) cnt.textContent = counts[k]||0;
+        });
+        // pressed state
+        $$('#reactBar .react-btn').forEach(btn=>{
+          const k = btn.getAttribute('data-key');
+          btn.setAttribute('aria-pressed', my[k] ? 'true' : 'false');
+        });
+      }, (err)=>{ console.error('listenReactions', err); });
+      return unsub;
     }
 
-    async function renderReactions(postId){
-      const host = $('#reactRow');
-      if(!host) return;
-      if(!host.dataset.inited){
-        host.innerHTML='';
-        EMOJIS.forEach(({key,glyph})=>{ const btn=document.createElement('button'); btn.className='rx'; btn.dataset.key=key; btn.innerHTML=`<span class="g">${glyph}</span><span class="n">0</span>`; host.appendChild(btn); });
-        host.dataset.inited='1';
-        host.addEventListener('click', async (e)=>{ const b=e.target.closest('button.rx'); if(!b) return; await toggleReaction(postId, b.dataset.key); const {sums,mine}=await readReactionCounts(postId); updateReactionUI(host, sums, mine); });
+    // ===== COMMENTS =====
+    function updateAuthLine(){
+      const line = $('#authLine');
+      if(!line) return;
+      if(auth.currentUser){
+        const u = auth.currentUser;
+        const name = u.displayName || 'Pengguna';
+        line.innerHTML = `<span>Masuk sebagai <strong>${name}</strong></span> <button class=\"btn\" id=\"btnLogout\">Keluar</button>`;
+        $('#btnLogout')?.addEventListener('click', signOutNow);
+        $('#commentFormWrap')?.classList.remove('hidden');
+      } else {
+        line.innerHTML = `<button class=\"btn primary\" id=\"btnLogin\">Masuk dengan Google</button><span style=\"color:var(--muted)\"> untuk berkomentar & memberi reaksi.</span>`;
+        $('#btnLogin')?.addEventListener('click', signIn);
+        $('#commentFormWrap')?.classList.add('hidden');
       }
-      const {sums,mine}=await readReactionCounts(postId); updateReactionUI(host, sums, mine);
     }
 
-    // ===== Comments =====
-    function wireCommentForm(postId){
-      const name=$('#cname'), avatar=$('#cavatar'), text=$('#ctext');
-      $('#cclear')?.addEventListener('click', ()=>{ if(text) text.value=''; });
-      $('#csend')?.addEventListener('click', async ()=>{
-        const u = await ensureUser();
-        const body=(text?.value||'').trim(); if(!body){ text.focus(); return; }
-        try{
-          await addDoc(collection(db,`posts/${postId}/comments`), { uid:u.uid, name:(name?.value||u.displayName||'Anon').slice(0,80), avatar:(avatar?.value||u.photoURL||''), text: body.slice(0,5000), createdAt: serverTimestamp() });
-          text.value='';
-        }catch(err){ console.error(err); alert('Gagal mengirim komentar.'); }
-      });
-    }
-
-    function renderCommentItem(d){
-      const x=d.data();
-      const el=document.createElement('div'); el.className='card'; el.style.cssText='padding:12px;border-radius:12px';
-      const pic = x.avatar? `<img src="${x.avatar}" alt="" style="width:24px;height:24px;border-radius:999px;object-fit:cover;vertical-align:middle;margin-right:8px">` : '<span style="display:inline-block;width:24px;height:24px;border-radius:999px;background:#334;vertical-align:middle;margin-right:8px"></span>';
-      el.innerHTML = `<div style="color:var(--muted);font-size:12px;margin-bottom:6px;display:flex;align-items:center">${pic}<strong style="margin-right:6px">${(x.name||'Anon').replace(/</g,'&lt;')}</strong><span style=opacity:.7>•</span><span style=margin-left:6px>${fmtTime(x.createdAt)}</span></div><div style="white-space:pre-wrap;line-height:1.7">${(x.text||'').replace(/</g,'&lt;')}</div>`;
-      return el;
-    }
-
-    function liveComments(postId){
-      const list = $('#clist'); if(!list) return ()=>{};
-      const qy = query(collection(db,`posts/${postId}/comments`), orderBy('createdAt','desc'));
-      return onSnapshot(qy, (snap)=>{ list.innerHTML=''; snap.forEach(doc=> list.appendChild(renderCommentItem(doc))); });
-    }
-
-    // Expose init for router
-    window.initPostFeatures = async function(postId){
+    async function sendComment(postId){
+      if(!auth.currentUser) return signIn();
+      const ta = $('#commentText');
+      const text = (ta.value||'').trim();
+      if(!text) return;
+      const u = auth.currentUser;
+      const col = collection(db, `posts/${postId}/comments`);
       try{
-        toggleCommentForm(!!auth.currentUser);
-        wireCommentForm(postId);
-        await renderReactions(postId);
-        if(window.__cUnsub) window.__cUnsub();
-        window.__cUnsub = liveComments(postId);
-        console.log('Firebase ready');
-      }catch(err){ console.error(err); }
+        await addDoc(col, { uid:u.uid, name:u.displayName || 'Anonim', photo:u.photoURL||'', text, createdAt: serverTimestamp() });
+        ta.value='';
+      }catch(e){ console.error('sendComment', e); }
     }
-  </script>
 
-  <!-- ========================= -->
-  <!--     APP (Router + UI)     -->
-  <!-- ========================= -->
-  <script>
-  // ===== UTIL =====
-  const $ = (sel, el = document) => el.querySelector(sel);
-  const $$ = (sel, el = document) => Array.from(el.querySelectorAll(sel));
-  const root = document.documentElement;
-  const setTheme = (t)=>{ root.setAttribute('data-theme', t); localStorage.setItem('theme', t); const ic = $('#themeIcon'); if(ic){ ic.textContent = t==='light' ? '☀️' : '🌙'; ic.style.transition='transform .45s var(--ease)'; ic.style.transform = t==='light' ? 'rotate(-180deg) scale(1.1)' : 'rotate(0deg)'; } $('#themeToggle').setAttribute('aria-pressed', t==='dark' ? 'true':'false'); };
-  const savedTheme = localStorage.getItem('theme') || (matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
-  setTheme(savedTheme);
-  $('#themeToggle').addEventListener('click', ()=> setTheme(root.getAttribute('data-theme')==='dark'?'light':'dark'));
+    function listenComments(postId){
+      const col = collection(db, `posts/${postId}/comments`);
+      const qy = query(col, orderBy('createdAt','desc'));
+      const wrap = $('#commentItems');
+      wrap.innerHTML = `<div style=\"color:var(--muted)\">Memuat komentar…</div>`;
+      let unsub = onSnapshot(qy, (snap)=>{
+        const items = [];
+        snap.forEach(d=>{
+          const c = d.data();
+          const when = c.createdAt?.toDate ? c.createdAt.toDate() : (c.createdAt? new Date(c.createdAt) : null);
+          const tgl = when? `${when.getDate()} ${monthID[when.getMonth()]} ${when.getFullYear()} ${when.getHours().toString().padStart(2,'0')}:${when.getMinutes().toString().padStart(2,'0')}` : '';
+          items.push(`
+            <div class=\"comment\">
+              <div class=\"ava\">${c.photo?`<img src=\"${c.photo}\" alt=\"\">`:''}</div>
+              <div>
+                <div class=\"meta\"><strong>${c.name||'Anonim'}</strong> • ${tgl}</div>
+                <div>${(c.text||'').replace(/</g,'&lt;').replace(/>/g,'&gt;')}</div>
+              </div>
+            </div>
+          `);
+        });
+        wrap.innerHTML = items.join('') || `<div style=\"color:var(--muted)\">Belum ada komentar.</div>`;
+      }, (err)=>{ console.error('listenComments', err); });
+      return unsub;
+    }
 
-  const monthID = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
-  const fmtDate = (iso) => { const d = new Date(iso + 'T00:00:00'); return `${d.getDate()} ${monthID[d.getMonth()]} ${d.getFullYear()}`; };
+    // ===== RENDER POST (includes Firebase wiring after authReady) =====
+    let unsubReact = null, unsubComments = null;
+    async function renderPost(id){
+      const idx = posts.findIndex(p=>p.id===id); const post = posts[idx] || posts[0];
+      document.title = post.title + ' — Rafy Rayyan';
+      $('#postTitle').textContent = post.title;
+      $('#postMeta').textContent = fmtDate(post.date) + ' • ' + post.tags.join(', ');
+      const hero = $('#postHero');
+      if(post.image){ hero.classList.remove('hidden'); const img = hero.firstElementChild; img.src = post.image; img.alt = 'Gambar: ' + post.title; }
+      else { hero.classList.add('hidden'); }
+      $('#postBody').innerHTML = post.body;
+      const prev = posts[idx-1]||null; const next = posts[idx+1]||null;
+      const prevA = $('#prevPost'); const nextA = $('#nextPost');
+      if(prev){ prevA.href = `#/post/${prev.id}`; prevA.textContent = '← ' + prev.title; prevA.style.visibility='visible'; } else prevA.style.visibility='hidden';
+      if(next){ nextA.href = `#/post/${next.id}`; nextA.textContent = next.title + ' →'; nextA.style.visibility='visible'; } else nextA.style.visibility='hidden';
 
-  // ===== DATA (posts with body) =====
-  const posts = [
-    { id:'novel-bab-1', title:'Novel — Bab 1: Pagi yang Menggantung', date:'2025-08-20',
-      tags:['Novel','Progres','Bab 1'],
-      image:'https://images.unsplash.com/photo-1507842217343-583bb7270b66?q=80&w=1200&auto=format&fit=crop',
-      excerpt:'Awal cerita—sebuah pagi di Jakarta, ketika segalanya terasa biasa saja, sampai tidak lagi…',
-      body:`<p>Pagi di Jakarta selalu terdengar sama: klakson, pedagang roti, dan radio tetangga yang tak pernah tepat frekuensi. Aku berjalan menembus lorong kos yang sempit sambil menghitung napas.</p>
-      <p>Di halaman, ada sandal yang ditinggalkan tergesa. "Pertanda baik atau buruk?" batinku. Telepon bergetar—pesan dari Ibu, hanya satu kata: <em>Pulang.</em></p>
-      <h2>Set up konflik</h2><p>Bab ini memperkenalkan dua hal: hilangnya figur jangkar dan kota yang ikut menelan suara.</p>`},
+      // Firebase-dependent UI
+      await authReady; // ensure auth state available after reload
+      renderReactionsUI(post.id);
+      unsubReact && unsubReact();
+      unsubReact = listenReactions(post.id);
+      updateAuthLine();
+      $('#btnSendComment')?.addEventListener('click', ()=> sendComment(post.id));
+      unsubComments && unsubComments();
+      unsubComments = listenComments(post.id);
+    }
 
-    { id:'catatan-riset', title:'Catatan Riset: Menentukan Setting & Perspektif', date:'2025-08-18',
-      tags:['Novel','Catatan','Riset'],
-      image:'https://images.unsplash.com/photo-1519681393784-d120267933ba?q=80&w=1200&auto=format&fit=crop',
-      excerpt:'Kenapa memilih sudut pandang orang pertama? Plus daftar referensi yang kupakai.',
-      body:`<p>Aku membandingkan POV orang pertama vs orang ketiga terbatas. Pilihan jatuh ke orang pertama untuk menangkap kegelisahan tokoh secara dekat.</p>
-      <blockquote>Satu kota bisa menjadi tokoh, jika kita memberinya napas.</blockquote>
-      <p>Referensi: <em>Norwegian Wood</em>, <em>Lelaki Harimau</em>, dan esai dialog.</p>`},
-
-    { id:'teknik-dialog', title:'Teknik Dialog: Biar Ngobrolnya Hidup', date:'2025-08-16',
-      tags:['Tips Menulis','Workshop','Blog'],
-      image:'https://images.unsplash.com/photo-1515516969-d4008cc6241a?q=80&w=1200&auto=format&fit=crop',
-      excerpt:'Beberapa trik sederhana untuk bikin dialog terasa alami tanpa “ceramah”.',
-      body:`<p>Trik cepat: kurangi penjelasan setelah dialog, biarkan respon lawan bicara memikul makna.</p>
-        <ul><li>Gunakan jeda seperlunya.</li><li>Gesture kecil menandai emosi.</li><li>Seimbangkan “kataku, katanya” dengan aksi.</li></ul>`},
-
-    { id:'novel-outline', title:'Outline Kasar: Alur Besar Novel', date:'2025-08-14',
-      tags:['Novel','Outline','Progres'],
-      image:'https://images.unsplash.com/photo-1491841550275-ad7854e35ca6?q=80&w=1200&auto=format&fit=crop',
-      excerpt:'Kerangka 3 babak + benang merah konflik utama dan subplot keluarga.',
-      body:`<p>Struktur 3 babak: pengenalan — eskalasi — resolusi. Subplot keluarga menempel pada pilihan kuliah tokoh.</p>`},
-
-    { id:'random-thoughts', title:'Random Thoughts: Nulis di Tengah Deadline', date:'2025-08-12',
-      tags:['Blog','Opini','Produktivitas'],
-      image:'https://images.unsplash.com/photo-1516542076529-1ea3854896e1?q=80&w=1200&auto=format&fit=crop',
-      excerpt:'Cara bagiku menjaga ritme nulis tanpa ngorbanin sekolah.',
-      body:`<p>Strategi: nulis 25 menit, rehat 5 menit—ulang 3 kali. Satu sesi ≈ 1 halaman.</p>`},
-
-    { id:'novel-bab-2', title:'Novel — Bab 2: Peta yang Hilang', date:'2025-08-10',
-      tags:['Novel','Progres','Bab 2'],
-      image:'https://images.unsplash.com/photo-1455390582262-044cdead277a?q=80&w=1200&auto=format&fit=crop',
-      excerpt:'Tokoh menemukan peta usang yang menuntun ke masa lalu ayahnya.',
-      body:`<p>Peta jadi pemicu babak dua.</p>`},
-
-    { id:'tips-outline', title:'Tips Outline yang Nggak Bikin Pusing', date:'2025-08-08',
-      tags:['Blog','Tips Menulis'],
-      image:'https://images.unsplash.com/photo-1524578271613-d550eacf6090?q=80&w=1200&auto=format&fit=crop',
-      excerpt:'Cara cepat bikin outline versi “kabel rapi”.',
-      body:`<p>Pakai pola 3 babak, tulis konflik per babak dalam 1 kalimat.</p>`},
-
-    { id:'novel-riset-lokasi', title:'Riset Lokasi: Catatan Lapangan', date:'2025-08-06',
-      tags:['Novel','Riset'],
-      image:'https://images.unsplash.com/photo-1456425712190-0dd8c2b00156?q=80&w=1200&auto=format&fit=crop',
-      excerpt:'Rute bus, suara pasar pagi, dan aroma hujan—semua dicatat.',
-      body:`<p>Merekam detail sensorik untuk adegan.</p>`},
-
-    { id:'esai-favorit', title:'Esai Favorit tentang Penokohan', date:'2025-08-04',
-      tags:['Blog','Opini'],
-      image:'https://images.unsplash.com/photo-1455390582262-044cdead277a?q=80&w=1200&auto=format&fit=crop',
-      excerpt:'Kumpulan esai yang bikin mikir ulang cara membangun karakter.',
-      body:`<p>Daftar esai dan ringkasannya.</p>`},
-
-    { id:'novel-bab-3', title:'Novel — Bab 3: Telepon Tengah Malam', date:'2025-08-02',
-      tags:['Novel','Progres','Bab 3'],
-      image:'https://images.unsplash.com/photo-1497250681960-ef046c08a56e?q=80&w=1200&auto=format&fit=crop',
-      excerpt:'Sebuah telepon mengubah keputusan tokoh.',
-      body:`<p>Twist pertama muncul.</p>`},
-
-    { id:'catatan-gaya', title:'Catatan Gaya: Metafora yang Hemat', date:'2025-07-30',
-      tags:['Blog','Catatan'],
-      image:'https://images.unsplash.com/photo-1526318472351-c75fcf070305?q=80&w=1200&auto=format&fit=crop',
-      excerpt:'Menjaga metafora tetap jernih dan tepat sasaran.',
-      body:`<p>Contoh sebelum–sesudah.</p>`},
-
-    { id:'review-buku', title:'Review Buku: Cara Menulis Dialog', date:'2025-07-28',
-      tags:['Blog','Review'],
-      image:'https://images.unsplash.com/photo-1544930834-45e1b225b0cc?q=80&w=1200&auto=format&fit=crop',
-      excerpt:'Catatan dari buku craft writing favorit.',
-      body:`<p>Tiga poin yang bisa langsung dipraktikkan.</p>`},
-
-    { id:'novel-bab-4', title:'Novel — Bab 4: Hujan di Peron', date:'2025-07-26',
-      tags:['Novel','Progres','Bab 4'],
-      image:'https://images.unsplash.com/photo-1444723121867-7a241cacace9?q=80&w=1200&auto=format&fit=crop',
-      excerpt:'Adegan peron jadi titik balik relasi.',
-      body:`<p>Adegan dialog singkat namun tajam.</p>`},
-  ];
-
-  // ===== STATE (query per view + page) =====
-  const states = { home:{q:'', page:1}, blog:{q:'', page:1}, novel:{q:'', page:1} };
-
-  function cardHTML(p){
-    return `
-      <a class="card-link" href="#/post/${encodeURIComponent(p.id)}" aria-label="Buka: ${p.title}">
-        <article class="card will-reveal">
-          <div class="thumb">${p.image?`<img src="${p.image}" alt="Thumbnail untuk: ${p.title}">`:''}</div>
-          <div class="card-body">
-            <div class="meta"><span>${fmtDate(p.date)}</span> • <span>${p.tags[0]}</span></div>
-            <h3 class="title">${p.title}</h3>
-            <p>${p.excerpt}</p>
-            <div class="tags">${p.tags.map(t => `<span class="tag">#${t}</span>`).join('')}</div>
-          </div>
-        </article>
-      </a>`;
-  }
-  const norm = (s)=> (s||'').toLowerCase().replace(/<[^>]+>/g,' ');
-  function searchFilter(list, q){
-    const tokens = q.trim()? q.trim().toLowerCase().split(/\s+/):[];
-    let res = list;
-    if(tokens.length){
-      res = res.filter(p=>{
-        const hay = norm(p.title+' '+p.excerpt+' '+p.tags.join(' ')+' '+p.body);
-        return tokens.every(t=> hay.includes(t));
+    function setActive(h){
+      $$('.menu a').forEach(a=>{
+        const k=a.dataset.link;
+        const on = (k==='home' && (h==='#/'||h===''||h==='#')) || (k==='about'&&h.startsWith('#/about')) || (k==='blog'&&h.startsWith('#/blog')) || (k==='novel'&&h.startsWith('#/novel'));
+        a.classList.toggle('active', on);
       });
     }
-    return res.sort((a,b)=> new Date(b.date)-new Date(a.date));
-  }
-  function attachReveal(scope){ const revealObs = new IntersectionObserver((entries)=>{ entries.forEach(en=>{ if(en.isIntersecting){ en.target.classList.add('reveal-in'); revealObs.unobserve(en.target); } }); }, {rootMargin:'0px 0px -10% 0px', threshold:0.1}); $$('.will-reveal', scope||document).forEach(el=> revealObs.observe(el)); }
-  function renderGrid(gridEl, list){
-    const fallback = `<div style="grid-column:1/-1;padding:26px;border:1px dashed rgba(255,255,255,.18);border-radius:14px;text-align:center;color:var(--muted)">Tidak ada hasil yang cocok.</div>`;
-    gridEl.innerHTML = list.length ? list.map(cardHTML).join('') : fallback;
-    attachReveal(gridEl);
-    $$('.thumb', gridEl).forEach(t=>{
-      t.classList.add('skeleton');
-      const img = t.querySelector('img');
-      if(img){ img.setAttribute('loading','lazy'); img.addEventListener('load', ()=> t.classList.remove('skeleton'), {once:true}); img.addEventListener('error', ()=> t.classList.remove('skeleton'), {once:true}); }
-      else t.classList.remove('skeleton');
+    function show(view){
+      $('#view-home').classList.toggle('hidden', view!=='home');
+      $('#view-about').classList.toggle('hidden', view!=='about');
+      $('#view-post').classList.toggle('hidden', view!=='post');
+      $('#view-blog').classList.toggle('hidden', view!=='blog');
+      $('#view-novel').classList.toggle('hidden', view!=='novel');
+      window.scrollTo({top:0, behavior:'auto'});
+    }
+
+    async function routeRender(){
+      const h = location.hash || '#/' ;
+      setActive(h);
+      $('#loader')?.classList.add('show');
+      const finish = ()=>{ attachReveal(document); setTimeout(()=> $('#loader')?.classList.remove('show'), 150); onScrollNav(); };
+      if(h.startsWith('#/post/')){ show('post'); await authReady; await renderPost(decodeURIComponent(h.replace('#/post/',''))); finish(); }
+      else if(h==="#/about"){ show('about'); finish(); }
+      else if(h==="#/blog"){ show('blog'); renderBlog(); finish(); }
+      else if(h==="#/novel"){ show('novel'); renderNovel(); finish(); }
+      else { show('home'); renderHome(); finish(); }
+    }
+    window.addEventListener('hashchange', ()=>{ routeRender(); }, true);
+
+    // footer stats
+    $('#statPosts').textContent = posts.length;
+    $('#statTags').textContent = new Set(posts.flatMap(p=>p.tags)).size;
+
+    // Subscribe modal logic
+    function openSub(){ const m=$('#subModal'); if(m){ m.classList.remove('hidden'); $('#subEmail')?.focus(); document.body.style.overflow='hidden'; }}
+    function closeSub(){ $('#subModal')?.classList.add('hidden'); document.body.style.overflow=''; }
+    $('#openSub')?.addEventListener('click', openSub);
+    $('#closeSub')?.addEventListener('click', closeSub);
+    $('#subCancel')?.addEventListener('click', closeSub);
+    $('#subSave')?.addEventListener('click', ()=>{
+      const email = ($('#subEmail')?.value||'').trim();
+      const valid = /[^@\s]+@[^@\s]+\.[^@\s]+/.test(email);
+      const notice = $('#subNotice');
+      if(!valid){ notice.textContent='Email tidak valid.'; notice.style.color='salmon'; return; }
+      const key='subscribers'; const arr = JSON.parse(localStorage.getItem(key)||'[]');
+      if(!arr.includes(email)) arr.push(email);
+      localStorage.setItem(key, JSON.stringify(arr));
+      notice.textContent='Berhasil! Email tersimpan di perangkat ini. Integrasi pengiriman bisa ditambahkan nanti.'; notice.style.color='var(--muted)';
+      setTimeout(closeSub, 1000);
     });
-  }
+    $('#subModal')?.addEventListener('click', (e)=>{ if(e.target.id==='subModal' || e.target.classList.contains('modal-backdrop')) closeSub(); });
 
-  function setupSearch(view){
-    const S = states[view]; const input = document.getElementById(`search-${view}`); if(!input || input.dataset.inited) return; input.dataset.inited='1';
-    window.addEventListener('keydown', (e)=>{ if(document.getElementById(`view-${view}`).classList.contains('hidden')) return; if(e.key==='/' && document.activeElement!==input){ e.preventDefault(); input.focus(); } });
-    input.addEventListener('input', e=>{ S.q = e.target.value; S.page = 1; routeRender(); });
-  }
+    // initial
+    routeRender();
 
-  // ===== PAGINATION =====
-  const perPageForViewport = ()=> (innerWidth < 640 ? 8 : (innerWidth <= 1024 ? 8 : 12));
-  function renderPager(view, totalPages){
-    const wrap = document.getElementById(`pager-${view}`); if(!wrap) return; const cur = states[view].page; if(totalPages<=1){ wrap.innerHTML=''; return; }
-    const nums = []; const push = n => nums.push(`<button class="btn ${n===cur?'active':''}" data-p="${n}">${n}</button>`); const addDots = ()=> nums.push(`<span style="padding:8px 6px;color:var(--muted)">…</span>`);
-    push(1); if(cur>3) addDots(); for(let n=Math.max(2,cur-1); n<=Math.min(totalPages-1,cur+1); n++) push(n); if(cur<totalPages-2) addDots(); if(totalPages>1) push(totalPages);
-    wrap.innerHTML = `<button class="btn" data-p="prev" ${cur===1?'disabled':''}>←</button>${nums.join('')}<button class="btn" data-p="next" ${cur===totalPages?'disabled':''}>→</button>`;
-    wrap.onclick = (e)=>{ const p=e.target.getAttribute('data-p'); if(!p) return; if(p==='prev'&&states[view].page>1) states[view].page--; else if(p==='next'&&states[view].page<totalPages) states[view].page++; else if(/^\d+$/.test(p)) states[view].page=parseInt(p,10); routeRender(); window.scrollTo({ top: 0, behavior: 'smooth' }); };
-  }
+    // back-to-top
+    $('#toTop')?.addEventListener('click', ()=> window.scrollTo({top:0, behavior:'smooth'}));
 
-  // ===== INTERACTIONS =====
-  function onScrollNav(){ document.querySelector('.nav')?.classList.toggle('scrolled', window.scrollY>4); }
-  window.addEventListener('scroll', onScrollNav);
-  const showLoader = ()=> $('#page-loader')?.classList.add('show');
-  const hideLoader = ()=> $('#page-loader')?.classList.remove('show');
-  function prepareReveal(){ ['.hero .avatar', '.hero h1', '.hero p', '.hero .hero-cta', '.about .avatar', '.about .card', '.foot-grid > *'].forEach(sel=>{ $$(sel).forEach(el=>{ if(!el.classList.contains('will-reveal')) el.classList.add('will-reveal'); }); }); attachReveal(document); }
+    // re-render on resize
+    let rszT; 
+    window.addEventListener('resize', ()=>{ clearTimeout(rszT); rszT = setTimeout(()=> routeRender(), 120); });
 
-  // ===== RENDER PER ROUTE =====
-  function renderHome(){ setupSearch('home'); const filtered = searchFilter(posts.slice(), states.home.q); const per=perPageForViewport(); const total=Math.max(1, Math.ceil(filtered.length/per)); states.home.page=Math.min(Math.max(1, states.home.page), total); const start=(states.home.page-1)*per; renderGrid($('#grid-home'), filtered.slice(start,start+per)); renderPager('home', total); }
-  function renderBlog(){ setupSearch('blog'); const base=posts.filter(p=> p.tags.includes('Blog')); const filtered = searchFilter(base, states.blog.q); const per=perPageForViewport(); const total=Math.max(1, Math.ceil(filtered.length/per)); states.blog.page=Math.min(Math.max(1, states.blog.page), total); const start=(states.blog.page-1)*per; renderGrid($('#grid-blog'), filtered.slice(start,start+per)); renderPager('blog', total); }
-  function renderNovel(){ setupSearch('novel'); const base=posts.filter(p=> p.tags.includes('Novel')); const filtered = searchFilter(base, states.novel.q); const per=perPageForViewport(); const total=Math.max(1, Math.ceil(filtered.length/per)); states.novel.page=Math.min(Math.max(1, states.novel.page), total); const start=(states.novel.page-1)*per; renderGrid($('#grid-novel'), filtered.slice(start,start+per)); renderPager('novel', total); }
-  function renderPost(id){ const idx=posts.findIndex(p=>p.id===id); const post=posts[idx]||posts[0]; document.title = post.title + ' — Rafy Rayyan'; $('#postTitle').textContent=post.title; $('#postMeta').textContent=fmtDate(post.date)+' • '+post.tags.join(', '); const hero=$('#postHero'); if(post.image){ hero.classList.remove('hidden'); const img=hero.firstElementChild; img.src=post.image; img.alt='Gambar: '+post.title; } else hero.classList.add('hidden'); $('#postBody').innerHTML=post.body; const prev=posts[idx-1]||null; const next=posts[idx+1]||null; const prevA=$('#prevPost'); const nextA=$('#nextPost'); if(prev){ prevA.href = `#/post/${prev.id}`; prevA.textContent = '← ' + prev.title; prevA.style.visibility='visible'; } else prevA.style.visibility='hidden'; if(next){ nextA.href = `#/post/${next.id}`; nextA.textContent = next.title + ' →'; nextA.style.visibility='visible'; } else nextA.style.visibility='hidden';
-    // Inisialisasi fitur Firebase (reactions + comments)
-    if(window.initPostFeatures) window.initPostFeatures(post.id);
-  }
+    // Boot splash on load
+    (function bootSplash(){
+      var l = document.getElementById('loader');
+      if(!l) return;
+      var min = 450;
+      function splash(){
+        var start = performance.now();
+        l.classList.add('show');
+        requestAnimationFrame(function(){
+          var wait = Math.max(0, min - (performance.now() - start));
+          setTimeout(function(){ l.classList.remove('show'); }, wait);
+        });
+      }
+      if (document.readyState === 'complete' || document.readyState === 'interactive') splash();
+      else document.addEventListener('DOMContentLoaded', splash, {once:true});
+    })();
 
-  function setActive(h){ $$('.menu a').forEach(a=>{ const k=a.dataset.link; const on = (k==='home' && (h==='#/'||h===''||h==='#')) || (k==='about'&&h.startsWith('#/about')) || (k==='blog'&&h.startsWith('#/blog')) || (k==='novel'&&h.startsWith('#/novel')); a.classList.toggle('active', on); }); }
-  function show(view){ $('#view-home').classList.toggle('hidden', view!=='home'); $('#view-about').classList.toggle('hidden', view!=='about'); $('#view-post').classList.toggle('hidden', view!=='post'); $('#view-blog').classList.toggle('hidden', view!=='blog'); $('#view-novel').classList.toggle('hidden', view!=='novel'); window.scrollTo({top:0, behavior:'auto'}); }
-  function routeRender(){ const h=location.hash || '#/'; setActive(h); showLoader(); const finish=()=>{ prepareReveal(); setTimeout(hideLoader, 200); onScrollNav(); }; if(h.startsWith('#/post/')){ show('post'); renderPost(decodeURIComponent(h.replace('#/post/',''))); finish(); } else if(h==='#/about'){ show('about'); finish(); } else if(h==='#/blog'){ show('blog'); renderBlog(); finish(); } else if(h==='#/novel'){ show('novel'); renderNovel(); finish(); } else { show('home'); renderHome(); finish(); } }
-  window.addEventListener('hashchange', routeRender);
+    /* === Background Music === */
+    (function(){
+      const MUSIC_SRC = new URLSearchParams(location.search).get('music') || 'bgm.mp3';
+      const bgm = document.getElementById('bgm');
+      const bgmBtn = document.getElementById('bgmToggle');
+      if(!bgm || !bgmBtn) return;
+      const ico = bgmBtn.querySelector('.bgm-ico');
+      bgm.src = MUSIC_SRC; bgm.loop = true; bgm.preload = 'auto';
+      try{ const vol = parseFloat(localStorage.getItem('bgmVol')||'0.7'); if(!Number.isNaN(vol)) bgm.volume = Math.min(1, Math.max(0, vol)); }catch(_){ }
+      function updateUI(){ const playing = !bgm.paused && !bgm.ended; bgmBtn.classList.toggle('playing', playing); bgmBtn.setAttribute('aria-pressed', playing? 'true':'false'); if(ico) ico.textContent = playing? '🔊':'🔇'; }
+      async function playIfAllowed(){ try{ await bgm.play(); localStorage.setItem('bgm','on'); } catch(e){ localStorage.setItem('bgm','off'); } finally{ updateUI(); } }
+      if(localStorage.getItem('bgm')==='on'){ playIfAllowed(); } else { updateUI(); }
+      bgmBtn.addEventListener('click', async ()=>{ if(bgm.paused){ await playIfAllowed(); } else { bgm.pause(); localStorage.setItem('bgm','off'); updateUI(); } });
+      document.addEventListener('pointerdown', function once(){ if(localStorage.getItem('bgm')==='on' && bgm.paused){ playIfAllowed(); } document.removeEventListener('pointerdown', once); }, {capture:false});
+      window.addEventListener('hashchange', ()=>{ if(localStorage.getItem('bgm')==='on' && bgm.paused){ playIfAllowed(); } });
+    })();
 
-  // footer stats
-  $('#statPosts').textContent = posts.length;
-  $('#statTags').textContent = new Set(posts.flatMap(p=>p.tags)).size;
-
-  // Subscribe modal logic
-  function openSub(){ const m=$('#subModal'); if(m){ m.classList.remove('hidden'); $('#subEmail')?.focus(); document.body.style.overflow='hidden'; }}
-  function closeSub(){ $('#subModal')?.classList.add('hidden'); document.body.style.overflow=''; }
-  $('#openSub')?.addEventListener('click', openSub);
-  $('#closeSub')?.addEventListener('click', closeSub);
-  $('#subCancel')?.addEventListener('click', closeSub);
-  $('#subSave')?.addEventListener('click', ()=>{
-    const email = ($('#subEmail')?.value||'').trim();
-    const valid = /[^@\s]+@[^@\s]+\.[^@\s]+/.test(email);
-    const notice = $('#subNotice');
-    if(!valid){ notice.textContent='Email tidak valid.'; notice.style.color='salmon'; return; }
-    const key='subscribers'; const arr = JSON.parse(localStorage.getItem(key)||'[]');
-    if(!arr.includes(email)) arr.push(email);
-    localStorage.setItem(key, JSON.stringify(arr));
-    notice.textContent='Berhasil! Email tersimpan di perangkat ini. Integrasi pengiriman bisa ditambahkan nanti.'; notice.style.color='var(--muted)';
-    setTimeout(closeSub, 1000);
-  });
-  $('#subModal')?.addEventListener('click', (e)=>{ if(e.target.id==='subModal' || e.target.classList.contains('modal-backdrop')) closeSub(); });
-
-  // initial
-  routeRender();
-
-  // back-to-top
-  $('#toTop')?.addEventListener('click', ()=> window.scrollTo({top:0, behavior:'smooth'}));
-
-  // re-render on resize (for responsive per-page)
-  let rszT; window.addEventListener('resize', ()=>{ clearTimeout(rszT); rszT = setTimeout(()=> routeRender(), 120); });
-
-  // Boot splash on hard reload / direct URL
-  (function bootSplash(){
-    var l = document.getElementById('loader') || document.getElementById('page-loader'); if(!l) return; var min = 550;
-    function splash(){ var start = performance.now(); l.classList.remove('hidden'); requestAnimationFrame(function(){ var wait = Math.max(0, min - (performance.now() - start)); setTimeout(function(){ l.classList.add('hidden'); }, wait); }); }
-    if (document.readyState === 'complete' || document.readyState === 'interactive') splash(); else document.addEventListener('DOMContentLoaded', splash, {once:true});
-  })();
+    // BGM toast first visit
+    (function(){
+      if(sessionStorage.getItem('bgm_autoplay_pending') !== '1') return;
+      var btn = document.getElementById('bgmToggle');
+      var bgm = document.getElementById('bgm');
+      if(!btn) return;
+      function showToast(){
+        if(document.getElementById('bgmToast')) return;
+        var t = document.createElement('div');
+        t.className = 'bgm-toast';
+        t.id = 'bgmToast';
+        t.textContent = 'Klik untuk nyalakan musik 🎵';
+        document.body.appendChild(t);
+        setTimeout(function(){ if(t && t.parentNode){ t.parentNode.removeChild(t); } }, 7000);
+      }
+      function hideToast(){ var t = document.getElementById('bgmToast'); if(t && t.parentNode){ t.parentNode.removeChild(t); } }
+      showToast();
+      if(bgm){ bgm.addEventListener('play', hideToast, {once:true}); }
+      btn.addEventListener('click', hideToast, {once:true});
+      function onInteract(){
+        if(bgm && sessionStorage.getItem('bgm_autoplay_pending')==='1' && bgm.paused){
+          bgm.play().then(function(){ localStorage.setItem('bgm','on'); }).catch(function(){})
+            .finally(function(){ hideToast(); sessionStorage.removeItem('bgm_autoplay_pending'); document.removeEventListener('pointerdown', onInteract); });
+        } else {
+          hideToast(); document.removeEventListener('pointerdown', onInteract);
+        }
+      }
+      document.addEventListener('pointerdown', onInteract, {capture:false});
+    })();
   </script>
-
-  <!-- Page loader overlay used by router -->
-  <div id="page-loader" class="loader" aria-hidden="true"><div class="spinner" role="status" aria-label="Memuat"></div></div>
-
 </body>
 </html>
