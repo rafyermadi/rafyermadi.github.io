@@ -10,59 +10,79 @@
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&family=Playfair+Display:wght@600&display=swap" rel="stylesheet">
   <style>
     :root{
-      --bg:#0f1117; --bg-soft:#151826; --card:#181c2e; --text:#e6e8ef; --muted:#96a0b5;
-      --brand:#8b5cf6; --brand-2:#22d3ee; --ring:#3b82f6; --radius:16px; --shadow:0 10px 30px rgba(0,0,0,.35);
-      --maxw:1200px; --nav-h:72px;
+      --bg: #0f1117;        /* dark */
+      --bg-soft: #151826;
+      --card: #181c2e;
+      --text: #e6e8ef;
+      --muted: #96a0b5;
+      --brand: #8b5cf6; /* violet-500 */
+      --brand-2: #22d3ee; /* cyan-400 */
+      --ring: #3b82f6; /* blue-500 */
+      --radius: 16px;
+      --shadow: 0 10px 30px rgba(0,0,0,.35);
+      --maxw: 1200px;
+      --nav-h: 72px;
+      --accent: linear-gradient(135deg,var(--brand),var(--brand-2));
     }
-    html[data-theme="light"]{--bg:#f7f8fc;--bg-soft:#fff;--card:#fff;--text:#101321;--muted:#5a6275;--ring:#2563eb}
+    html[data-theme="light"]{
+      --bg: #f7f8fc;       /* light */
+      --bg-soft: #ffffff;
+      --card: #ffffff;
+      --text: #101321;
+      --muted: #5a6275;
+      --ring: #2563eb;
+    }
     *{box-sizing:border-box}
-    html,body{
-      margin:0;padding:0;color:var(--text);
-      background:
+    html,body{margin:0;padding:0;background:
       radial-gradient(1200px 600px at 10% -10%, rgba(139,92,246,.22), transparent 60%),
       radial-gradient(900px 500px at 110% 10%, rgba(34,211,238,.16), transparent 60%),
-      linear-gradient(180deg,var(--bg),var(--bg));
-      font-family:"Plus Jakarta Sans",system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,"Apple Color Emoji","Segoe UI Emoji";
+      linear-gradient(180deg, var(--bg), var(--bg));
+      color:var(--text);
+      font-family:"Plus Jakarta Sans", system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      scroll-behavior:smooth;
     }
-    a{color:inherit;text-decoration:none} img{max-width:100%;display:block}
+    a{color:inherit;text-decoration:none}
+    img{max-width:100%;display:block}
     .container{max-width:var(--maxw);margin-inline:auto;padding-inline:20px}
 
     /* NAVBAR */
-    .nav{position:sticky;top:0;z-index:70;min-height:var(--nav-h);padding-block:10px;backdrop-filter:blur(8px);
-      background:color-mix(in oklab,var(--bg) 80%,#000 20%);border-bottom:1px solid rgba(255,255,255,.06)}
+    .nav{position:sticky; top:0; z-index:70; min-height:var(--nav-h); padding-block:10px;
+      backdrop-filter: blur(8px);
+      background: color-mix(in oklab, var(--bg) 80%, #000 20%);
+      border-bottom: 1px solid rgba(255,255,255,.06);
+    }
     html[data-theme="light"] .nav{border-bottom:1px solid rgba(16,19,33,.08)}
     .nav-inner{display:flex;align-items:center;justify-content:space-between;gap:12px}
-    .brand{display:flex;align-items:center;gap:12px;font-weight:800;letter-spacing:.2px}
-    .brand-badge{width:34px;height:34px;border-radius:10px;background:linear-gradient(135deg,var(--brand),var(--brand-2));
-      display:grid;place-items:center;box-shadow:var(--shadow)}
+    .brand{display:flex;align-items:center;gap:12px;font-weight:800;letter-spacing:.2px;flex:0 0 auto}
+    .brand-badge{width:34px;height:34px;border-radius:10px;background:var(--accent);display:grid;place-items:center;box-shadow: var(--shadow)}
+    .brand-badge span{font-weight:800}
     .menu{display:flex;gap:8px;align-items:center;flex:1 1 auto;min-width:0;overflow:auto;scrollbar-width:none}
     .menu::-webkit-scrollbar{display:none}
     .menu a{padding:10px 14px;border-radius:12px;color:var(--muted);white-space:nowrap}
-    .menu a.active,.menu a:hover{color:var(--text);background:rgba(255,255,255,.06)}
-    html[data-theme="light"] .menu a.active,html[data-theme="light"] .menu a:hover{background:rgba(16,19,33,.06)}
-    .right-actions{display:flex;gap:10px;align-items:center}
+    .menu a.active, .menu a:hover{color:var(--text);background:rgba(255,255,255,.06)}
+    html[data-theme="light"] .menu a.active, html[data-theme="light"] .menu a:hover{background:rgba(16,19,33,.06)}
+    .right-actions{display:flex;gap:10px;align-items:center;flex:0 0 auto}
     .toggle{padding:9px 12px;border-radius:12px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.04);cursor:pointer}
     html[data-theme="light"] .toggle{border-color:rgba(16,19,33,.12);background:rgba(16,19,33,.04)}
 
     /* SHARED */
-    .section{padding:28px 0 80px} .hidden{display:none!important}
-    .visually-hidden{position:absolute!important;height:1px;width:1px;overflow:hidden;clip:rect(1px,1px,1px,1px);white-space:nowrap}
+    .section{padding:28px 0 80px}
+    .hidden{display:none !important}
+    .visually-hidden{position:absolute !important; height:1px; width:1px; overflow:hidden; clip:rect(1px,1px,1px,1px); white-space:nowrap;}
 
-    /* HOME */
+    /* HOME (HERO + TOOLBAR + GRID) */
     .hero{padding:60px 0 32px}
     .hero-wrap{display:grid;grid-template-columns:160px 1fr;gap:24px;align-items:center}
     .avatar{width:160px;height:160px;border-radius:999px;overflow:hidden;position:relative;box-shadow:0 12px 30px rgba(0,0,0,.45)}
-    .avatar::before{content:"";position:absolute;inset:-3px;border-radius:999px;padding:3px;
-      background:linear-gradient(135deg,var(--brand),transparent 45%,var(--brand-2));
-      -webkit-mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite:xor; mask-composite:exclude}
-    .hero h1{margin:0;font-family:"Playfair Display",serif;font-weight:600;font-size:42px;letter-spacing:.2px}
+    .avatar::before{content:"";position:absolute;inset:-3px;border-radius:999px;padding:3px;background:var(--accent); -webkit-mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite:xor; mask-composite:exclude}
+    .hero h1{margin:0;font-family:"Playfair Display", serif;font-weight:600;font-size:42px;letter-spacing:.2px}
     .hero p{margin:10px 0 0;color:var(--muted);max-width:70ch;line-height:1.65}
     .hero-cta{margin-top:16px;display:flex;gap:10px;flex-wrap:wrap}
     .btn{padding:10px 14px;border-radius:12px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.04);color:var(--text);cursor:pointer}
-    .btn.primary{background:linear-gradient(135deg,var(--brand),var(--brand-2));border:none}
+    .btn.primary{background:var(--accent);border:none}
 
-    .toolbar{position:sticky;top:calc(var(--nav-h) - 1px);z-index:65;background:color-mix(in oklab,var(--bg) 85%,#000 15%);backdrop-filter:blur(8px);
-      border-top:1px solid rgba(255,255,255,.06);border-bottom:1px solid rgba(255,255,255,.06)}
+    .toolbar{position:sticky; top:calc(var(--nav-h) - 1px); z-index:65; background:color-mix(in oklab, var(--bg) 85%, #000 15%);backdrop-filter: blur(8px);
+      border-top:1px solid rgba(255,255,255,.06); border-bottom:1px solid rgba(255,255,255,.06)}
     html[data-theme="light"] .toolbar{border-color:rgba(16,19,33,.08)}
     .toolbar-inner{display:flex;gap:10px;align-items:center;padding:12px 0}
     .search{flex:1;display:flex;align-items:center;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:14px;overflow:hidden}
@@ -71,12 +91,15 @@
     .search .kbd{padding:0 10px;color:var(--muted);border-left:1px solid rgba(255,255,255,.08)}
     html[data-theme="light"] .search .kbd{border-left-color:rgba(16,19,33,.1)}
 
-    .grid{display:grid;gap:18px;grid-template-columns:repeat(3,1fr)}
-    @media (max-width:1024px){.grid{grid-template-columns:repeat(2,1fr)} .hero-wrap{grid-template-columns:140px 1fr;align-items:start}}
-    @media (max-width:640px){.grid{grid-template-columns:1fr} .hero{padding:36px 0 14px} .hero-wrap{grid-template-columns:1fr;text-align:center;gap:14px} .avatar{margin-inline:auto} .hero-cta{justify-content:center}}
-    .card{background:var(--card);border:1px solid rgba(255,255,255,.08);border-radius:20px;overflow:hidden;transition:transform .2s ease,box-shadow .2s ease;display:flex;flex-direction:column;min-height:380px}
-    .card:hover{transform:translateY(-4px);box-shadow:0 16px 40px rgba(0,0,0,.2)}
-    .thumb{aspect-ratio:16/9;background:#0b0d13;overflow:hidden}
+    .grid{display:grid;gap:18px;grid-template-columns:repeat(3, 1fr)}
+    @media (max-width: 1024px){.grid{grid-template-columns:repeat(2,1fr)} .hero-wrap{grid-template-columns:140px 1fr;align-items:start}}
+    @media (max-width: 640px){.grid{grid-template-columns:1fr} .hero{padding:36px 0 14px} .hero-wrap{grid-template-columns:1fr; text-align:center; gap:14px} .avatar{margin-inline:auto} .hero-cta{justify-content:center} .nav-inner{flex-wrap:nowrap}}
+    .card{background:var(--card);border:1px solid rgba(255,255,255,.08);border-radius:20px;overflow:hidden;transition:transform .2s ease, box-shadow .2s ease;display:flex;flex-direction:column;min-height:380px; opacity:0; transform:translateY(12px)}
+    .card.reveal{opacity:1; transform:translateY(0); transition:opacity .5s ease, transform .5s ease}
+    html[data-theme="light"] .card{border-color:rgba(16,19,33,.08)}
+    .card:hover{transform:translateY(-4px); box-shadow:0 16px 40px rgba(0,0,0,.2)}
+    .thumb{aspect-ratio:16/9; background:#0b0d13; overflow:hidden}
+    html[data-theme="light"] .thumb{background:#e9ecf7}
     .thumb img{width:100%;height:100%;object-fit:cover}
     .card-body{padding:14px;display:flex;flex-direction:column;gap:6px;flex:1}
     .meta{display:flex;gap:10px;align-items:center;color:var(--muted);font-size:13px}
@@ -86,13 +109,13 @@
     .tag{font-size:12px;padding:4px 10px;border-radius:999px;border:1px solid rgba(255,255,255,.12);color:#c9d3f0}
     html[data-theme="light"] .tag{color:#34406a;border-color:rgba(16,19,33,.12)}
 
-    /* ABOUT */
+    /* ABOUT VIEW */
     .about{padding:60px 0}
     .about-grid{display:grid;grid-template-columns:160px 1fr;gap:24px;align-items:start}
     @media (max-width:900px){.about-grid{grid-template-columns:1fr}}
     .about .card{border-radius:18px;padding:18px}
 
-    /* POST */
+    /* POST VIEW */
     header.post{padding:30px 0}
     .post-title{font-family:"Playfair Display",serif;font-size:40px;margin:0 0 8px}
     .post-meta{color:var(--muted);font-size:14px}
@@ -105,16 +128,33 @@
     article img{max-width:100%;height:auto;border-radius:12px;display:block;margin:10px auto}
     .post-nav{display:flex;justify-content:space-between;gap:10px;margin:22px 0}
 
-    /* FOOTER */
+    /* REACTION ROW */
+    .react-row{display:flex;gap:10px;align-items:center;margin:10px 0 18px}
+    .react{display:inline-flex;align-items:center;gap:8px;padding:6px 10px;border-radius:999px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.03);cursor:pointer;font:inherit;color:inherit}
+    .react.active{outline:2px solid rgba(255,255,255,.18); background:rgba(255,255,255,.06)}
+    .react span[data-count]{min-width:14px;text-align:center;opacity:.9}
+
+    /* COMMENTS */
+    .c-wrap{background:var(--card);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:12px}
+    .c-item{padding:8px 10px;border-radius:10px;background:rgba(255,255,255,.03);margin:6px 0;display:flex;gap:10px;align-items:flex-start}
+    .c-item .c-avatar{width:28px;height:28px;border-radius:999px;overflow:hidden;background:#222}
+    .c-name{font-weight:700}
+    .c-meta{font-size:12px;color:var(--muted)}
+    .c-form{display:grid;gap:8px;margin-top:10px}
+    .input{width:100%;padding:10px 12px;border-radius:10px;border:1px solid rgba(255,255,255,.12);background:transparent;color:var(--text)}
+
+    /* FOOTER — BIO STYLE */
     .site-footer{position:relative;border-top:1px solid rgba(255,255,255,.08);padding:50px 0 24px;color:var(--muted);overflow:hidden;background:
       radial-gradient(600px 200px at 10% -10%, rgba(139,92,246,.18), transparent 60%),
       radial-gradient(600px 200px at 110% 10%, rgba(34,211,238,.12), transparent 60%)}
     html[data-theme="light"] .site-footer{border-top-color:rgba(16,19,33,.08)}
     .foot-grid{display:grid;grid-template-columns:2fr 1fr 1fr;gap:20px}
-    @media (max-width:800px){.foot-grid{grid-template-columns:1fr}}
+    @media (max-width: 800px){.foot-grid{grid-template-columns:1fr}}
     .foot-brand{display:flex;gap:12px;align-items:center}
+    .foot-brand .desc{color:var(--muted);max-width:60ch;line-height:1.7}
     .foot-social{display:flex;gap:10px;margin-top:10px}
     .iconbtn{display:inline-grid;place-items:center;width:36px;height:36px;border-radius:10px;border:1px solid rgba(255,255,255,.12)}
+    html[data-theme="light"] .iconbtn{border-color:rgba(16,19,33,.12)}
     .stat{display:grid;grid-template-columns:1fr 1fr;gap:10px}
     .stat .box{background:var(--card);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:12px;text-align:center}
     .quote{background:var(--card);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:14px;font-style:italic}
@@ -128,29 +168,30 @@
     .modal-card input{width:100%;padding:10px 12px;border-radius:10px;border:1px solid rgba(255,255,255,.12);background:transparent;color:var(--text)}
     .modal-actions{display:flex;gap:8px;justify-content:flex-end;margin-top:10px}
 
-    /* REACTIONS + COMMENTS */
-    .rx-wrap{display:flex;gap:10px;align-items:center;margin:18px 0 8px}
-    .rx-btn{padding:6px 10px;border-radius:12px;border:1px solid rgba(255,255,255,.12);background:transparent;color:inherit;cursor:pointer;display:inline-flex;gap:6px;align-items:center;transition:transform .15s ease, background .2s ease}
-    html[data-theme="light"] .rx-btn{border-color:rgba(16,19,33,.12)}
-    .rx-btn b{font-weight:700;min-width:1.2em;text-align:right}
-    .rx-btn.active{background:rgba(255,255,255,.08)}
-    .rx-btn[disabled]{opacity:.6;cursor:default}
-    .rx-pop{transform:translateY(-2px) scale(1.05)}
-    .cmt-card{background:var(--card);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:10px 12px;margin:8px 0}
-    .cmt-meta{font-size:12px;color:var(--muted);margin-bottom:4px;display:flex;gap:8px;align-items:center}
-    .cmt-form{background:var(--card);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:10px;margin-top:10px}
-    .cmt-form input,.cmt-form textarea{width:100%;padding:10px 12px;border-radius:10px;border:1px solid rgba(255,255,255,.12);background:transparent;color:inherit;outline:none;margin:6px 0}
-    html[data-theme="light"] .cmt-form input,html[data-theme="light"] .cmt-form textarea{border-color:rgba(16,19,33,.12)}
-    .cmt-actions{display:flex;gap:8px;justify-content:flex-end}
-    .btn-small{padding:8px 12px;border-radius:12px;border:1px solid rgba(255,255,255,.12);background:transparent;color:inherit;cursor:pointer}
-    .btn-primary{background:linear-gradient(135deg,var(--brand),var(--brand-2));border:none;color:white}
+    /* LOADER */
+    #appLoader{position:fixed;inset:0;display:grid;place-items:center;background:rgba(8,10,16,.9);z-index:200;transition:opacity .35s ease}
+    #appLoader.hidden{opacity:0;pointer-events:none}
+    .spinner{width:56px;height:56px;border-radius:999px;border:5px solid rgba(255,255,255,.15);border-top-color:#fff;animation:spin 1s linear infinite}
+    @keyframes spin{to{transform:rotate(360deg)}}
+
+    /* AUDIO BTN + OVERLAY */
+    #audioToggle{position:fixed;right:18px;bottom:18px;z-index:90;border-radius:999px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.06);backdrop-filter:blur(6px)}
+    #audioPrompt{position:fixed;inset:0;display:none;place-items:center;z-index:140;background:rgba(0,0,0,.7)}
+    #audioPrompt.show{display:grid}
+    #audioPrompt .box{background:var(--bg-soft);border:1px solid rgba(255,255,255,.12);padding:18px;border-radius:14px}
   </style>
 </head>
 <body>
+  <!-- LOADER -->
+  <div id="appLoader" aria-hidden="true"><div class="spinner" aria-label="Memuat..."></div></div>
+
   <!-- NAVBAR -->
   <nav class="nav">
     <div class="container nav-inner">
-      <a href="#/" class="brand"><span class="brand-badge"><span>R</span></span>Rafy Rayyan</a>
+      <a href="#/" class="brand" id="brand">
+        <span class="brand-badge" aria-hidden="true"><span>R</span></span>
+        Rafy Rayyan
+      </a>
       <div class="menu" role="navigation" aria-label="Primary">
         <a href="#/" data-link="home" class="active">Beranda</a>
         <a href="#/blog" data-link="blog">Blog</a>
@@ -158,78 +199,185 @@
         <a href="#/about" data-link="about">About</a>
       </div>
       <div class="right-actions">
-        <button id="themeToggle" class="toggle" aria-pressed="false" title="Ganti tema"><span id="themeIcon">🌙</span></button>
+        <button id="themeToggle" class="toggle" aria-pressed="false" title="Ganti tema">
+          <span id="themeIcon" aria-hidden="true">🌙</span>
+        </button>
       </div>
     </div>
   </nav>
 
-  <!-- HOME -->
+  <!-- ===== HOME VIEW ===== -->
   <div id="view-home">
     <header class="hero" id="top">
       <div class="container hero-wrap">
-        <div class="avatar"><img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80&w=800&auto=format&fit=crop" alt="Foto profil Rafy Rayyan"/></div>
+        <div class="avatar">
+          <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80&w=800&auto=format&fit=crop" alt="Foto profil Rafy Rayyan"/>
+        </div>
         <div>
-          <h1>Halo, aku <span style="background:linear-gradient(135deg,var(--brand),var(--brand-2));-webkit-background-clip:text;background-clip:text;color:transparent">Rafy Rayyan</span>.</h1>
-          <p>Ini adalah rumah digital untuk tugas akhir Bahasa Indonesia kelas 12 sekaligus blog pribadiku. Di sini aku mengarsipkan progres <em>novel</em> yang sedang kutulis, juga catatan, opini, dan eksperimen lain. Selamat mampir! ✨</p>
-          <div class="hero-cta"><button class="btn primary" id="openSub">Berlangganan via Email</button></div>
+          <h1>Halo, aku <span style="background:var(--accent);-webkit-background-clip:text;background-clip:text;color:transparent">Rafy Rayyan</span>.</h1>
+          <p>
+            Ini adalah rumah digital untuk tugas akhir Bahasa Indonesia kelas 12 sekaligus blog pribadiku. Di sini aku mengarsipkan progres <em>novel</em> yang sedang kutulis, juga catatan, opini, dan eksperimen lain. Selamat mampir! ✨
+          </p>
+          <div class="hero-cta">
+            <button class="btn primary" id="openSub">Berlangganan via Email</button>
+          </div>
         </div>
       </div>
     </header>
+
     <div class="toolbar" aria-label="Pencarian">
       <div class="container toolbar-inner">
         <label class="visually-hidden" for="search-home">Cari postingan</label>
-        <div class="search"><input id="search-home" type="search" placeholder="Cari judul, tag, atau isi… (ketik untuk memfilter)" autocomplete="off"/><div class="kbd">/</div></div>
+        <div class="search">
+          <input id="search-home" type="search" placeholder="Cari judul, tag, atau isi… (ketik untuk memfilter)" autocomplete="off"/>
+          <div class="kbd">/</div>
+        </div>
       </div>
     </div>
-    <main class="section container"><div class="grid" id="grid-home"></div></main>
+
+    <main class="section container" aria-live="polite">
+      <div class="grid" id="grid-home"></div>
+    </main>
   </div>
 
-  <!-- BLOG -->
+  <!-- ===== BLOG VIEW ===== -->
   <div id="view-blog" class="hidden">
-    <section class="about" style="padding:40px 0 10px"><div class="container"><h1 style="font-family:'Playfair Display',serif;margin:0">Blog</h1><p style="color:var(--muted)">Tulisan-tulisan selain progres novel.</p></div></section>
-    <div class="toolbar"><div class="container toolbar-inner"><label class="visually-hidden" for="search-blog">Cari postingan blog</label><div class="search"><input id="search-blog" type="search" placeholder="Cari di Blog…" autocomplete="off"/><div class="kbd">/</div></div></div></div>
-    <main class="section container"><div class="grid" id="grid-blog"></div></main>
+    <section class="about" style="padding:40px 0 10px">
+      <div class="container"><h1 style="font-family:'Playfair Display',serif;margin:0">Blog</h1><p style="color:var(--muted)">Tulisan-tulisan selain progres novel.</p></div>
+    </section>
+    <div class="toolbar" aria-label="Pencarian">
+      <div class="container toolbar-inner">
+        <label class="visually-hidden" for="search-blog">Cari postingan blog</label>
+        <div class="search">
+          <input id="search-blog" type="search" placeholder="Cari di Blog…" autocomplete="off"/>
+          <div class="kbd">/</div>
+        </div>
+      </div>
+    </div>
+    <main class="section container" aria-live="polite">
+      <div class="grid" id="grid-blog"></div>
+    </main>
   </div>
 
-  <!-- NOVEL -->
+  <!-- ===== NOVEL VIEW ===== -->
   <div id="view-novel" class="hidden">
-    <section class="about" style="padding:40px 0 10px"><div class="container"><h1 style="font-family:'Playfair Display',serif;margin:0">Novel</h1><p style="color:var(--muted)">Kumpulan bab, outline, dan catatan riset novel.</p></div></section>
-    <div class="toolbar"><div class="container toolbar-inner"><label class="visually-hidden" for="search-novel">Cari postingan novel</label><div class="search"><input id="search-novel" type="search" placeholder="Cari di Novel…" autocomplete="off"/><div class="kbd">/</div></div></div></div>
-    <main class="section container"><div class="grid" id="grid-novel"></div></main>
+    <section class="about" style="padding:40px 0 10px">
+      <div class="container"><h1 style="font-family:'Playfair Display',serif;margin:0">Novel</h1><p style="color:var(--muted)">Kumpulan bab, outline, dan catatan riset novel.</p></div>
+    </section>
+    <div class="toolbar" aria-label="Pencarian">
+      <div class="container toolbar-inner">
+        <label class="visually-hidden" for="search-novel">Cari postingan novel</label>
+        <div class="search">
+          <input id="search-novel" type="search" placeholder="Cari di Novel…" autocomplete="off"/>
+          <div class="kbd">/</div>
+        </div>
+      </div>
+    </div>
+    <main class="section container" aria-live="polite">
+      <div class="grid" id="grid-novel"></div>
+    </main>
   </div>
 
-  <!-- ABOUT -->
+  <!-- ===== ABOUT VIEW ===== -->
   <div id="view-about" class="hidden">
     <section class="about">
       <div class="container about-grid">
         <div class="avatar"><img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80&w=800&auto=format&fit=crop" alt="Foto Rafy"></div>
         <div>
           <h1 style="font-family:'Playfair Display',serif;font-size:40px;margin:0 0 8px">Tentang Penulis</h1>
-          <p style="color:var(--muted);line-height:1.8">Hai! Aku <strong>Rafy Rayyan</strong>, siswa kelas 12 SMAN 68 Jakarta. Aku suka menulis fiksi, ngoprek web, dan bikin proyek kreatif.</p>
+          <p style="color:var(--muted);line-height:1.8">Hai! Aku <strong>Rafy Rayyan</strong>, siswa kelas 12 SMAN 68 Jakarta. Aku suka menulis fiksi, ngoprek web, dan bikin proyek kreatif. Blog ini jadi arsip perjalanan nulis novel untuk tugas akhir Bahasa Indonesia—plus tempatku berbagi catatan, ide, dan hal-hal yang menurutku seru.</p>
+          <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px">
+            <a class="btn" href="https://www.instagram.com/rafy.rayyan/" target="_blank" rel="noopener">📷 Instagram</a>
+            <a class="btn" href="#" title="Email (isi nanti)">✉️ Email</a>
+          </div>
         </div>
+      </div>
+    </section>
+
+    <section class="container" style="margin-bottom:50px">
+      <div class="card reveal" style="padding:18px">
+        <h2 style="margin:0 0 8px">Ringkas</h2>
+        <ul style="line-height:1.8;margin:0;padding-left:18px">
+          <li>Sekolah: SMAN 68 Jakarta (Kelas 12)</li>
+          <li>Minat: penulisan kreatif, desain web, komunitas sekolah</li>
+          <li>Novel yang sedang digarap: <em>(judul sementara)</em></li>
+        </ul>
       </div>
     </section>
   </div>
 
-  <!-- POST -->
+  <!-- ===== POST VIEW ===== -->
   <div id="view-post" class="hidden">
-    <header class="post"><div class="container"><h1 id="postTitle" class="post-title">Judul</h1><div id="postMeta" class="post-meta">Tanggal • Tag</div><div id="postHero" class="post-hero hidden"><img alt=""></div></div></header>
+    <header class="post">
+      <div class="container">
+        <h1 id="postTitle" class="post-title">Judul</h1>
+        <div id="postMeta" class="post-meta">Tanggal • Tag</div>
+        <div id="postHero" class="post-hero hidden"><img alt=""></div>
+      </div>
+    </header>
     <main class="container">
       <article id="postBody"></article>
-      <nav class="post-nav"><a id="prevPost" class="btn" href="#">← Sebelumnya</a><a id="nextPost" class="btn" href="#">Berikutnya →</a></nav>
-      <div id="rx-mount"></div>
-      <div id="cmt-mount"></div>
+
+      <!-- Reactions -->
+      <div class="react-row" id="reactRow">
+        <button class="react" data-react="like">👍 <span data-count="like">0</span></button>
+        <button class="react" data-react="love">❤️ <span data-count="love">0</span></button>
+        <button class="react" data-react="fire">🔥 <span data-count="fire">0</span></button>
+        <button class="react" data-react="clap">👏 <span data-count="clap">0</span></button>
+        <button class="react" data-react="wow">😯 <span data-count="wow">0</span></button>
+      </div>
+
+      <!-- Comments -->
+      <section class="c-wrap" id="comments">
+        <h2 style="margin:4px 0 10px">Komentar</h2>
+        <div id="cList"></div>
+        <div class="c-form">
+          <input id="cName" class="input" placeholder="Nama (opsional)">
+          <input id="cAvatar" class="input" placeholder="URL foto profil (opsional)">
+          <textarea id="cText" class="input" rows="3" placeholder="Tulis komentar…"></textarea>
+          <div style="display:flex;gap:8px;justify-content:flex-end">
+            <button id="cClear" class="btn">Bersihkan</button>
+            <button id="cSend" class="btn primary">Kirim</button>
+          </div>
+        </div>
+      </section>
+
+      <nav class="post-nav">
+        <a id="prevPost" class="btn" href="#" style="visibility:hidden">← Sebelumnya</a>
+        <a id="nextPost" class="btn" href="#" style="visibility:hidden">Berikutnya →</a>
+      </nav>
     </main>
   </div>
 
-  <!-- FOOTER -->
+  <!-- FOOTER (bio + stats + quote) -->
   <footer class="site-footer">
     <div class="container foot-grid">
-      <div><div class="foot-brand"><div class="brand-badge"></div><div><div style="font-weight:800">Rafy Rayyan</div><div class="desc">Blog ini mendokumentasikan perjalanan menulis novel dan belajar hal-hal kreatif lainnya.</div><div class="foot-social"><a class="iconbtn" href="https://www.instagram.com/rafy.rayyan/" target="_blank" rel="noopener">IG</a></div></div></div></div>
-      <div><div style="font-weight:700;margin-bottom:8px">Stat singkat</div><div class="stat"><div class="box"><div style="font-size:28px;font-weight:800" id="statPosts">0</div><div style="font-size:12px;color:var(--muted)">Total Post</div></div><div class="box"><div style="font-size:28px;font-weight:800" id="statTags">0</div><div style="font-size:12px;color:var(--muted)">Jumlah Tag</div></div></div></div>
-      <div><div style="font-weight:700;margin-bottom:8px">Catatan kecil</div><div class="quote">“Menulis itu merawat ingatan.”</div></div>
+      <div>
+        <div class="foot-brand">
+          <div class="brand-badge" aria-hidden="true"></div>
+          <div>
+            <div style="font-weight:800">Rafy Rayyan</div>
+            <div class="desc">Blog ini mendokumentasikan perjalanan menulis novel dan belajar hal-hal kreatif lainnya. Terima kasih sudah mampir dan membaca. 🙌</div>
+            <div class="foot-social"><a class="iconbtn" href="https://www.instagram.com/rafy.rayyan/" target="_blank" rel="noopener" title="Instagram">IG</a></div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div style="font-weight:700;margin-bottom:8px">Stat singkat</div>
+        <div class="stat">
+          <div class="box"><div style="font-size:28px;font-weight:800" id="statPosts">0</div><div style="font-size:12px;color:var(--muted)">Total Post</div></div>
+          <div class="box"><div style="font-size:28px;font-weight:800" id="statTags">0</div><div style="font-size:12px;color:var(--muted)">Jumlah Tag</div></div>
+        </div>
+      </div>
+      <div>
+        <div style="font-weight:700;margin-bottom:8px">Catatan kecil</div>
+        <div class="quote">“Menulis itu merawat ingatan. Setiap paragraf adalah jejak yang tidak ingin hilang.”</div>
+      </div>
     </div>
-    <div class="container copy"><span>© 2025 — Dibuat oleh Rafy Rayyan.</span><button class="btn" id="toTop" type="button">Kembali ke atas</button></div>
+    <div class="container copy">
+      <span>© 2025 — Dibuat oleh <a href="https://www.instagram.com/rafy.rayyan/" target="_blank" rel="noopener">Rafy Rayyan</a>. Semua konten dilindungi hak cipta.</span>
+      <button class="btn" id="toTop" type="button">Kembali ke atas</button>
+    </div>
   </footer>
 
   <!-- SUBSCRIBE MODAL -->
@@ -239,173 +387,353 @@
       <h3 id="subTitle">Berlangganan via Email</h3>
       <p id="subNotice" style="color:var(--muted);margin-top:2px">Masukkan email untuk mendapat kabar saat ada tulisan baru.</p>
       <input type="email" id="subEmail" placeholder="nama@contoh.com" autocomplete="email" />
-      <div class="modal-actions"><button class="btn" id="subCancel">Batal</button><button class="btn primary" id="subSave">Simpan</button></div>
+      <div class="modal-actions">
+        <button class="btn" id="subCancel">Batal</button>
+        <button class="btn primary" id="subSave">Simpan</button>
+      </div>
       <button class="toggle" id="closeSub" style="position:absolute;right:10px;top:10px">✕</button>
     </div>
   </div>
 
-  <!-- ===== APP + FIREBASE (SINGLE MODULE) ===== -->
-  <script type="module">
-  /* ========== THEME & HELPERS ========== */
-  const $=(s,e=document)=>e.querySelector(s), $$=(s,e=document)=>Array.from(e.querySelectorAll(s));
-  const root=document.documentElement;
-  const setTheme=t=>{root.setAttribute('data-theme',t);localStorage.setItem('theme',t);$('#themeIcon').textContent=t==='light'?'☀️':'🌙';$('#themeToggle').setAttribute('aria-pressed',t==='dark'?'true':'false')};
-  setTheme(localStorage.getItem('theme')||(matchMedia('(prefers-color-scheme: light)').matches?'light':'dark'));
-  $('#themeToggle').addEventListener('click',()=>setTheme(root.getAttribute('data-theme')==='dark'?'light':'dark'));
-  const monthID=['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
-  const fmtDate=iso=>{const d=new Date(iso+'T00:00:00');return `${d.getDate()} ${monthID[d.getMonth()]} ${d.getFullYear()}`};
-  const norm=s=>(s||'').toLowerCase().replace(/<[^>]+>/g,' ');
+  <!-- AUDIO: button & prompt -->
+  <audio id="bgAudio" src="audio/bg.mp3" loop preload="auto"></audio>
+  <button id="audioToggle" class="toggle" title="Musik latar">🔈</button>
+  <div id="audioPrompt"><div class="box">Klik untuk menyalakan musik 🎵</div></div>
 
-  /* ========== DATA POST ========== */
-  const posts=[/* —— isi sama seperti sebelumnya (13 post) —— */  
-  {id:'novel-bab-1',title:'Novel — Bab 1: Pagi yang Menggantung',date:'2025-08-20',tags:['Novel','Progres','Bab 1'],image:'https://images.unsplash.com/photo-1507842217343-583bb7270b66?q=80&w=1200&auto=format&fit=crop',excerpt:'Awal cerita—sebuah pagi di Jakarta...',body:`<p>Pagi di Jakarta selalu terdengar sama...</p><h2>Set up konflik</h2><p>Bab ini memperkenalkan...</p>`},
-  {id:'catatan-riset',title:'Catatan Riset: Menentukan Setting & Perspektif',date:'2025-08-18',tags:['Novel','Catatan','Riset'],image:'https://images.unsplash.com/photo-1519681393784-d120267933ba?q=80&w=1200&auto=format&fit=crop',excerpt:'Kenapa memilih sudut pandang...',body:`<p>Aku membandingkan...</p>`},
-  {id:'teknik-dialog',title:'Teknik Dialog: Biar Ngobrolnya Hidup',date:'2025-08-16',tags:['Tips Menulis','Workshop','Blog'],image:'https://images.unsplash.com/photo-1515516969-d4008cc6241a?q=80&w=1200&auto=format&fit=crop',excerpt:'Beberapa trik sederhana...',body:`<p>Trik cepat...</p>`},
-  {id:'novel-outline',title:'Outline Kasar: Alur Besar Novel',date:'2025-08-14',tags:['Novel','Outline','Progres'],image:'https://images.unsplash.com/photo-1491841550275-ad7854e35ca6?q=80&w=1200&auto=format&fit=crop',excerpt:'Kerangka 3 babak...',body:`<p>Struktur 3 babak...</p>`},
-  {id:'random-thoughts',title:'Random Thoughts: Nulis di Tengah Deadline',date:'2025-08-12',tags:['Blog','Opini','Produktivitas'],image:'https://images.unsplash.com/photo-1516542076529-1ea3854896e1?q=80&w=1200&auto=format&fit=crop',excerpt:'Cara menjaga ritme...',body:`<p>Strategi: 25/5...</p>`},
-  {id:'novel-bab-2',title:'Novel — Bab 2: Peta yang Hilang',date:'2025-08-10',tags:['Novel','Progres','Bab 2'],image:'https://images.unsplash.com/photo-1455390582262-044cdead277a?q=80&w=1200&auto=format&fit=crop',excerpt:'Peta menuntun...',body:`<p>Peta jadi pemicu...</p>`},
-  {id:'tips-outline',title:'Tips Outline yang Nggak Bikin Pusing',date:'2025-08-08',tags:['Blog','Tips Menulis'],image:'https://images.unsplash.com/photo-1524578271613-d550eacf6090?q=80&w=1200&auto=format&fit=crop',excerpt:'Cara cepat bikin outline...',body:`<p>Pakai pola...</p>`},
-  {id:'novel-riset-lokasi',title:'Riset Lokasi: Catatan Lapangan',date:'2025-08-06',tags:['Novel','Riset'],image:'https://images.unsplash.com/photo-1456425712190-0dd8c2b00156?q=80&w=1200&auto=format&fit=crop',excerpt:'Rute bus...',body:`<p>Merekam detail...</p>`},
-  {id:'esai-favorit',title:'Esai Favorit tentang Penokohan',date:'2025-08-04',tags:['Blog','Opini'],image:'https://images.unsplash.com/photo-1455390582262-044cdead277a?q=80&w=1200&auto=format&fit=crop',excerpt:'Kumpulan esai...',body:`<p>Daftar esai...</p>`},
-  {id:'novel-bab-3',title:'Novel — Bab 3: Telepon Tengah Malam',date:'2025-08-02',tags:['Novel','Progres','Bab 3'],image:'https://images.unsplash.com/photo-1497250681960-ef046c08a56e?q=80&w=1200&auto=format&fit=crop',excerpt:'Telepon mengubah...',body:`<p>Twist pertama...</p>`},
-  {id:'catatan-gaya',title:'Catatan Gaya: Metafora yang Hemat',date:'2025-07-30',tags:['Blog','Catatan'],image:'https://images.unsplash.com/photo-1526318472351-c75fcf070305?q=80&w=1200&auto=format&fit=crop',excerpt:'Menjaga metafora...',body:`<p>Contoh...</p>`},
-  {id:'review-buku',title:'Review Buku: Cara Menulis Dialog',date:'2025-07-28',tags:['Blog','Review'],image:'https://images.unsplash.com/photo-1544930834-45e1b225b0cc?q=80&w=1200&auto=format&fit=crop',excerpt:'Catatan dari buku...',body:`<p>Tiga poin...</p>`},
-  {id:'novel-bab-4',title:'Novel — Bab 4: Hujan di Peron',date:'2025-07-26',tags:['Novel','Progres','Bab 4'],image:'https://images.unsplash.com/photo-1444723121867-7a241cacace9?q=80&w=1200&auto=format&fit=crop',excerpt:'Adegan peron...',body:`<p>Adegan dialog...</p>`}
+  <script type="module">
+  // ====== FIREBASE SDK ======
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+  import { getFirestore, collection, doc, getDoc, setDoc, addDoc, query, where, orderBy, limit, getDocs, serverTimestamp, getCountFromServer } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+
+  // ====== FIREBASE CONFIG (punyamu) ======
+  const firebaseConfig = {
+    apiKey: "AIzaSyA0Nc3sCYCfhsX6y6Ft5SxEuZDBcfT0zHk",
+    authDomain: "rafyermadi-a4e98.firebaseapp.com",
+    projectId: "rafyermadi-a4e98",
+    storageBucket: "rafyermadi-a4e98.firebasestorage.app",
+    messagingSenderId: "529097759816",
+    appId: "1:529097759816:web:7c0081bf4b612b2dee4c7d"
+  };
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+  console.log('Firebase ready');
+
+  // ===== UTIL =====
+  const $ = (sel, el = document) => el.querySelector(sel);
+  const $$ = (sel, el = document) => Array.from(el.querySelectorAll(sel));
+  const root = document.documentElement;
+  const setTheme = (t)=>{root.setAttribute('data-theme', t); localStorage.setItem('theme', t); $('#themeIcon').textContent = t==='light' ? '☀️' : '🌙'; $('#themeToggle').setAttribute('aria-pressed', t==='dark' ? 'true':'false');};
+  const savedTheme = localStorage.getItem('theme') || (matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+  setTheme(savedTheme);
+  $('#themeToggle').addEventListener('click', ()=> setTheme(root.getAttribute('data-theme')==='dark'?'light':'dark'));
+
+  const monthID = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+  const fmtDate = (iso) => { const d = new Date(iso + 'T00:00:00'); return `${d.getDate()} ${monthID[d.getMonth()]} ${d.getFullYear()}`; };
+
+  // ===== DATA (posts with body) =====
+  const posts = [
+    { id:'novel-bab-1', title:'Novel — Bab 1: Pagi yang Menggantung', date:'2025-08-20',
+      tags:['Novel','Progres','Bab 1'],
+      image:'https://images.unsplash.com/photo-1507842217343-583bb7270b66?q=80&w=1200&auto=format&fit=crop',
+      excerpt:'Awal cerita—sebuah pagi di Jakarta, ketika segalanya terasa biasa saja, sampai tidak lagi…',
+      body:`<p>Pagi di Jakarta selalu terdengar sama: klakson, pedagang roti, dan radio tetangga yang tak pernah tepat frekuensi. Aku berjalan menembus lorong kos yang sempit sambil menghitung napas.</p>
+      <p>Di halaman, ada sandal yang ditinggalkan tergesa. "Pertanda baik atau buruk?" batinku. Telepon bergetar—pesan dari Ibu, hanya satu kata: <em>Pulang.</em></p>
+      <h2>Set up konflik</h2><p>Bab ini memperkenalkan dua hal: hilangnya figur jangkar dan kota yang ikut menelan suara.</p>`},
+
+    { id:'catatan-riset', title:'Catatan Riset: Menentukan Setting & Perspektif', date:'2025-08-18',
+      tags:['Novel','Catatan','Riset'],
+      image:'https://images.unsplash.com/photo-1519681393784-d120267933ba?q=80&w=1200&auto=format&fit=crop',
+      excerpt:'Kenapa memilih sudut pandang orang pertama? Plus daftar referensi yang kupakai.',
+      body:`<p>Aku membandingkan POV orang pertama vs orang ketiga terbatas. Pilihan jatuh ke orang pertama untuk menangkap kegelisahan tokoh secara dekat.</p>
+      <blockquote>Satu kota bisa menjadi tokoh, jika kita memberinya napas.</blockquote>
+      <p>Referensi: <em>Norwegian Wood</em>, <em>Lelaki Harimau</em>, dan esai dialog.</p>`},
+
+    { id:'teknik-dialog', title:'Teknik Dialog: Biar Ngobrolnya Hidup', date:'2025-08-16',
+      tags:['Tips Menulis','Workshop','Blog'],
+      image:'https://images.unsplash.com/photo-1515516969-d4008cc6241a?q=80&w=1200&auto=format&fit=crop',
+      excerpt:'Beberapa trik sederhana untuk bikin dialog terasa alami tanpa “ceramah”.',
+      body:`<p>Trik cepat: kurangi penjelasan setelah dialog, biarkan respon lawan bicara memikul makna.</p>
+        <ul><li>Gunakan jeda seperlunya.</li><li>Gesture kecil menandai emosi.</li><li>Seimbangkan “kataku, katanya” dengan aksi.</li></ul>`},
+
+    { id:'novel-outline', title:'Outline Kasar: Alur Besar Novel', date:'2025-08-14',
+      tags:['Novel','Outline','Progres'],
+      image:'https://images.unsplash.com/photo-1491841550275-ad7854e35ca6?q=80&w=1200&auto=format&fit=crop',
+      excerpt:'Kerangka 3 babak + benang merah konflik utama dan subplot keluarga.',
+      body:`<p>Struktur 3 babak: pengenalan — eskalasi — resolusi. Subplot keluarga menempel pada pilihan kuliah tokoh.</p>`},
+
+    { id:'random-thoughts', title:'Random Thoughts: Nulis di Tengah Deadline', date:'2025-08-12',
+      tags:['Blog','Opini','Produktivitas'],
+      image:'https://images.unsplash.com/photo-1516542076529-1ea3854896e1?q=80&w=1200&auto=format&fit=crop',
+      excerpt:'Cara bagiku menjaga ritme nulis tanpa ngorbanin sekolah.',
+      body:`<p>Strategi: nulis 25 menit, rehat 5 menit—ulang 3 kali. Satu sesi ≈ 1 halaman.</p>`},
+
+    { id:'novel-bab-2', title:'Novel — Bab 2: Peta yang Hilang', date:'2025-08-10',
+      tags:['Novel','Progres','Bab 2'],
+      image:'https://images.unsplash.com/photo-1455390582262-044cdead277a?q=80&w=1200&auto=format&fit=crop',
+      excerpt:'Tokoh menemukan peta usang yang menuntun ke masa lalu ayahnya.',
+      body:`<p>Peta jadi pemicu babak dua.</p>`},
+
+    { id:'tips-outline', title:'Tips Outline yang Nggak Bikin Pusing', date:'2025-08-08',
+      tags:['Blog','Tips Menulis'],
+      image:'https://images.unsplash.com/photo-1524578271613-d550eacf6090?q=80&w=1200&auto=format&fit=crop',
+      excerpt:'Cara cepat bikin outline versi “kabel rapi”.',
+      body:`<p>Pakai pola 3 babak, tulis konflik per babak dalam 1 kalimat.</p>`},
+
+    { id:'novel-riset-lokasi', title:'Riset Lokasi: Catatan Lapangan', date:'2025-08-06',
+      tags:['Novel','Riset'],
+      image:'https://images.unsplash.com/photo-1456425712190-0dd8c2b00156?q=80&w=1200&auto=format&fit=crop',
+      excerpt:'Rute bus, suara pasar pagi, dan aroma hujan—semua dicatat.',
+      body:`<p>Merekam detail sensorik untuk adegan.</p>`},
+
+    { id:'esai-favorit', title:'Esai Favorit tentang Penokohan', date:'2025-08-04',
+      tags:['Blog','Opini'],
+      image:'https://images.unsplash.com/photo-1455390582262-044cdead277a?q=80&w=1200&auto=format&fit=crop',
+      excerpt:'Kumpulan esai yang bikin mikir ulang cara membangun karakter.',
+      body:`<p>Daftar esai dan ringkasannya.</p>`},
+
+    { id:'novel-bab-3', title:'Novel — Bab 3: Telepon Tengah Malam', date:'2025-08-02',
+      tags:['Novel','Progres','Bab 3'],
+      image:'https://images.unsplash.com/photo-1497250681960-ef046c08a56e?q=80&w=1200&auto=format&fit=crop',
+      excerpt:'Sebuah telepon mengubah keputusan tokoh.',
+      body:`<p>Twist pertama muncul.</p>`},
+
+    { id:'catatan-gaya', title:'Catatan Gaya: Metafora yang Hemat', date:'2025-07-30',
+      tags:['Blog','Catatan'],
+      image:'https://images.unsplash.com/photo-1526318472351-c75fcf070305?q=80&w=1200&auto=format&fit=crop',
+      excerpt:'Menjaga metafora tetap jernih dan tepat sasaran.',
+      body:`<p>Contoh sebelum–sesudah.</p>`},
+
+    { id:'review-buku', title:'Review Buku: Cara Menulis Dialog', date:'2025-07-28',
+      tags:['Blog','Review'],
+      image:'https://images.unsplash.com/photo-1544930834-45e1b225b0cc?q=80&w=1200&auto=format&fit=crop',
+      excerpt:'Catatan dari buku craft writing favorit.',
+      body:`<p>Tiga poin yang bisa langsung dipraktikkan.</p>`},
+
+    { id:'novel-bab-4', title:'Novel — Bab 4: Hujan di Peron', date:'2025-07-26',
+      tags:['Novel','Progres','Bab 4'],
+      image:'https://images.unsplash.com/photo-1444723121867-7a241cacace9?q=80&w=1200&auto=format&fit=crop',
+      excerpt:'Adegan peron jadi titik balik relasi.',
+      body:`<p>Adegan dialog singkat namun tajam.</p>`},
   ];
 
-  /* ========== SEARCH/GRID RENDER ========== */
-  const states={home:{q:''},blog:{q:''},novel:{q:''}};
-  function searchFilter(list,q){const t=q.trim()?q.trim().toLowerCase().split(/\s+/):[];let r=list;if(t.length){r=r.filter(p=>{const h=norm(p.title+' '+p.excerpt+' '+p.tags.join(' ')+' '+p.body);return t.every(x=>h.includes(x))})}return r.sort((a,b)=>new Date(b.date)-new Date(a.date))}
-  const cardHTML=p=>`<a class="card-link" href="#/post/${encodeURIComponent(p.id)}"><article class="card"><div class="thumb">${p.image?`<img src="${p.image}" alt="Thumbnail ${p.title}">`:''}</div><div class="card-body"><div class="meta"><span>${fmtDate(p.date)}</span> • <span>${p.tags[0]}</span></div><h3 class="title">${p.title}</h3><p>${p.excerpt}</p><div class="tags">${p.tags.map(t=>`<span class="tag">#${t}</span>`).join('')}</div></div></article></a>`;
-  const renderGrid=(el,list)=>el.innerHTML=list.map(cardHTML).join('')||`<div style="grid-column:1/-1;padding:26px;border:1px dashed rgba(255,255,255,.18);border-radius:14px;text-align:center;color:var(--muted)">Tidak ada hasil yang cocok.</div>`;
-  function setupSearch(view){const S=states[view];const i=document.getElementById(`search-${view}`);if(!i||i.dataset.inited)return;i.dataset.inited='1';window.addEventListener('keydown',e=>{if(document.getElementById(`view-${view}`).classList.contains('hidden'))return;if(e.key==='/'&&document.activeElement!==i){e.preventDefault();i.focus();}});i.addEventListener('input',e=>{S.q=e.target.value;routeRender()})}
-  function renderHome(){setupSearch('home');renderGrid($('#grid-home'),searchFilter(posts.slice(),states.home.q))}
-  function renderBlog(){setupSearch('blog');renderGrid($('#grid-blog'),searchFilter(posts.filter(p=>p.tags.includes('Blog')),states.blog.q))}
-  function renderNovel(){setupSearch('novel');renderGrid($('#grid-novel'),searchFilter(posts.filter(p=>p.tags.includes('Novel')),states.novel.q))}
+  // ===== STATE (query per view) =====
+  const states = { home:{q:''}, blog:{q:''}, novel:{q:''} };
 
-  // Stub agar tidak hilang saat reload pada #/post/...
-  window.afterPostRendered = window.afterPostRendered || function(){};
-  window._currentPostId = null;
-
-  function renderPost(id){
-    const idx=posts.findIndex(p=>p.id===id); const post=posts[idx]||posts[0];
-    document.title=post.title+' — Rafy Rayyan';
-    $('#postTitle').textContent=post.title;
-    $('#postMeta').textContent=fmtDate(post.date)+' • '+post.tags.join(', ');
-    const hero=$('#postHero'); if(post.image){hero.classList.remove('hidden');const img=hero.firstElementChild;img.src=post.image;img.alt='Gambar: '+post.title}else hero.classList.add('hidden');
-    $('#postBody').innerHTML=post.body;
-
-    const prev=posts[idx-1]||null,next=posts[idx+1]||null,prevA=$('#prevPost'),nextA=$('#nextPost');
-    if(prev){prevA.href=`#/post/${prev.id}`;prevA.textContent='← '+prev.title;prevA.style.visibility='visible'} else prevA.style.visibility='hidden';
-    if(next){nextA.href=`#/post/${next.id}`;nextA.textContent=next.title+' →';nextA.style.visibility='visible'} else nextA.style.visibility='hidden';
-
-    window._currentPostId=post.id;
-    window.afterPostRendered(post.id); // kalau sudah siap Firebase langsung mount, kalau belum, nanti dipanggil ulang
+  // ===== COMMON RENDERERS =====
+  function cardHTML(p){
+    return `
+      <a class="card-link" href="#/post/${encodeURIComponent(p.id)}" aria-label="Buka: ${p.title}">
+        <article class="card">
+          <div class="thumb">${p.image?`<img src="${p.image}" alt="Thumbnail untuk: ${p.title}">`:''}</div>
+          <div class="card-body">
+            <div class="meta"><span>${fmtDate(p.date)}</span> • <span>${p.tags[0]}</span></div>
+            <h3 class="title">${p.title}</h3>
+            <p>${p.excerpt}</p>
+            <div class="tags">${p.tags.map(t => `<span class="tag">#${t}</span>`).join('')}</div>
+          </div>
+        </article>
+      </a>`;
   }
-
-  function setActive(h){$$('.menu a').forEach(a=>{const k=a.dataset.link;const on=(k==='home'&&(h==='#/'||h===''||h==='#'))||(k==='about'&&h.startsWith('#/about'))||(k==='blog'&&h.startsWith('#/blog'))||(k==='novel'&&h.startsWith('#/novel'));a.classList.toggle('active',on)})}
-  function show(v){$('#view-home').classList.toggle('hidden',v!=='home');$('#view-about').classList.toggle('hidden',v!=='about');$('#view-post').classList.toggle('hidden',v!=='post');$('#view-blog').classList.toggle('hidden',v!=='blog');$('#view-novel').classList.toggle('hidden',v!=='novel');window.scrollTo({top:0,behavior:'instant'})}
-  function routeRender(){const h=location.hash||'#/';setActive(h);if(h.startsWith('#/post/')){show('post');renderPost(decodeURIComponent(h.replace('#/post/','')))} else if(h==='#/about'){show('about')} else if(h==='#/blog'){show('blog');renderBlog()} else if(h==='#/novel'){show('novel');renderNovel()} else {show('home');renderHome()}}
-  window.addEventListener('hashchange',routeRender);
-
-  // Footer + modal
-  $('#statPosts').textContent=posts.length; $('#statTags').textContent=new Set(posts.flatMap(p=>p.tags)).size;
-  const openSub=()=>{$('#subModal')?.classList.remove('hidden');$('#subEmail')?.focus();document.body.style.overflow='hidden'};
-  const closeSub=()=>{$('#subModal')?.classList.add('hidden');document.body.style.overflow=''};
-  $('#openSub')?.addEventListener('click',openSub); $('#closeSub')?.addEventListener('click',closeSub); $('#subCancel')?.addEventListener('click',closeSub);
-  $('#subSave')?.addEventListener('click',()=>{const email=($('#subEmail')?.value||'').trim();const ok=/[^@\s]+@[^@\s]+\.[^@\s]+/.test(email);const n=$('#subNotice');if(!ok){n.textContent='Email tidak valid.';n.style.color='salmon';return}const key='subscribers';const arr=JSON.parse(localStorage.getItem(key)||'[]');if(!arr.includes(email))arr.push(email);localStorage.setItem(key,JSON.stringify(arr));n.textContent='Berhasil!';n.style.color='var(--muted)';setTimeout(closeSub,900)});
-  $('#subModal')?.addEventListener('click',e=>{if(e.target.id==='subModal'||e.target.classList.contains('modal-backdrop'))closeSub()});
-  $('#toTop')?.addEventListener('click',()=>window.scrollTo({top:0,behavior:'smooth'}));
-
-  routeRender(); // initial
-
-  /* ========== FIREBASE: reactions (boolean 1x) + comments ========== */
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
-  import { getFirestore, doc, setDoc, collection, onSnapshot, serverTimestamp, addDoc, query, orderBy, limit } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
-
-  const firebaseConfig={apiKey:"AIzaSyA0Nc3sCYCfhsX6y6Ft5SxEuZDBcfT0zHk",authDomain:"rafyermadi-a4e98.firebaseapp.com",projectId:"rafyermadi-a4e98",storageBucket:"rafyermadi-a4e98.firebasestorage.app",messagingSenderId:"529097759816",appId:"1:529097759816:web:7c0081bf4b612b2dee4c7d"};
-  const fbApp=initializeApp(firebaseConfig); const db=getFirestore(fbApp);
-
-  const REACT_KEYS=[{k:'like',emoji:'👍',title:'Suka'},{k:'love',emoji:'❤️',title:'Love'},{k:'fire',emoji:'🔥',title:'Keren'},{k:'clap',emoji:'👏',title:'Tepuk tangan'},{k:'wow',emoji:'😯',title:'Wow'}];
-  const deviceId=(()=>{let id=localStorage.getItem('deviceId');if(!id){id='dev-'+Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem('deviceId',id)}return id})();
-
-  function el(tag,attrs={},...ch){const n=document.createElement(tag);Object.entries(attrs).forEach(([k,v])=>{if(k==='class')n.className=v;else if(k==='style')n.style.cssText=v;else if(k.startsWith('on')&&typeof v==='function')n.addEventListener(k.slice(2),v);else n.setAttribute(k,v)});ch.flat().forEach(c=>n.append(c instanceof Node?c:document.createTextNode(c)));return n}
-  const fmtTS=ts=>{try{const d=ts?.toDate?.()??new Date();return d.toLocaleString('id-ID',{dateStyle:'medium',timeStyle:'short'})}catch{return ''}}
-
-  // === Reactions: tiap device 1x/jenis ===
-  async function setReactionOnce(postId,type){
-    const ref=doc(db,'posts',postId,'reactions',deviceId);
-    // set boolean true (merge) — repeated click tidak menambah apa-apa
-    await setDoc(ref,{ device:deviceId, [type]:true, updatedAt:serverTimestamp() },{merge:true});
-  }
-  function mountReactions(postId,mount){
-    mount.innerHTML='';
-    const bar=el('div',{class:'rx-wrap','data-rx':postId});
-    REACT_KEYS.forEach(({k,emoji,title})=>{
-      const b=el('button',{class:'rx-btn',title,'data-react':k,onclick:async()=>{
-        if(b.classList.contains('active')) return;
-        try{await setReactionOnce(postId,k); b.classList.add('rx-pop'); setTimeout(()=>b.classList.remove('rx-pop'),140);}catch(e){console.error(e);alert('Gagal menyimpan reaction.');}
-      }},emoji,' ',el('b',{'data-count':k},'0'));
-      bar.append(b);
-    });
-    mount.append(bar);
-
-    // aggregate counts (jumlah device yang boolean true)
-    onSnapshot(collection(db,'posts',postId,'reactions'),snap=>{
-      const sum={like:0,love:0,fire:0,clap:0,wow:0};
-      snap.forEach(d=>{const x=d.data(); Object.keys(sum).forEach(k=>sum[k]+=x[k]?1:0);});
-      Object.entries(sum).forEach(([k,v])=>{const node=bar.querySelector(`[data-count="${k}"]`); if(node) node.textContent=v;});
-    });
-
-    // listen dokumen milik device ini → tandai tombol yang sudah dipakai
-    onSnapshot(doc(db,'posts',postId,'reactions',deviceId),docSnap=>{
-      const used=docSnap.data()||{};
-      REACT_KEYS.forEach(({k})=>{
-        const btn=bar.querySelector(`[data-react="${k}"]`);
-        const active=!!used[k];
-        btn.classList.toggle('active',active);
-        btn.setAttribute('aria-pressed',active?'true':'false');
+  const norm = (s)=> (s||'').toLowerCase().replace(/<[^>]+>/g,' ');
+  function searchFilter(list, q){
+    const tokens = q.trim()? q.trim().toLowerCase().split(/\s+/):[];
+    let res = list;
+    if(tokens.length){
+      res = res.filter(p=>{
+        const hay = norm(p.title+' '+p.excerpt+' '+p.tags.join(' ')+' '+p.body);
+        return tokens.every(t=> hay.includes(t));
       });
-    });
+    }
+    return res.sort((a,b)=> new Date(b.date)-new Date(a.date));
+  }
+  function renderGrid(gridEl, list){ gridEl.innerHTML = list.map(cardHTML).join('') || `<div style="grid-column:1/-1;padding:26px;border:1px dashed rgba(255,255,255,.18);border-radius:14px;text-align:center;color:var(--muted)">Tidak ada hasil yang cocok.</div>`; $$('.card', gridEl).forEach(c=>observer.observe(c)); }
+
+  // ===== WIRING SEARCH =====
+  function setupSearch(view){
+    const S = states[view];
+    const input = document.getElementById(`search-${view}`);
+    if(!input || input.dataset.inited){return;}
+    input.dataset.inited='1';
+    window.addEventListener('keydown', (e)=>{ if(document.getElementById(`view-${view}`).classList.contains('hidden')) return; if(e.key==='/' && document.activeElement!==input){ e.preventDefault(); input.focus(); } });
+    input.addEventListener('input', e=>{ S.q = e.target.value; routeRender(); });
   }
 
-  // === Comments ===
-  function mountComments(postId,mount){
-    mount.innerHTML='';
-    const title=el('div',{style:'font-weight:700;margin:6px 0 4px'},'Komentar');
-    const list=el('div',{'data-cmt-list':''});
-    const form=el('form',{class:'cmt-form',onsubmit:async e=>{
-      e.preventDefault(); const f=new FormData(form);
-      const name=(f.get('name')||'').toString().trim().slice(0,100);
-      const text=(f.get('text')||'').toString().trim().slice(0,2000);
-      const avatar=(f.get('avatar')||'').toString().trim().slice(0,500);
-      if(!text){alert('Komentar masih kosong.');return}
-      try{await addDoc(collection(db,'posts',postId,'comments'),{name,text,avatarUrl:avatar||null,createdAt:serverTimestamp()});localStorage.setItem('cmtName',name);form.reset()}catch(err){console.error(err);alert('Gagal mengirim komentar.')}}
-    });
-    const inpName=el('input',{name:'name',placeholder:'Nama (opsional)'}); inpName.value=localStorage.getItem('cmtName')||'';
-    const inpAvatar=el('input',{name:'avatar',placeholder:'URL foto profil (opsional)'});
-    const ta=el('textarea',{name:'text',rows:'4',placeholder:'Tulis komentar…'});
-    const actions=el('div',{class:'cmt-actions'},el('button',{type:'reset',class:'btn-small'},'Bersihkan'),el('button',{type:'submit',class:'btn-small btn-primary'},'Kirim'));
-    form.append(inpName,inpAvatar,ta,actions); mount.append(title,list,form);
+  // ===== RENDER PER ROUTE =====
+  function renderHome(){
+    setupSearch('home');
+    const list = searchFilter(posts.slice(), states.home.q);
+    renderGrid(document.getElementById('grid-home'), list);
+  }
+  function renderBlog(){
+    setupSearch('blog');
+    const base = posts.filter(p=> p.tags.includes('Blog'));
+    const list = searchFilter(base, states.blog.q);
+    renderGrid(document.getElementById('grid-blog'), list);
+  }
+  function renderNovel(){
+    setupSearch('novel');
+    const base = posts.filter(p=> p.tags.includes('Novel'));
+    const list = searchFilter(base, states.novel.q);
+    renderGrid(document.getElementById('grid-novel'), list);
+  }
+  function renderPost(id){
+    const idx = posts.findIndex(p=>p.id===id); const post = posts[idx] || posts[0];
+    document.title = post.title + ' — Rafy Rayyan';
+    $('#postTitle').textContent = post.title;
+    $('#postMeta').textContent = fmtDate(post.date) + ' • ' + post.tags.join(', ');
+    const hero = $('#postHero');
+    if(post.image){ hero.classList.remove('hidden'); const img = hero.firstElementChild; img.src = post.image; img.alt = 'Gambar: ' + post.title; }
+    else { hero.classList.add('hidden'); }
+    $('#postBody').innerHTML = post.body;
+    const prev = posts[idx-1]||null; const next = posts[idx+1]||null;
+    const prevA = $('#prevPost'); const nextA = $('#nextPost');
+    if(prev){ prevA.href = `#/post/${prev.id}`; prevA.textContent = '← ' + prev.title; prevA.style.visibility='visible'; } else prevA.style.visibility='hidden';
+    if(next){ nextA.href = `#/post/${next.id}`; nextA.textContent = next.title + ' →'; nextA.style.visibility='visible'; } else nextA.style.visibility='hidden';
 
-    onSnapshot(query(collection(db,'posts',postId,'comments'),orderBy('createdAt','asc'),limit(200)),snap=>{
-      list.innerHTML=''; if(snap.empty){list.append(el('div',{class:'cmt-card',style:'opacity:.7'},'Belum ada komentar.'));return}
-      snap.forEach(d=>{const x=d.data(); list.append(el('div',{class:'cmt-card'},el('div',{class:'cmt-meta'},x.avatarUrl?el('img',{src:x.avatarUrl,alt:'',style:'width:22px;height:22px;border-radius:999px;object-fit:cover'}):'',el('span',{},x.name||'Anonim'),el('span',{},'• '+fmtTS(x.createdAt))),el('div',{},x.text||'')))});
-    });
+    // setup reactions & comments for this post
+    setupReactions(post.id);
+    loadComments(post.id);
   }
 
-  // dipanggil dari renderPost; di-assign ulang setelah Firebase siap
-  window.afterPostRendered = function(postId){
-    const cont=$('#postBody')?.parentElement||document.body;
-    const rx=$('#rx-mount')||cont.appendChild(el('div',{id:'rx-mount'}));
-    const cm=$('#cmt-mount')||cont.appendChild(el('div',{id:'cmt-mount'}));
-    mountReactions(postId,rx); mountComments(postId,cm);
-  };
+  function setActive(h){
+    $$('.menu a').forEach(a=>{
+      const k=a.dataset.link;
+      const on = (k==='home' && (h==='#/'||h===''||h==='#')) || (k==='about'&&h.startsWith('#/about')) || (k==='blog'&&h.startsWith('#/blog')) || (k==='novel'&&h.startsWith('#/novel'));
+      a.classList.toggle('active', on);
+    });
+  }
+  function show(view){
+    $('#view-home').classList.toggle('hidden', view!=='home');
+    $('#view-about').classList.toggle('hidden', view!=='about');
+    $('#view-post').classList.toggle('hidden', view!=='post');
+    $('#view-blog').classList.toggle('hidden', view!=='blog');
+    $('#view-novel').classList.toggle('hidden', view!=='novel');
+    window.scrollTo({top:0, behavior:'instant'});
+  }
+  async function routeRender(){
+    const h = location.hash || '#/' ;
+    setActive(h);
+    if(h.startsWith('#/post/')){ show('post'); renderPost(decodeURIComponent(h.replace('#/post/',''))); }
+    else if(h==='#/about'){ show('about'); }
+    else if(h==='#/blog'){ show('blog'); renderBlog(); }
+    else if(h==='#/novel'){ show('novel'); renderNovel(); }
+    else { show('home'); renderHome(); }
+  }
+  window.addEventListener('hashchange', ()=>{ showLoader(); setTimeout(()=>{ routeRender(); hideLoader(); }, 120); });
 
-  // kalau halaman sudah terlanjur render post sebelum Firebase siap, panggil ulang di sini
-  if(window._currentPostId) window.afterPostRendered(window._currentPostId);
+  // footer stats
+  $('#statPosts').textContent = posts.length;
+  $('#statTags').textContent = new Set(posts.flatMap(p=>p.tags)).size;
 
-  console.log('Firebase ready');
+  // Subscribe modal logic
+  function openSub(){ const m=$('#subModal'); if(m){ m.classList.remove('hidden'); $('#subEmail')?.focus(); document.body.style.overflow='hidden'; }}
+  function closeSub(){ $('#subModal')?.classList.add('hidden'); document.body.style.overflow=''; }
+  $('#openSub')?.addEventListener('click', openSub);
+  $('#closeSub')?.addEventListener('click', closeSub);
+  $('#subCancel')?.addEventListener('click', closeSub);
+  $('#subSave')?.addEventListener('click', ()=>{
+    const email = ($('#subEmail')?.value||'').trim();
+    const valid = /[^@\s]+@[^@\s]+\.[^@\s]+/.test(email);
+    const notice = $('#subNotice');
+    if(!valid){ notice.textContent='Email tidak valid.'; notice.style.color='salmon'; return; }
+    const key='subscribers'; const arr = JSON.parse(localStorage.getItem(key)||'[]');
+    if(!arr.includes(email)) arr.push(email);
+    localStorage.setItem(key, JSON.stringify(arr));
+    notice.textContent='Berhasil! Email tersimpan di perangkat ini. Integrasi pengiriman bisa ditambahkan nanti.'; notice.style.color='var(--muted)';
+    setTimeout(closeSub, 900);
+  });
+  $('#subModal')?.addEventListener('click', (e)=>{ if(e.target.id==='subModal' || e.target.classList.contains('modal-backdrop')) closeSub(); });
+
+  // LOADER controls
+  function showLoader(){ $('#appLoader')?.classList.remove('hidden'); }
+  function hideLoader(){ $('#appLoader')?.classList.add('hidden'); }
+  showLoader();
+
+  // Reveal on scroll
+  const observer = new IntersectionObserver(entries=>{
+    entries.forEach(e=>{ if(e.isIntersecting) { e.target.classList.add('reveal'); observer.unobserve(e.target);} });
+  }, {threshold:.08});
+
+  // AUDIO
+  const audio = $('#bgAudio');
+  const audioBtn = $('#audioToggle');
+  const audioPrompt = $('#audioPrompt');
+  function syncAudioBtn(){ audioBtn.textContent = audio.paused ? '🔈' : '🔊'; }
+  audioBtn.addEventListener('click', async ()=>{ try{ if(audio.paused) await audio.play(); else audio.pause(); syncAudioBtn(); localStorage.setItem('bgAudioPaused', audio.paused? '1':'0'); }catch{}}
+  );
+  // Hard-load prompt once
+  (function(){
+    const first = sessionStorage.getItem('audioPromptShown');
+    const pausedPref = localStorage.getItem('bgAudioPaused')==='1';
+    if(!first && !pausedPref){ audioPrompt.classList.add('show'); audioPrompt.addEventListener('click', async ()=>{ audioPrompt.classList.remove('show'); sessionStorage.setItem('audioPromptShown','1'); try{ await audio.play(); }catch{} syncAudioBtn(); }); }
+    else { syncAudioBtn(); }
+  })();
+
+  // ===== REACTIONS (toggle per device) =====
+  const REACT_TYPES = ['like','love','fire','clap','wow'];
+  function getDeviceId(){ const k='deviceId'; let id = localStorage.getItem(k); if(!id){ id = 'dev-' + (crypto?.randomUUID? crypto.randomUUID(): Math.random().toString(36).slice(2)); localStorage.setItem(k,id); } return id; }
+
+  async function refreshReactions(postId){
+    const tasks = REACT_TYPES.map(async t=>{
+      const q = query(collection(db,'posts',postId,'reactions'), where(t,'==',true));
+      const snap = await getCountFromServer(q);
+      const n = snap.data().count || 0;
+      const el = document.querySelector(`[data-count="${t}"]`);
+      if(el) el.textContent = n;
+    });
+    await Promise.all(tasks);
+  }
+  async function setupReactions(postId){
+    const deviceId = getDeviceId();
+    const myRef = doc(db,'posts',postId,'reactions',deviceId);
+    // Ambil status saya
+    let my = {}; const mySnap = await getDoc(myRef); if(mySnap.exists()) my = mySnap.data();
+    REACT_TYPES.forEach(t=>{ const btn = document.querySelector(`[data-react="${t}"]`); if(!btn) return; btn.classList.toggle('active', !!my[t]); btn.onclick = async ()=>{ try{ const curSnap = await getDoc(myRef); const cur = curSnap.exists()? !!curSnap.data()[t] : false; const next = !cur; await setDoc(myRef, { device: deviceId, [t]: next, updatedAt: serverTimestamp() }, { merge:true }); btn.classList.toggle('active', next); refreshReactions(postId); }catch(err){ alert('Gagal menyimpan reaction.'); console.error(err); } }; });
+    refreshReactions(postId);
+  }
+
+  // ===== COMMENTS =====
+  function cItemHTML(d){
+    const name = d.name?.trim() || 'Anon';
+    const when = d.createdAt?.toDate ? d.createdAt.toDate() : new Date();
+    const timeStr = when.toLocaleString('id-ID', { hour12:false });
+    const ava = d.avatar?.trim();
+    return `<div class="c-item"><div class="c-avatar">${ava?`<img src="${ava}" alt="">`:''}</div><div><div class="c-name">${name} <span class="c-meta">• ${timeStr}</span></div><div>${(d.text||'').replace(/</g,'&lt;')}</div></div></div>`;
+  }
+  async function loadComments(postId){
+    const list = $('#cList'); list.innerHTML = '';
+    const qy = query(collection(db,'posts',postId,'comments'), orderBy('createdAt','asc'), limit(200));
+    const snap = await getDocs(qy);
+    snap.forEach(docu=>{ list.insertAdjacentHTML('beforeend', cItemHTML(docu.data())); });
+
+    // wiring form
+    const btnSend = $('#cSend'); const btnClr = $('#cClear');
+    btnClr.onclick = ()=>{ $('#cName').value=''; $('#cAvatar').value=''; $('#cText').value=''; };
+    btnSend.onclick = async ()=>{
+      const name = ($('#cName').value||'').trim();
+      const text = ($('#cText').value||'').trim();
+      const avatar = ($('#cAvatar').value||'').trim();
+      if(!text){ $('#cText').focus(); return; }
+      try{
+        await addDoc(collection(db,'posts',postId,'comments'), {
+          name, text, avatar: avatar||null,
+          device: getDeviceId(),
+          createdAt: serverTimestamp()
+        });
+        $('#cText').value='';
+        loadComments(postId);
+      }catch(err){
+        alert('Gagal mengirim komentar.');
+        console.error(err);
+      }
+    };
+  }
+
+  // initial
+  routeRender();
+  hideLoader();
+  // back-to-top
+  $('#toTop')?.addEventListener('click', ()=> window.scrollTo({top:0, behavior:'smooth'}));
   </script>
 </body>
 </html>
