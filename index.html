@@ -437,19 +437,48 @@
   function renderHome(){ setupSearch('home'); const filtered = searchFilter(posts.slice(), states.home.q); const per = perPageForViewport(); const total = Math.max(1, Math.ceil(filtered.length / per)); states.home.page = Math.min(Math.max(1, states.home.page), total); const start = (states.home.page-1)*per; renderGrid($('#grid-home'), filtered.slice(start, start+per)); renderPager('home', total); }
   function renderBlog(){ setupSearch('blog'); const base = posts.filter(p=> p.tags.includes('Blog')); const filtered = searchFilter(base, states.blog.q); const per = perPageForViewport(); const total = Math.max(1, Math.ceil(filtered.length / per)); states.blog.page = Math.min(Math.max(1, states.blog.page), total); const start = (states.blog.page-1)*per; renderGrid($('#grid-blog'), filtered.slice(start, start+per)); renderPager('blog', total); }
   function renderNovel(){ setupSearch('novel'); const base = posts.filter(p=> p.tags.includes('Novel')); const filtered = searchFilter(base, states.novel.q); const per = perPageForViewport(); const total = Math.max(1, Math.ceil(filtered.length / per)); states.novel.page = Math.min(Math.max(1, states.novel.page), total); const start = (states.novel.page-1)*per; renderGrid($('#grid-novel'), filtered.slice(start, start+per)); renderPager('novel', total); }
-  function renderPost(id){
-    const idx = posts.findIndex(p=>p.id===id); const post = posts[idx] || posts[0];
-    document.title = post.title + ' — Rafy Rayyan';
-    $('#postTitle').textContent = post.title;
-    $('#postMeta').textContent = fmtDate(post.date) + ' • ' + post.tags.join(', ');
-    const hero = $('#postHero'); if(post.image){ hero.classList.remove('hidden'); const img = hero.firstElementChild; img.src = post.image; img.alt = 'Gambar: ' + post.title; } else { hero.classList.add('hidden'); }
-    $('#postBody').innerHTML = post.body;
-    const prev = posts[idx-1]||null; const next = posts[idx+1]||null; const prevA = $('#prevPost'); const nextA = $('#nextPost');
-    if(prev){ prevA.href = `#/post/${prev.id}`; prevA.textContent = '← ' + prev.title; prevA.style.visibility='visible'; } else prevA.style.visibility='hidden';
-    if(next){ nextA.href = `#/post/${next.id}`; nextA.textContent = next.title + ' →'; nextA.style.visibility='visible'; } else nextA.style.visibility='hidden';
-    window.__currentPostId = post.id; // penting untuk re-init saat login berubah
-    initPostFeatures(post.id);
+ function renderPost(id){
+  const idx  = posts.findIndex(p => p.id === id);
+  const post = posts[idx] || posts[0];
+
+  document.title = `${post.title} — Rafy Rayyan`;
+  $('#postTitle').textContent = post.title;
+  $('#postMeta').textContent  = `${fmtDate(post.date)} • ${post.tags.join(', ')}`;
+
+  const hero = $('#postHero');
+  if (post.image){
+    hero.classList.remove('hidden');
+    const img = hero.firstElementChild;
+    img.src = post.image;
+    img.alt = 'Gambar: ' + post.title;
+  } else {
+    hero.classList.add('hidden');
   }
+
+  $('#postBody').innerHTML = post.body;
+
+  const prev  = posts[idx-1] || null;
+  const next  = posts[idx+1] || null;
+  const prevA = $('#prevPost');
+  const nextA = $('#nextPost');
+
+  if (prev){
+    prevA.href = `#/post/${prev.id}`;
+    prevA.textContent = '← ' + prev.title;
+    prevA.style.visibility = 'visible';
+  } else prevA.style.visibility = 'hidden';
+
+  if (next){
+    nextA.href = `#/post/${next.id}`;
+    nextA.textContent = next.title + ' →';
+    nextA.style.visibility = 'visible';
+  } else nextA.style.visibility = 'hidden';
+
+  // simpan id post aktif lalu init fitur
+  window.__currentPostId = post.id;
+  window.initPostFeatures(post.id);   // ⟵ letakkan DI SINI
+}
+
   function setActive(h){ $$('.menu a').forEach(a=>{ const k=a.dataset.link; const on = (k==='home' && (h==='#/'||h===''||h==='#')) || (k==='about'&&h.startsWith('#/about')) || (k==='blog'&&h.startsWith('#/blog')) || (k==='novel'&&h.startsWith('#/novel')); a.classList.toggle('active', on); }); }
   function show(view){ $('#view-home').classList.toggle('hidden', view!=='home'); $('#view-about').classList.toggle('hidden', view!=='about'); $('#view-post').classList.toggle('hidden', view!=='post'); $('#view-blog').classList.toggle('hidden', view!=='blog'); $('#view-novel').classList.toggle('hidden', view!=='novel'); window.scrollTo({top:0, behavior:'auto'}); }
   function routeRender(){ const h = location.hash || '#/'; setActive(h); showLoader(); const finish = ()=>{ prepareReveal(); setTimeout(hideLoader, 200); onScrollNav(); }; if(h.startsWith('#/post/')){ show('post'); renderPost(decodeURIComponent(h.replace('#/post/',''))); finish(); } else if(h==='#/about'){ show('about'); finish(); } else if(h==='#/blog'){ show('blog'); renderBlog(); finish(); } else if(h==='#/novel'){ show('novel'); renderNovel(); finish(); } else { show('home'); renderHome(); finish(); } }
@@ -486,142 +515,334 @@
   </script>
 
   <!-- ===== FIREBASE: App + Auth + Firestore ===== -->
-  <script type="module">
-    import { initializeApp } from 'https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js';
-    import { getAuth, onAuthStateChanged, GoogleAuthProvider, signInWithPopup, signOut } from 'https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js';
-    import { getFirestore, collection, doc, getDoc, getDocs, setDoc, addDoc, deleteDoc, serverTimestamp, query, orderBy, limit } from 'https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js';
+<script type="module">
+/* ==== Firebase init (pakai kredensialmu) ==== */
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
+import {
+  getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut
+} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
+import {
+  getFirestore, collection, doc, getDoc, getDocs, setDoc, addDoc, deleteDoc,
+  query, orderBy, onSnapshot, serverTimestamp
+} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
 
-    // === Your config ===
-    const firebaseConfig = {
-      apiKey: 'AIzaSyDXQygwS9MCOwnHPxwg6oSfczsp51S-n9o',
-      authDomain: 'rafyermadi-d0eef.firebaseapp.com',
-      projectId: 'rafyermadi-d0eef',
-      storageBucket: 'rafyermadi-d0eef.firebasestorage.app',
-      messagingSenderId: '200873624449',
-      appId: '1:200873624449:web:6a96fa29f37deca10f9e80'
-    };
+const firebaseConfig = {
+  apiKey: "AIzaSyDXQygwS9MCOwnHPxwg6oSfczsp51S-n9o",
+  authDomain: "rafyermadi-d0eef.firebaseapp.com",
+  projectId: "rafyermadi-d0eef",
+  storageBucket: "rafyermadi-d0eef.firebasestorage.app",
+  messagingSenderId: "200873624449",
+  appId: "1:200873624449:web:6a96fa29f37deca10f9e80"
+};
 
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const db = getFirestore(app);
-    const provider = new GoogleAuthProvider();
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db   = getFirestore(app);
+const provider = new GoogleAuthProvider();
 
-    // Device id (untuk 1x reaction per emoji per device)
-    function getDeviceId(){ let id = localStorage.getItem('deviceId'); if(!id){ id = 'dev-' + crypto.randomUUID(); localStorage.setItem('deviceId', id); } return id; }
+/* ==== helpers ==== */
+const $  = (s,el=document)=>el.querySelector(s);
+const $$ = (s,el=document)=>Array.from(el.querySelectorAll(s));
+const sleep = (ms)=> new Promise(r=>setTimeout(r,ms));
+let __postUnsub = null;            // listener komentar
+let __countsBusy = false;          // throttle hitung reaction
+let __reactBusy = false;           // cegah spam klik
+let __currentPostId = null;        // id post aktif
+const REACT_KEYS = ['like','love','fire','clap','wow']; // 👍❤️🔥👏😯
 
-    // ===== Auth UI (di area komentar, bukan navbar) =====
-    function renderAuthArea(){
-      const wrap = document.getElementById('authArea'); if(!wrap) return;
-      const u = auth.currentUser;
-      if(!u){
-        wrap.innerHTML = `<button class="btn" id="loginBtn">Masuk dengan Google</button>`;
-        document.getElementById('loginBtn')?.addEventListener('click', async ()=>{ try{ await signInWithPopup(auth, provider); }catch(e){ alert('Gagal masuk.'); console.error(e);} });
-      } else {
-        wrap.innerHTML = `<div style="display:flex;gap:8px;align-items:center"><img src="${u.photoURL||''}" alt="" style="width:26px;height:26px;border-radius:50%"/><span style="font-size:14px">${u.displayName||u.email}</span><button class="btn" id="logoutBtn">Keluar</button></div>`;
-        document.getElementById('logoutBtn')?.addEventListener('click', async ()=>{ try{ await signOut(auth); }catch(e){ console.error(e); } });
-      }
-    }
+/* ==== Auth UI (khusus area komentar) ==== */
+function mountAuthControls(where) {
+  let wrap = $('#authCtrl', where);
+  if (!wrap) {
+    wrap = document.createElement('div');
+    wrap.id = 'authCtrl';
+    wrap.style.display='flex';
+    wrap.style.alignItems='center';
+    wrap.style.gap='8px';
+    wrap.style.margin='0 0 10px';
+    where.prepend(wrap);
+  }
+  const u = auth.currentUser;
+  if (!u) {
+    wrap.innerHTML = `
+      <button id="gLogin" class="btn" type="button">Masuk dengan Google</button>
+      <span style="color:var(--muted)">Wajib login untuk komentar & reaction</span>
+    `;
+    $('#gLogin',wrap)?.addEventListener('click', async()=>{
+      try{ await signInWithPopup(auth, provider); }catch(e){ console.error(e); }
+    }, {once:true});
+  } else {
+    wrap.innerHTML = `
+      <img src="${u.photoURL||''}" alt="" style="width:28px;height:28px;border-radius:50%">
+      <span style="font-weight:600">${u.displayName||u.email||'Pengguna'}</span>
+      <button id="gLogout" class="btn" type="button">Keluar</button>
+    `;
+    $('#gLogout',wrap)?.addEventListener('click', ()=> signOut(auth), {once:true});
+  }
+}
 
-    // ===== Reactions =====
-    const EMOJIS = [ ['up','👍'], ['love','❤️'], ['fire','🔥'], ['clap','👏'], ['wow','😯'] ];
-    function renderReactRow(state){
-      const row = document.getElementById('reactRow'); if(!row) return;
-      const me = state?.me || {}; const total = state?.total || {}; row.innerHTML = '';
-      EMOJIS.forEach(([k, emo])=>{
-        const cnt = total[k]||0; const active = !!me[k];
-        const btn = document.createElement('button'); btn.className = 'react-btn' + (active?' active':''); btn.dataset.key=k; btn.innerHTML = `${emo} <span>${cnt}</span>`; btn.type='button';
-        btn.addEventListener('click', async ()=>{
-          // hanya boleh klik jika sudah login
-          if(!auth.currentUser){ alert('Masuk dulu untuk memberi reaksi.'); renderAuthArea(); return; }
-          try{ await toggleReaction(window.__currentPostId, k); await refreshReactions(window.__currentPostId); }catch(err){ console.error(err); alert('Gagal menyimpan reaction.'); }
-        });
-        row.appendChild(btn);
-      });
-    }
-    async function refreshReactions(postId){
-      if(!postId) return;
-      const col = collection(db, 'posts', postId, 'reactions');
-      const docs = await getDocs(col);
-      const total = {up:0,love:0,fire:0,clap:0,wow:0};
-      const deviceId = getDeviceId();
-      let me = {up:false,love:false,fire:false,clap:false,wow:false};
-      docs.forEach(d=>{
-        const v = d.data();
-        if(v.up) total.up++; if(v.love) total.love++; if(v.fire) total.fire++; if(v.clap) total.clap++; if(v.wow) total.wow++;
-        if(d.id===deviceId){ me = { up:!!v.up, love:!!v.love, fire:!!v.fire, clap:!!v.clap, wow:!!v.wow } }
-      });
-      renderReactRow({total, me});
-    }
-    async function toggleReaction(postId, key){
-      const deviceId = getDeviceId();
-      const ref = doc(db, 'posts', postId, 'reactions', deviceId);
-      const snap = await getDoc(ref);
-      const existing = snap.exists()? snap.data() : {};
-      const next = !existing[key];
-      const payload = { [key]: next, userId: auth.currentUser.uid, deviceId, updatedAt: serverTimestamp(), createdAt: snap.exists()? existing.createdAt || serverTimestamp() : serverTimestamp() };
-      await setDoc(ref, payload, { merge:true });
-      // kalau semua false -> hapus
-      const merged = { ...existing, ...payload };
-      const allOff = !merged.up && !merged.love && !merged.fire && !merged.clap && !merged.wow;
-      if(allOff){ await deleteDoc(ref); }
-    }
+/* ==== Reactions ==== */
+/* Lihat counts tanpa login; toggle butuh login */
+function buildReactRow(container) {
+  if (!container) return;
+  container.innerHTML = `
+    <div id="reactRow" class="react-row" aria-label="Reaksi pembaca" style="display:flex;gap:10px;margin:10px 0">
+      ${[
+        ['like','👍'],['love','❤️'],['fire','🔥'],['clap','👏'],['wow','😯']
+      ].map(([k,emo])=>`
+        <button class="btn react" data-k="${k}" aria-pressed="false"
+          style="display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border-radius:12px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.04)">
+          <span class="emo">${emo}</span>
+          <span class="cnt" data-for="${k}">0</span>
+        </button>
+      `).join('')}
+    </div>
+  `;
+  // handler: satu kali bind
+  $('#reactRow')?.addEventListener('click', async(e)=>{
+    const btn = e.target.closest('button.react'); if(!btn) return;
+    const k = btn.dataset.k;
+    await toggleReaction(k);
+  }, {once:false});
+}
 
-    // ===== Comments =====
-    function resetCForm(){ $('#cname').value=''; $('#cavatar').value=''; $('#ctext').value=''; }
-    function renderCommentItem(d){
-      const el=document.createElement('div'); el.className='card'; el.style.padding='10px';
-      const x=d.data(); const when=x.createdAt?.toDate? x.createdAt.toDate(): new Date();
-      el.innerHTML = `<div style="display:flex;gap:10px;align-items:flex-start"><div style="width:28px;height:28px;border-radius:50%;background:#0b0d13;overflow:hidden;flex:0 0 auto">${x.avatar?`<img src="${x.avatar}" alt="" style="width:100%;height:100%;object-fit:cover">`:''}</div><div style="flex:1"><div style="font-size:13px;color:var(--muted)">${x.author||'anon'} • ${when.toLocaleDateString('id-ID',{day:'2-digit',month:'short',year:'numeric'})}, ${when.toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit'})}</div><div style="margin-top:4px">${(x.text||'')}</div></div></div>`;
-      return el;
-    }
-    async function refreshComments(postId){
-      const list = document.getElementById('clist'); if(!list) return; list.innerHTML='';
-      const qref = query(collection(db,'posts',postId,'comments'), orderBy('createdAt','desc'), limit(80));
-      const docs = await getDocs(qref);
-      docs.forEach(d=> list.appendChild(renderCommentItem(d)) );
-    }
-    function wireCommentForm(postId){
-      const sendBtn = document.getElementById('csend'); const clearBtn = document.getElementById('cclear'); const name=$('#cname'); const avatar=$('#cavatar'); const text=$('#ctext');
-      clearBtn?.addEventListener('click', ()=> resetCForm());
-      let sending=false; // anti-dupe
-      sendBtn?.addEventListener('click', async ()=>{
-        if(sending) return; if(!auth.currentUser){ alert('Masuk dulu untuk berkomentar.'); renderAuthArea(); return; }
-        const body=(text?.value||'').trim(); if(!body){ text.focus(); return; }
-        sending=true; sendBtn.disabled=true;
-        try{
-          await addDoc(collection(db,'posts',postId,'comments'),{
-            userId: auth.currentUser.uid,
-            author: name.value||auth.currentUser.displayName||'anon',
-            avatar: (avatar.value||auth.currentUser.photoURL)||'',
-            text: body.slice(0,5000),
-            createdAt: serverTimestamp()
-          });
-          text.value='';
-          await refreshComments(postId);
-        }catch(err){ console.error(err); alert('Gagal mengirim komentar.'); }
-        finally{ sending=false; sendBtn.disabled=false; }
-      });
-    }
-
-    // ===== Initiate on Post =====
-    async function initPostFeatures(postId){
-      if(!postId) return;
-      renderAuthArea(); // tampilkan tombol login/keluar di area komentar
-      // muat counts & comments tanpa perlu login
-      try{ await Promise.all([ refreshReactions(postId), refreshComments(postId) ]); }catch(e){ console.error(e); }
-      // pasang form
-      wireCommentForm(postId);
-    }
-
-    // ===== Auth change => re-init di halaman post aktif =====
-    onAuthStateChanged(auth, ()=>{
-      renderAuthArea();
-      if(location.hash.startsWith('#/post/') && window.__currentPostId){ initPostFeatures(window.__currentPostId); }
-      console.log('auth changed', auth.currentUser?.uid||null);
+async function refreshCounts() {
+  if (__countsBusy || !__currentPostId) return;
+  __countsBusy = true;
+  try {
+    const snap = await getDocs(collection(db, `posts/${__currentPostId}/reactions`));
+    const sums = {like:0,love:0,fire:0,clap:0,wow:0};
+    snap.forEach(d=>{
+      const v = d.data();
+      REACT_KEYS.forEach(k=>{ if (v[k]) sums[k]++; });
     });
+    REACT_KEYS.forEach(k=>{
+      const el = $(`.cnt[data-for="${k}"]`);
+      if (el) el.textContent = String(sums[k]||0);
+    });
+    // highlight milik user
+    const u = auth.currentUser;
+    if (u) {
+      const my = await getDoc(doc(db, `posts/${__currentPostId}/reactions/${u.uid}`));
+      const data = my.exists() ? my.data() : {};
+      $$('#reactRow button.react').forEach(b=>{
+        const on = !!data[b.dataset.k];
+        b.setAttribute('aria-pressed', on?'true':'false');
+        b.style.outline = on? '2px solid var(--brand-2)':'none';
+      });
+    } else {
+      $$('#reactRow button.react').forEach(b=>{
+        b.setAttribute('aria-pressed','false');
+        b.style.outline='none';
+      });
+    }
+  } catch(e){ console.error(e); }
+  finally { __countsBusy = false; }
+}
 
-    // Expose for router
-    window.initPostFeatures = initPostFeatures;
-  </script>
+async function toggleReaction(key) {
+  if (__reactBusy) return;
+  const u = auth.currentUser;
+  if (!u) { alert('Masuk dulu untuk memberi reaction.'); return; }
+  __reactBusy = true;
+  try{
+    const ref = doc(db, `posts/${__currentPostId}/reactions/${u.uid}`);
+
+    // tentukan ON/OFF
+    let wantOn = true;
+    const btn = $(`#reactRow button.react[data-k="${key}"]`);
+    if (btn) {
+      wantOn = btn.getAttribute('aria-pressed') !== 'true';
+    } else {
+      const snap = await getDoc(ref);
+      wantOn = !(snap.exists() && !!snap.data()[key]);
+    }
+
+    // simpan 1 dokumen per user per post
+    await setDoc(ref, {
+      uid: u.uid,
+      postId: __currentPostId,
+      [key]: wantOn,
+      updatedAt: serverTimestamp(),
+      createdAt: serverTimestamp()
+    }, { merge: true });
+
+    // kalau semua false, hapus dokumen
+    const after = await getDoc(ref);
+    const d = after.data() || {};
+    const anyOn = REACT_KEYS.some(k => !!d[k]);
+    if (!anyOn) await deleteDoc(ref).catch(()=>{});
+
+    await refreshCounts();
+  } catch (err) {
+    console.error(err);
+    alert('Gagal menyimpan reaction.');
+  } finally {
+    __reactBusy = false;
+  }
+}
+
+/* ==== Komentar (form di atas, list terbaru di atas) ==== */
+function buildCommentUI(container){
+  if (!container) return;
+  container.innerHTML = `
+    <h2>Komentar</h2>
+    <div id="cAuth"></div>
+    <div id="cForm" style="margin:12px 0">
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px">
+        <input id="cName"   placeholder="Nama (otomatis dari Google, bisa diganti)" style="flex:1;min-width:220px;padding:10px;border-radius:10px;border:1px solid rgba(255,255,255,.12);background:transparent;color:var(--text)">
+        <input id="cAvatar" placeholder="URL foto profil (opsional)" style="flex:1;min-width:220px;padding:10px;border-radius:10px;border:1px solid rgba(255,255,255,.12);background:transparent;color:var(--text)">
+      </div>
+      <textarea id="cText" rows="3" placeholder="Tulis komentar…" style="width:100%;padding:10px;border-radius:10px;border:1px solid rgba(255,255,255,.12);background:transparent;color:var(--text)"></textarea>
+      <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:8px">
+        <button id="cClear" class="btn" type="button">Bersihkan</button>
+        <button id="cSend"  class="btn primary" type="button">Kirim</button>
+      </div>
+    </div>
+    <div id="cList" style="display:flex;flex-direction:column;gap:10px;margin:12px 0"></div>
+  `;
+  // auth controls di sini
+  mountAuthControls($('#cAuth', container));
+
+  // bind form (hindari duplikasi)
+  const sendBtn = $('#cSend', container);
+  if (!sendBtn.dataset.bound) {
+    sendBtn.dataset.bound = '1';
+    sendBtn.addEventListener('click', onSendComment);
+  }
+  $('#cClear',container)?.addEventListener('click', ()=>{
+    $('#cText',container).value='';
+  }, {once:false});
+}
+
+async function onSendComment(){
+  const u = await ensureUser();
+  if (!u) return;
+  const wrap = $('#comments');
+  const name   = $('#cName',wrap).value.trim() || u.displayName || 'Anon';
+  const avatar = $('#cAvatar',wrap).value.trim() || u.photoURL || '';
+  const textEl = $('#cText',wrap);
+  const text   = (textEl.value||'').trim();
+  if (!text) return;
+
+  const btn = $('#cSend',wrap);
+  btn.disabled = true; btn.textContent = 'Mengirim…';
+  try{
+    await addDoc(collection(db, `posts/${__currentPostId}/comments`), {
+      uid: u.uid,
+      postId: __currentPostId,
+      name, avatar, text,
+      createdAt: serverTimestamp()
+    });
+    textEl.value = '';
+  }catch(err){
+    console.error(err);
+    alert('Gagal mengirim komentar.');
+  }finally{
+    btn.disabled = false; btn.textContent = 'Kirim';
+  }
+}
+
+async function ensureUser(){
+  if (auth.currentUser) return auth.currentUser;
+  try{
+    await signInWithPopup(auth, provider);
+    return auth.currentUser;
+  }catch(e){
+    console.error(e);
+    return null;
+  }
+}
+
+/* ==== Render komentar (baru di atas) ==== */
+function mountCommentList(container){
+  if (__postUnsub) { __postUnsub(); __postUnsub = null; }
+  const list = $('#cList', container);
+  list.innerHTML = '';
+  const qy = query(
+    collection(db, `posts/${__currentPostId}/comments`),
+    orderBy('createdAt','desc')
+  );
+  __postUnsub = onSnapshot(qy, (snap)=>{
+    list.innerHTML = '';
+    snap.forEach(docSnap=>{
+      const d = docSnap.data();
+      const el = document.createElement('div');
+      el.className = 'card';
+      el.style.padding='10px';
+      el.innerHTML = `
+        <div style="display:flex;align-items:center;gap:8px;color:var(--muted);font-size:12px">
+          <img src="${d.avatar||''}" alt="" style="width:20px;height:20px;border-radius:50%">
+          <strong style="font-size:13px;color:var(--text)">${d.name||'Anon'}</strong>
+          <span>•</span>
+          <span>${d.createdAt?.toDate?.().toLocaleString?.()||''}</span>
+        </div>
+        <div style="margin-top:6px;white-space:pre-wrap">${(d.text||'')}</div>
+      `;
+      list.appendChild(el);
+    });
+  }, (err)=> console.error(err));
+}
+
+/* ==== Inisialisasi fitur post (dipanggil dari renderPost) ==== */
+async function initPostFeatures(postId){
+  __currentPostId = postId;
+
+  // 1) Reaction row tepat di bawah artikel
+  let reactMount = $('#reactRowMount') || (()=>{
+    const nav = document.createElement('div');
+    nav.id = 'reactRowMount';
+    nav.style.display='flex';
+    nav.style.justifyContent='flex-start';
+    const postBody = $('#postBody')?.parentElement; // di <main> yg sama
+    if (postBody) postBody.insertBefore(nav, postBody.firstChild.nextSibling);
+    return nav;
+  })();
+  buildReactRow(reactMount);
+  const row = document.querySelector('#reactRow');
+  if (row && !row.dataset.bound) {
+    row.addEventListener('click', async (e) => {
+      const btn = e.target.closest('button.react'); if (!btn) return;
+      const k = btn.dataset.k;
+      await toggleReaction(k);
+    });
+    row.dataset.bound = '1'; // cegah bind ganda saat pindah2 post
+  }
+  await refreshCounts();
+
+  // 2) Komentar
+  let com = $('#comments');
+  if (com) {
+    buildCommentUI(com);
+    mountCommentList(com);
+  }
+}
+
+/* ==== Hook ke routermu yang sudah ada ==== */
+/* Penting: definisikan fungsi ini SEBELUM dipanggil renderPost */
+window.initPostFeatures = initPostFeatures;
+
+/* ==== Dengarkan perubahan login agar highlight tombol & auth box terupdate tanpa reload ==== */
+onAuthStateChanged(auth, ()=>{
+  // update auth box (kalau lagi di halaman post)
+  const com = $('#comments');
+  if (com) mountAuthControls($('#cAuth', com));
+  refreshCounts();
+  console.log('auth changed', auth.currentUser ? auth.currentUser.uid : null);
+});
+
+/* ==== Patch kecil: panggil init dari renderPost setelah konten selesai ==== */
+/* Cari fungsi renderPost(id) di skripmu. Tepat setelah kamu set judul/hero/body
+   tambahkan: window.initPostFeatures(post.id); 
+   — kalau kamu pakai nama berbeda, tetap panggil window.initPostFeatures(__id__). */
+
+/* ==== Catatan Rules Firestore (pastikan sesuai) ====
+
+
+
+==== END rules ==== */
+</script>
+
 </body>
 </html>
+
