@@ -481,7 +481,41 @@
 
   function setActive(h){ $$('.menu a').forEach(a=>{ const k=a.dataset.link; const on = (k==='home' && (h==='#/'||h===''||h==='#')) || (k==='about'&&h.startsWith('#/about')) || (k==='blog'&&h.startsWith('#/blog')) || (k==='novel'&&h.startsWith('#/novel')); a.classList.toggle('active', on); }); }
   function show(view){ $('#view-home').classList.toggle('hidden', view!=='home'); $('#view-about').classList.toggle('hidden', view!=='about'); $('#view-post').classList.toggle('hidden', view!=='post'); $('#view-blog').classList.toggle('hidden', view!=='blog'); $('#view-novel').classList.toggle('hidden', view!=='novel'); window.scrollTo({top:0, behavior:'auto'}); }
-  function routeRender(){ const h = location.hash || '#/'; setActive(h); showLoader(); const finish = ()=>{ prepareReveal(); setTimeout(hideLoader, 200); onScrollNav(); }; if(h.startsWith('#/post/')){ show('post'); renderPost(decodeURIComponent(h.replace('#/post/',''))); finish(); } else if(h==='#/about'){ show('about'); finish(); } else if(h==='#/blog'){ show('blog'); renderBlog(); finish(); } else if(h==='#/novel'){ show('novel'); renderNovel(); finish(); } else { show('home'); renderHome(); finish(); } }
+function routeRender() {
+  const h = location.hash || '#/';
+  setActive(h);
+  showLoader();
+
+  const done = () => {
+    prepareReveal();
+    setTimeout(hideLoader, 200);
+    // hard fallback supaya gak pernah nyangkut
+    setTimeout(hideLoader, 1500);
+    onScrollNav();
+  };
+
+  try {
+    if (h.startsWith('#/post/')) {
+      show('post');
+      renderPost(decodeURIComponent(h.replace('#/post/', '')));
+    } else if (h === '#/about') {
+      show('about');
+    } else if (h === '#/blog') {
+      show('blog');
+      renderBlog();
+    } else if (h === '#/novel') {
+      show('novel');
+      renderNovel();
+    } else {
+      show('home');
+      renderHome();
+    }
+  } catch (e) {
+    console.error(e);
+  } finally {
+    done();
+  }
+}
   window.addEventListener('hashchange', routeRender);
 
   // footer stats
@@ -768,18 +802,20 @@ function mountCommentList(container){
     snap.forEach(docSnap=>{
       const d = docSnap.data();
       const el = document.createElement('div');
-      el.className = 'card';
-      el.style.padding='10px';
-      el.innerHTML = `
-        <div style="display:flex;align-items:center;gap:8px;color:var(--muted);font-size:12px">
-          <img src="${d.avatar||''}" alt="" style="width:20px;height:20px;border-radius:50%">
-          <strong style="font-size:13px;color:var(--text)">${d.name||'Anon'}</strong>
-          <span>•</span>
-          <span>${d.createdAt?.toDate?.().toLocaleString?.()||''}</span>
-        </div>
-        <div style="margin-top:6px;white-space:pre-wrap">${(d.text||'')}</div>
-      `;
-      list.appendChild(el);
+// boleh tetap pakai .card untuk tampilan, tapi override ukuran
+el.className = 'card';
+el.style.cssText = 'padding:12px;min-height:unset;'; // ⟵ kunci: min-height:unset
+el.innerHTML = `
+  <div style="display:flex;align-items:center;gap:8px;color:var(--muted);font-size:12px">
+    <img src="${d.avatar||''}" alt="" style="width:20px;height:20px;border-radius:50%">
+    <strong style="font-size:13px;color:var(--text)">${d.name||'Anon'}</strong>
+    <span>•</span>
+    <span>${d.createdAt?.toDate?.().toLocaleString?.()||''}</span>
+  </div>
+  <div style="margin-top:6px;white-space:pre-wrap">${(d.text||'')}</div>
+`;
+list.appendChild(el);
+
     });
   }, (err)=> console.error(err));
 }
@@ -845,4 +881,5 @@ onAuthStateChanged(auth, ()=>{
 
 </body>
 </html>
+
 
