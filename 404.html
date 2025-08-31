@@ -80,6 +80,14 @@
     .hero-cta{margin-top:16px;display:flex;gap:10px;flex-wrap:wrap}
     .btn{padding:10px 14px;border-radius:12px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.04);color:var(--text);cursor:pointer}
     .btn.primary{background:linear-gradient(135deg,var(--brand),var(--brand-2));border:none}
+    /* ikon kecil di dalam tombol (Instagram, Email, dll) */
+.btn .ico{
+  width:18px;
+  height:18px;
+  margin-right:8px;
+  vertical-align:-3px;
+  display:inline-block;
+}
 
     .toolbar{position:sticky; top:calc(var(--nav-h) - 1px); z-index:65; background:color-mix(in oklab, var(--bg) 85%, #000 15%);backdrop-filter: blur(8px);
       border-top:1px solid rgba(255,255,255,.06); border-bottom:1px solid rgba(255,255,255,.06)}
@@ -313,7 +321,17 @@ html[data-theme="light"] .email-pop { border-color: rgba(16,19,33,.12); backgrou
   <p>Kalau mau menyapa atau ngobrol soal tulisan, sekolah, atau ngoprek web, silakan kirim email atau DM Instagram. Senang bisa kenalan! 🙌</p>
 </div>
 
-<div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px"><a class="btn" href="https://www.instagram.com/rafy.rayyan/" target="_blank" rel="noopener">📷 Instagram</a><a class="btn"
+<div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px"><a class="btn" href="https://www.instagram.com/rafy.rayyan/" target="_blank" rel="noopener">
+  <svg class="ico" aria-hidden="true" viewBox="0 0 24 24" fill="none"
+       stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <!-- lucide/feather-style instagram -->
+    <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+    <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+  </svg>
+  Instagram
+</a>
+<a class="btn"
    id="emailChooserBtn"
    href="mailto:rafyermadi@gmail.com?subject=Halo%20Rafy%20dari%20blog&body=Hai%20Rafy,%0ASaya%20mau%20tanya%20tentang..."
    title="Kirim email ke Rafy">
