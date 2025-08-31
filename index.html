@@ -249,50 +249,6 @@ html[data-theme="light"] .email-pop { border-color: rgba(16,19,33,.12); backgrou
 }
 .email-pop a:hover { background: rgba(255,255,255,.06); }
 .email-pop .hint { color: var(--muted); font-size: 12px; margin-left: auto; }
-    /* === SAWERIA: Running Text bar === */
-.rtbar{
-  position: sticky;
-  top: var(--nav-h);
-  z-index: 60;
-  height: 40px;
-  display: grid;
-  align-items: center;
-  background: color-mix(in oklab, var(--bg) 88%, #000 12%);
-  border-bottom: 1px solid rgba(255,255,255,.06);
-}
-html[data-theme="light"] .rtbar{
-  background: color-mix(in oklab, var(--bg) 94%, #000 6%);
-  border-bottom-color: rgba(16,19,33,.08);
-}
-    /* === SAWERIA: Support/Leaderboard section (Home) === */
-.support{
-  margin: 28px 0 60px;
-  display: grid;
-  gap: 12px;
-}
-.support-embed{
-  border-radius: 16px;
-  overflow: hidden;
-  border: 1px solid rgba(255,255,255,.08);
-  background: var(--card);
-  box-shadow: var(--shadow);
-}
-html[data-theme="light"] .support-embed{
-  border-color: rgba(16,19,33,.08);
-}
-.support-btn{
-  width: fit-content;
-}
-    /* === SAWERIA: Floating alert === */
-.saweria-alert{
-  position: fixed;
-  right: max(16px, env(safe-area-inset-right));
-  bottom: max(86px, calc(env(safe-area-inset-bottom) + 86px)); /* biar gak nabrak tombol BGM */
-  width: min(420px, 92vw);
-  height: 130px; /* kira-kira tinggi alert */
-  z-index: 240;
-  pointer-events: none; /* biar gak ganggu klik halaman */
-}
   </style>
 </head>
 <body>
@@ -317,18 +273,6 @@ html[data-theme="light"] .support-embed{
     </div>
   </nav>
 
-  <!-- SAWERIA: Running Text (di bawah navbar) -->
-<div class="rtbar">
-  <iframe
-    src="https://saweria.co/widgets/recent?streamKey=2f1b9aab15f94a5ef365134415d66a5b"
-    title="Saweria Running Text"
-    loading="lazy"
-    referrerpolicy="no-referrer"
-    allow="autoplay"
-    style="width:100%;height:40px;border:0;display:block"
-  ></iframe>
-</div>
-
   <!-- HOME VIEW -->
   <div id="view-home">
     <header class="hero" id="top">
@@ -350,25 +294,6 @@ html[data-theme="light"] .support-embed{
     <main class="section container" aria-live="polite">
       <div class="grid" id="grid-home"></div>
       <div class="pager" id="pager-home"></div>
-      <!-- SAWERIA: Support section (Home) -->
-<section id="support" class="container support">
-  <a class="btn primary support-btn"
-     href="https://saweria.co/RafyRayyan"
-     target="_blank" rel="noopener"
-     title="Buka halaman Saweria">
-    ☕ Dukung di Saweria
-  </a>
-
-  <div class="support-embed" aria-label="Saweria Leaderboard">
-    <iframe
-      src="https://saweria.co/widgets/leaderboard?streamKey=2f1b9aab15f94a5ef365134415d66a5b"
-      loading="lazy"
-      title="Saweria Leaderboard"
-      referrerpolicy="no-referrer"
-      style="width:100%;height:320px;border:0;display:block;border-radius:16px"
-    ></iframe>
-  </div>
-</section>
     </main>
   </div>
 
@@ -1151,21 +1076,8 @@ if (emailBtn && !emailBtn.dataset.bound) {
 
   routeRender(); // first render
   </script>
-  <!-- SAWERIA: Floating Alert overlay -->
-<div class="saweria-alert" aria-hidden="true">
-  <iframe
-    src="https://saweria.co/widgets/alert?streamKey=2f1b9aab15f94a5ef365134415d66a5b"
-    title="Saweria Alert"
-    allow="autoplay"
-    loading="lazy"
-    referrerpolicy="no-referrer"
-    style="width:100%;height:100%;border:0;display:block"
-  ></iframe>
-</div>
 </body>
 </html>
-
-
 
 
 
