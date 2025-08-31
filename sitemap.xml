@@ -1,8 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>https://rafyermadi.github.io/</loc>
-    <changefreq>weekly</changefreq>
-    <priority>1.0</priority>
-  </url>
+  <!-- Halaman utama -->
+  <url><loc>https://rafyermadi.github.io/</loc><changefreq>weekly</changefreq><priority>1.0</priority></url>
+  <url><loc>https://rafyermadi.github.io/blog</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://rafyermadi.github.io/novel</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://rafyermadi.github.io/about</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+
+  <!-- Post -->
+  <url><loc>https://rafyermadi.github.io/post/novel-bab-1</loc><lastmod>2025-08-20</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://rafyermadi.github.io/post/catatan-riset</loc><lastmod>2025-08-18</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://rafyermadi.github.io/post/teknik-dialog</loc><lastmod>2025-08-16</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://rafyermadi.github.io/post/novel-outline</loc><lastmod>2025-08-14</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://rafyermadi.github.io/post/random-thoughts</loc><lastmod>2025-08-12</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://rafyermadi.github.io/post/novel-bab-2</loc><lastmod>2025-08-10</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://rafyermadi.github.io/post/tips-outline</loc><lastmod>2025-08-08</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://rafyermadi.github.io/post/novel-riset-lokasi</loc><lastmod>2025-08-06</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://rafyermadi.github.io/post/esai-favorit</loc><lastmod>2025-08-04</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://rafyermadi.github.io/post/novel-bab-3</loc><lastmod>2025-08-02</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://rafyermadi.github.io/post/catatan-gaya</loc><lastmod>2025-07-30</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://rafyermadi.github.io/post/review-buku</loc><lastmod>2025-07-28</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://rafyermadi.github.io/post/novel-bab-4</loc><lastmod>2025-07-26</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
 </urlset>
