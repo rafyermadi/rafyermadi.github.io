@@ -211,6 +211,27 @@
     /* Override khusus kartu KOMENTAR */
     #comments .card, #cList .card{min-height:unset; padding:12px; border-radius:12px; border:1px solid rgba(255,255,255,.08); background:transparent}
     .comment-card{padding:12px;border-radius:12px;border:1px solid rgba(255,255,255,.08);background:transparent}
+    /* === Email chooser popover === */
+.email-pop {
+  position: fixed;
+  z-index: 210;
+  background: color-mix(in oklab, var(--bg) 92%, #000 8%);
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+  padding: 6px;
+  min-width: 220px;
+  animation: fadeSlideUp .15s var(--ease);
+}
+html[data-theme="light"] .email-pop { border-color: rgba(16,19,33,.12); background: var(--bg-soft); }
+.email-pop a {
+  display: flex; align-items: center; gap: 8px;
+  padding: 10px 12px; border-radius: 9px;
+  color: var(--text); text-decoration: none; font-size: 14px;
+}
+.email-pop a:hover { background: rgba(255,255,255,.06); }
+.email-pop .hint { color: var(--muted); font-size: 12px; margin-left: auto; }
+
   </style>
 </head>
 <body>
@@ -276,11 +297,12 @@
   <!-- ABOUT VIEW -->
   <div id="view-about" class="hidden">
     <section class="about"><div class="container about-grid"><div class="avatar"><img src="rafyaboutprofile.jpg" alt="Foto Rafy"></div><div><h1 style="font-family:'Playfair Display',serif;font-size:40px;margin:0 0 8px">Tentang Penulis</h1><p style="color:var(--muted);line-height:1.8">Hai! Aku <strong>Rafy Rayyan</strong>, siswa kelas 12 SMAN 68 Jakarta. Aku suka menulis fiksi, ngoprek web, dan bikin proyek kreatif. Blog ini jadi arsip perjalanan nulis novel untuk tugas akhir Bahasa Indonesia—plus tempatku berbagi catatan, ide, dan hal-hal yang menurutku seru.</p><div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px"><a class="btn" href="https://www.instagram.com/rafy.rayyan/" target="_blank" rel="noopener">📷 Instagram</a><a class="btn"
-   href="https://mail.google.com/mail/?view=cm&fs=1&to=rafyermadi@gmail.com&su=Halo%20Rafy%20dari%20blog&body=Hai%20Rafy,%0ASaya%20mau%20tanya%20tentang..."
-   target="_blank" rel="noopener"
-   title="Buka compose Gmail">
+   id="emailChooserBtn"
+   href="mailto:rafyermadi@gmail.com?subject=Halo%20Rafy%20dari%20blog&body=Hai%20Rafy,%0ASaya%20mau%20tanya%20tentang..."
+   title="Kirim email ke Rafy">
   ✉️ Email
-</a></div></div></div></section>
+</a>
+</div></div></div></section>
     <section class="container" style="margin-bottom:50px"><div class="card" style="padding:18px"><h2 style="margin:0 0 8px">Ringkas</h2><ul style="line-height:1.8;margin:0;padding-left:18px"><li>Sekolah: SMAN 68 Jakarta (Kelas 12)</li><li>Minat: penulisan kreatif, desain web, komunitas sekolah</li><li>Novel yang sedang digarap: <em>(judul sementara)</em></li></ul></div></section>
   </div>
 
@@ -885,6 +907,102 @@
   $('#openSub')?.addEventListener('click', openSub); $('#closeSub')?.addEventListener('click', closeSub); $('#subCancel')?.addEventListener('click', closeSub);
   $('#subSave')?.addEventListener('click', ()=>{ const email = ($('#subEmail')?.value||'').trim(); const valid = /[^@\s]+@[^@\s]+\.[^@\s]+/.test(email); const notice = $('#subNotice'); if(!valid){ notice.textContent='Email tidak valid.'; notice.style.color='salmon'; return; } const key='subscribers'; const arr = JSON.parse(localStorage.getItem(key)||'[]'); if(!arr.includes(email)) arr.push(email); localStorage.setItem(key, JSON.stringify(arr)); notice.textContent='Berhasil! Email tersimpan di perangkat ini. Integrasi pengiriman bisa ditambahkan nanti.'; notice.style.color='var(--muted)'; setTimeout(closeSub, 900); });
   $('#subModal')?.addEventListener('click', (e)=>{ if(e.target.id==='subModal' || e.target.classList.contains('modal-backdrop')) closeSub(); });
+    /* ====== Email chooser (1 tombol, 2 pilihan) ====== */
+const EMAIL_TO   = 'rafyermadi@gmail.com';
+const EMAIL_SUB  = encodeURIComponent('Halo Rafy dari blog');
+const EMAIL_BODY = encodeURIComponent('Hai Rafy,\nSaya mau tanya tentang ...');
+
+function buildEmailLinks(){
+  return {
+    mailto: `mailto:${EMAIL_TO}?subject=${EMAIL_SUB}&body=${EMAIL_BODY}`,
+    gmail:  `https://mail.google.com/mail/?view=cm&fs=1&to=${EMAIL_TO}&su=${EMAIL_SUB}&body=${EMAIL_BODY}`
+  };
+}
+
+function openEmailMenu(btn){
+  closeEmailMenu(); // pastikan bersih
+  const links = buildEmailLinks();
+  const pop = document.createElement('div');
+  pop.className = 'email-pop';
+  pop.id = 'emailChooser';
+  pop.setAttribute('role','menu');
+  pop.innerHTML = `
+    <a href="${links.mailto}" data-act="mailto" role="menuitem">📨 Buka via Aplikasi <span class="hint">mailto:</span></a>
+    <a href="${links.gmail}"  data-act="gmail"  role="menuitem" target="_blank" rel="noopener">🌐 Buka via Gmail Web <span class="hint">tab baru</span></a>
+  `;
+
+  // posisi dekat tombol
+  const r = btn.getBoundingClientRect();
+  const margin = 8;
+  let left = r.left;
+  let top  = r.bottom + margin;
+
+  // geser biar nggak keluar layar
+  const vw = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
+  const maxLeft = vw - 240; // kira-kira lebar popover
+  if (left > maxLeft) left = Math.max(8, maxLeft);
+  if (top + 120 > window.innerHeight) top = r.top - margin - 84;
+
+  pop.style.left = `${left}px`;
+  pop.style.top  = `${top}px`;
+
+  document.body.appendChild(pop);
+
+  // state ARIA
+  btn.setAttribute('aria-expanded','true');
+  btn.setAttribute('aria-controls','emailChooser');
+
+  // klik item
+  pop.addEventListener('click', (e)=>{
+    const a = e.target.closest('a[data-act]');
+    if(!a) return;
+    const act = a.dataset.act;
+    if (act === 'mailto') {
+      // pakai lokasi agar trigger handler OS/app
+      window.location.href = links.mailto;
+    } else if (act === 'gmail') {
+      window.open(links.gmail, '_blank', 'noopener');
+    }
+    closeEmailMenu();
+  });
+
+  // close di luar / esc / scroll
+  setTimeout(()=>{ // timeout kecil agar klik tombol nggak langsung nutup
+    const closer = (ev)=>{
+      if (!pop.contains(ev.target) && ev.target !== btn) closeEmailMenu();
+    };
+    const onEsc = (ev)=>{ if(ev.key==='Escape') closeEmailMenu(); };
+    const onScroll = ()=> closeEmailMenu();
+
+    document.addEventListener('mousedown', closer, { once:false, capture:true });
+    document.addEventListener('touchstart', closer, { once:false, capture:true });
+    document.addEventListener('keydown', onEsc, { once:false });
+    window.addEventListener('scroll', onScroll, { once:true }, { passive:true });
+
+    // simpan untuk dibersihkan
+    pop._cleanup = ()=> {
+      document.removeEventListener('mousedown', closer, { capture:true });
+      document.removeEventListener('touchstart', closer, { capture:true });
+      document.removeEventListener('keydown', onEsc);
+      window.removeEventListener('scroll', onScroll);
+    };
+  }, 0);
+}
+
+function closeEmailMenu(){
+  const pop = document.getElementById('emailChooser');
+  const btn = document.getElementById('emailChooserBtn');
+  if (pop) { pop._cleanup?.(); pop.remove(); }
+  if (btn) { btn.setAttribute('aria-expanded','false'); btn.removeAttribute('aria-controls'); }
+}
+
+// mount
+const emailBtn = document.getElementById('emailChooserBtn');
+if (emailBtn && !emailBtn.dataset.bound) {
+  emailBtn.dataset.bound = '1';
+  emailBtn.setAttribute('aria-haspopup', 'menu');
+  emailBtn.addEventListener('click', (e)=>{ e.preventDefault(); openEmailMenu(emailBtn); });
+}
 
   routeRender(); // first render
   </script>
