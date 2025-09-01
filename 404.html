@@ -79,6 +79,7 @@
     .hero p{margin:10px 0 0;color:var(--muted);max-width:70ch;line-height:1.65}
     .hero-cta{margin-top:16px;display:flex;gap:10px;flex-wrap:wrap}
     .btn{padding:10px 14px;border-radius:12px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.04);color:var(--text);cursor:pointer}
+    .btn.saweria{display:inline-flex;align-items:center;gap:8px}
     .btn.primary{background:linear-gradient(135deg,var(--brand),var(--brand-2));border:none}
     /* ikon kecil di dalam tombol (Instagram, Email, dll) */
 .btn .ico{
@@ -281,7 +282,11 @@ html[data-theme="light"] .email-pop { border-color: rgba(16,19,33,.12); backgrou
         <div>
           <h1>Halo, aku <span style="background:linear-gradient(135deg,var(--brand),var(--brand-2));-webkit-background-clip:text;background-clip:text;color:transparent">Rafy Rayyan</span>.</h1>
           <p>Selamat datang di websiteku. Di sini aku menaruh progres <em>novel</em> untuk tugas akhir Bahasa Indonesia dari outline, riset, sampai catatan ringan, dan hal-hal yang ada di benakku. Tulisanku kuupdate bertahap, kamu bisa ikuti, kasih reaksi, atau tinggalkan komentar kalau ada ide yang ingin dibahas. Semoga bermanfaat. monggo pinarak 🙌✨</p>
-          <div class="hero-cta"><button class="btn primary" id="openSub">Berlangganan via Email</button></div>
+          <div class="hero-cta">
+  <button class="btn primary" id="openSub">Berlangganan via Email</button>
+  <a class="btn saweria" href="https://saweria.co/RafyRayyan" target="_blank" rel="noopener"
+     aria-label="Dukung di Saweria (buka di tab baru)">☕ Dukung di Saweria</a>
+</div>
         </div>
       </div>
     </header>
